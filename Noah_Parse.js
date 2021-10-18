@@ -29,13 +29,14 @@ function ParseCSV() {
     for (let i = 0; i < uber_set.length; i++) {
         data = fs.readFileSync(uber_set[i], 'utf8');
 
-        //data = data.replaceAll("\"", "")
-        data = data.replace(/\"/g, '')
-        //data = data.replaceAll('Date/Time','Date,Time')
-        //data = data.replace(/Date/Time/s,'Date,Time')
-        //data = data.replaceAll('/2014','/2014,')
-        //data = data.replace(/2014/g,'/2014,')
-        //console.log(data)
+        data = data.replaceAll("\"", "");
+        // data = data.replace(/\"/g, '')
+        data = data.replaceAll('/2014 ','/2014,');
+        data = data.replaceAll('Date/Time','Date,Time');
+        data = data.replaceAll('/','-');
+        // data = data.replace(/Date/Time/s,'Date,Time')
+        // data = data.replace(/2014/g,'/2014,')
+        // console.log(data)
 
         const data_table = data.split('\n').slice(1);
 
@@ -52,10 +53,12 @@ function ParseCSV() {
     for (let i = 0; i < fhv_set.length; i++) {
         data = fs.readFileSync(fhv_set[i], 'utf8');
 
-        //data = data.replaceAll('\" ','')
-        //data = data.replaceAll('\"','')
-        data = data.replace('\" ','')
-        data = data.replace('\"','')
+        data = data.replaceAll('\" ','');
+        data = data.replaceAll('\"','');
+        data = data.replaceAll('/','-');
+        // data = data.replace('\" ','')
+        // data = data.replace('\"','')
+        // console.log(data);
 
         const data_table = data.split('\n').slice(1);
 
@@ -92,11 +95,24 @@ function CompareBasedOnMonth() {
     output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
     output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}
     console.log('Finished Calculation');
-    return output
+    return output;
+}
+
+function SearchByParameter(ride_service, date_begin, date_end, time_begin, time_end, location) {
+    if (ride_service == uber) {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if ((uber_rides[i].date >= date_begin && uber_rides[i].date <= date_end) && (uber_rides[i].time >= time_begin && uber_rides[i].time <= time_end)) {
+
+            }
+        }
+    }
+    else {
+
+    }
 }
 
 function TrendsForUber() {
     
 }
 
-module.exports = { CompareBasedOnMonth, ParseCSV };
+module.exports = { CompareBasedOnMonth, ParseCSV, SearchByParameter };

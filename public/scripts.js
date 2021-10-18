@@ -45,6 +45,30 @@ console.log(response.comparing.uber)
     }); 
 });
 
+    // CREATE/POST
+    $('#search_parameters').on('submit', function(event) {
+        event.preventDefault();
 
+        var ride_service = $('#ride_service');
+        var date_begin = $('#date_begin');
+        var date_end = $('#date_end');
+        var time_begin = $('#time_begin');
+        var time_end = $('time_end');
+        var location = $('location');
+
+        console.log(ride_service.val(), date_begin.val(), date_end.val(), time_begin.val(), time_end.val(), location.val());
+
+        $.ajax({
+            url: '/search_results',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ rideService: ride_service.val(), dateBegin: date_begin.val(), dateEnd: date_end.val(), timeBegin: time_begin.val(), timeEnd: time_end.val(), address: location.val() }),
+            success: function(response) {
+                console.log(response);
+                createInput.val('');
+                $('#get-button').click();
+            }
+        });
+    });
 
 });

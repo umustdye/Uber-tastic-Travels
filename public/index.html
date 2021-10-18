@@ -9,6 +9,28 @@
 <body>
     <button id="get-pickup">Uber Oldests Pick-up Dates</button>
     <button id="compare">Compare Uber to Other Services</button>
+    <!-- <button id="indicate_search">Search</button> -->
+    <form id='search_parameters'>
+        <br> Ride Service: <br>
+        Choose a Ride Service: <select id='ride_service'>
+            <option value='Uber'>Uber</option>
+            <option value='American'>American</option>
+            <option value='Diplo'>Diplo</option>
+            <option value='Firstclass'>Firstclass</option>
+            <option value='Highclass'>Highclass</option>
+            <option value='Prestige'>Prestige</option>
+        </select>
+        <br><br> Date Range: <br>
+        From: <input type='date' id='date_begin'>
+        To: <input type='date' id='date_end'>
+        <br><br> Time Range: <br>
+        From: <input type='time' id='time_begin'>
+        To: <input type='time' id='time_end'>
+        <br><br> Location: <br>
+        Street Name: <input type='text' id='location'>
+        <br><br>
+        <button>Search</button>
+    </form>
     <hr>
     <table>
         <thead>
@@ -20,8 +42,8 @@
     </table>
 
 
-    <script src="jQuery.js"></script>
-    <script src="scripts.js"></script>
+    <script src="./jQuery.js"></script>
+    <script src="./scripts.js"></script>
     
 </body>
 </html>
