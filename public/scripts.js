@@ -53,8 +53,8 @@ console.log(response.comparing.uber)
         var date_begin = $('#date_begin');
         var date_end = $('#date_end');
         var time_begin = $('#time_begin');
-        var time_end = $('time_end');
-        var location = $('location');
+        var time_end = $('#time_end');
+        var location = $('#location');
 
         console.log(ride_service.val(), date_begin.val(), date_end.val(), time_begin.val(), time_end.val(), location.val());
 
@@ -64,9 +64,21 @@ console.log(response.comparing.uber)
             contentType: 'application/json',
             data: JSON.stringify({ rideService: ride_service.val(), dateBegin: date_begin.val(), dateEnd: date_end.val(), timeBegin: time_begin.val(), timeEnd: time_end.val(), address: location.val() }),
             success: function(response) {
-                console.log(response);
-                createInput.val('');
-                $('#get-button').click();
+                var tbodyEl = $('tbody');
+
+                tbodyEl.html('');
+
+                response.forEach(ride => {
+                    tbodyEl.append('\
+                    <tr>\
+                        <td class="date">' + 'Date: ' + ride.Date + ' | ' + '</td>\
+                        <td class="long">' + 'Time: ' +  ride.Time + ' | ' + '</td>\
+                        <td class="lat">' + 'Longitude: ' + ride.Lon +  ' | ' + '</td>\
+                        <td class="lat">' + 'Latitude: ' + ride.Lat + '</td>\
+                    </tr>\
+                ');
+                
+                });
             }
         });
     });

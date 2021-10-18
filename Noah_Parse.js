@@ -29,6 +29,7 @@ function ParseCSV() {
     for (let i = 0; i < uber_set.length; i++) {
         data = fs.readFileSync(uber_set[i], 'utf8');
 
+        data = data.replaceAll(':00\"','');
         data = data.replaceAll("\"", "");
         // data = data.replace(/\"/g, '')
         data = data.replaceAll('/2014 ','/2014,');
@@ -42,8 +43,13 @@ function ParseCSV() {
 
         data_table.forEach(ride => {
             table_row = ride.split(',');
-            let rideNew = new UberRide(table_row[0], table_row[1], table_row[2], table_row[3]);
-            uber_rides.push(rideNew);
+            if (table_row[0].length > 0 && table_row[1].length > 0) {
+                let curr_date = new Date(table_row[0]);
+                corrected_date = curr_date.toJSON();
+                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //useful for search
+                let rideNew = new UberRide(a_the_date, table_row[1], table_row[2], table_row[3]);
+                uber_rides.push(rideNew);
+            }
         })
 
     }
@@ -81,7 +87,7 @@ function CompareBasedOnMonth() {
     console.log('Comparing Uber to ' + f_name)
 
     for (let i = 0; i < uber_rides.length; i++) {
-        if (uber_rides[i].date.charAt(0) == specified_month) {
+        if (uber_rides[i].date.charAt(6) == specified_month) {
             u_rides = u_rides + 1;
         }
     }
@@ -99,16 +105,43 @@ function CompareBasedOnMonth() {
 }
 
 function SearchByParameter(ride_service, date_begin, date_end, time_begin, time_end, location) {
-    if (ride_service == uber) {
+    var toReturn = [];
+    console.log('Service = ' + ride_service);
+    if (ride_service == 'Uber') {
+        console.log('Inside Uber')
         for (let i = 0; i < uber_rides.length; i++) {
-            if ((uber_rides[i].date >= date_begin && uber_rides[i].date <= date_end) && (uber_rides[i].time >= time_begin && uber_rides[i].time <= time_end)) {
+            //converting date and time to ints for parameters
+            date_b_string = date_begin.replaceAll('-', '');
+            date_e_string = date_end.replaceAll('-', '');
+            time_b_string = time_begin.replaceAll(':', '');
+            time_e_string = time_end.replaceAll(':', '');
 
+            date_b = parseInt(date_b_string);
+            date_e = parseInt(date_e_string);
+            time_b = parseInt(time_b_string);
+            time_e = parseInt(time_e_string);
+
+            //converting date and time to ints for internal data
+            rides_date_b_string = uber_rides[i].date.replaceAll('-', '');
+            rides_date_e_string = uber_rides[i].date.replaceAll('-', '');
+            rides_time_b_string = uber_rides[i].time.replaceAll(':', '');
+            rides_time_e_string = uber_rides[i].time.replaceAll(':', '');
+
+            rides_date_b = parseInt(rides_date_b_string);
+            rides_date_e = parseInt(rides_date_e_string);
+            rides_time_b = parseInt(rides_time_b_string);
+            rides_time_e = parseInt(rides_time_e_string);
+
+            if ((rides_date_b >= date_b && rides_date_e <= date_e) && (rides_time_b >= time_b && rides_time_e <= time_e)) {
+                console.log('We have a winner');
+                toReturn.push({"Date": uber_rides[i].date, "Time": uber_rides[i].time, "Lon": uber_rides[i].longitude, "Lat": uber_rides[i].latitude});
             }
         }
     }
     else {
-
+        //Non Uber Rides
     }
+    return toReturn;
 }
 
 function TrendsForUber() {

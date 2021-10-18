@@ -37,9 +37,11 @@ server.get('/compare', function(req, res){
 });
 
 server.post('/search_results', function(req, res) {
-    var results = Parser.SearchByParameter(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address);
-
+    var results = [];
+    console.log(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address);
+    results = Parser.SearchByParameter(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address);
     console.log('Great Success!!');
+    console.log(results);
 
     res.send(results);
 });
