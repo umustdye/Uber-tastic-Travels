@@ -72,9 +72,8 @@ console.log(response.comparing.uber)
                     tbodyEl.append('\
                     <tr>\
                         <td class="date">' + 'Date: ' + ride.Date + ' | ' + '</td>\
-                        <td class="long">' + 'Time: ' +  ride.Time + ' | ' + '</td>\
-                        <td class="lat">' + 'Longitude: ' + ride.Lon +  ' | ' + '</td>\
-                        <td class="lat">' + 'Latitude: ' + ride.Lat + '</td>\
+                        <td class="time">' + 'Time: ' +  ride.Time + ' | ' + '</td>\
+                        <td class="address">' + 'Address: ' + ride.Address + '</td>\
                     </tr>\
                 ');
                 

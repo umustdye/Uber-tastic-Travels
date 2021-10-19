@@ -10,6 +10,7 @@
     <button id="get-pickup">Uber Oldests Pick-up Dates</button>
     <button id="compare">Compare Uber to Other Services</button>
     <!-- <button id="indicate_search">Search</button> -->
+    <h1>Search</h1>
     <form id='search_parameters'>
         <br> Ride Service: <br>
         Choose a Ride Service: <select id='ride_service'>
@@ -21,11 +22,11 @@
             <option value='Prestige'>Prestige</option>
         </select>
         <br><br> Date Range: <br>
-        From: <input type='date' id='date_begin'>
-        To: <input type='date' id='date_end'>
+        From: <input type='date' id='date_begin' required>
+        To: <input type='date' id='date_end' required>
         <br><br> Time Range: <br>
-        From: <input type='time' id='time_begin'>
-        To: <input type='time' id='time_end'>
+        From: <input type='time' id='time_begin' required>
+        To: <input type='time' id='time_end' required>
         <br><br> Location: <br>
         Street Name: <input type='text' id='location'>
         <br><br>
