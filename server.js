@@ -19,7 +19,7 @@ server.listen(port, function(error) {
 //console.log(UberParser.ParseUber());
 
 uber = UberParser.ParseUber();
-//console.log(Parser.ParseCSV());
+console.log(Parser.ParseCSV());
 //console.log(Parser.CompareBasedOnMonth());
 compare = Parser.CompareBasedOnMonth();
 
@@ -36,4 +36,19 @@ server.get('/compare', function(req, res){
     res.send({comparing: compare});
 });
 
-
+server.post('/search_results', function(req, res) {
+    var results = [];
+    var currLoc = req.body.address;
+    console.log(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address);
+    if (currLoc.length == 0) {
+        currLoc = ' | ';
+    }
+    results = Parser.SearchByParameter(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc);
+    console.log('Great Success!!');
+    // console.log(results);
+    if (results.length == 0) {
+        results = [{"Date": 'No Data Available', "Time": 'No Data Available', "Address": 'No Data Available'}, {"Date": 'No Data Available', "Time": 'No Data Available', "Address": 'No Data Available'}];
+    }
+    // console.log(results);
+    res.send(results);
+});
