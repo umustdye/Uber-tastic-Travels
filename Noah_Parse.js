@@ -1,15 +1,46 @@
 const fs = require('fs');
 
 class UberRide {
+    /*
+    Date is saved in the format (YYYY-MM-DD)
+        - If the date contains a single digit month or single digit day, it is preceeded by a 0
+        - For example: 2/4/2000 would be stored as 2000-02-04
+    Time is saved in 24 hr format
+        - The Uber data sets already has time stored in 24 hr format
+        - Note: Time in uber data files include seconds but are removed during parse.
+    Longitude and Latitude are saved as is from Uber csv files
+
+    All parameters are passed in as strings:
+        date: '2014-10-08'
+        time: '1:09'
+        latitude: '40.7556'
+        longitude: '-73.9836'
+    */
     constructor(date, time, latitude, longitude) {
-        this.date = date;
-        this.time = time;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.date = date; // Saved with year in front and a 0 preceeding any single digit value (YYYY-MM-DD)
+        this.time = time; // Saved as 24 Hr time and includes 0 preceeding single digit values (HH:MM)
+        this.latitude = latitude; // Saved as is from document
+        this.longitude = longitude; // Saved as is from document
     }
 }
 
 class FHVRide {
+    /*
+    Date is saved in the format (YYYY-MM-DD)
+        - If the date contains a single digit month or single digit day, it is preceeded by a 0
+        - For example: 2/4/2000 would be stored as 2000-02-04
+    Time is saved in 24 hr format and includes a 0 preceeding any single digit value
+        - For example: 1:10 AM would be stored as 01:10
+        - For example: 10:09 PM would be stored as 22:09
+        - Note: Time conversions are handled by the convertTo24Hr function
+        - Note: Time in other_fhv data files include seconds but are removed during parse.
+    Address is saved as is from other_fhv csv files
+
+    All parameters are passed in as strings:
+        date: '2014-07-23'
+        time: '15:09'
+        address: '2021 Grand Ave Morris Heights'
+    */
     constructor(date, time, address, name) {
         this.date = date;
         this.time = time;
