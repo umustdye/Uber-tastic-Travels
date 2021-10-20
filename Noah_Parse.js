@@ -10,17 +10,19 @@ class UberRide {
         - Note: Time in uber data files include seconds but are removed during parse.
     Longitude and Latitude are saved as is from Uber csv files
 
-    All parameters are passed in as strings:
+    All parameters are passed in as strings
+    
+    Here is an example of how each string should be stored:
         date: '2014-10-08'
         time: '1:09'
         latitude: '40.7556'
         longitude: '-73.9836'
     */
     constructor(date, time, latitude, longitude) {
-        this.date = date; // Saved with year in front and a 0 preceeding any single digit value (YYYY-MM-DD)
-        this.time = time; // Saved as 24 Hr time and includes 0 preceeding single digit values (HH:MM)
-        this.latitude = latitude; // Saved as is from document
-        this.longitude = longitude; // Saved as is from document
+        this.date = date;
+        this.time = time;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
 
@@ -36,7 +38,9 @@ class FHVRide {
         - Note: Time in other_fhv data files include seconds but are removed during parse.
     Address is saved as is from other_fhv csv files
 
-    All parameters are passed in as strings:
+    All parameters are passed in as strings
+    
+    Here is an example of how each string should be stored:
         date: '2014-07-23'
         time: '15:09'
         address: '2021 Grand Ave Morris Heights'
@@ -163,12 +167,12 @@ function ParseCSV() {
     for (let i = 0; i < uber_set.length; i++) {
         data = fs.readFileSync(uber_set[i], 'utf8');
 
-        data = data.replaceAll(':00\"','');
-        data = data.replaceAll("\"", "");
+        data = data.replaceAll(':00\"',''); //Removing seconds from time
+        data = data.replaceAll("\"", ""); //Removing "
         // data = data.replace(/\"/g, '')
-        data = data.replaceAll('/2014 ','/2014,');
+        data = data.replaceAll('/2014 ','/2014,'); //Replacing the space between date and time to easily add as seperate values
         data = data.replaceAll('Date/Time','Date,Time');
-        data = data.replaceAll('/','-');
+        data = data.replaceAll('/','-'); //Replacing / in date to be -
         // data = data.replace(/Date/Time/s,'Date,Time')
         // data = data.replace(/2014/g,'/2014,')
         // console.log(data)
@@ -181,9 +185,9 @@ function ParseCSV() {
             if (table_row[0].length > 0 && table_row[1].length > 0) {
                 let curr_date = new Date(table_row[0]);
 
-                corrected_date = curr_date.toJSON();
+                corrected_date = curr_date.toJSON(); //Changing the date to have the year first
 
-                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //useful for search
+                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //Gathering only the necessary values of the date to be stored
                 
                 let rideNew = new UberRide(a_the_date, table_row[1], table_row[2], table_row[3]);
                 uber_rides.push(rideNew);
@@ -197,9 +201,9 @@ function ParseCSV() {
     for (let i = 0; i < fhv_set.length; i++) {
         data = fs.readFileSync(fhv_set[i], 'utf8');
 
-        data = data.replaceAll('\" ','');
-        data = data.replaceAll('\"','');
-        data = data.replaceAll('/','-');
+        data = data.replaceAll('\" ',''); //Removing spaces and "
+        data = data.replaceAll('\"',''); //Removing "
+        data = data.replaceAll('/','-'); //Replacing / in dates to be -
         
         // data = data.replace('\" ','')
         // data = data.replace('\"','')
@@ -211,13 +215,13 @@ function ParseCSV() {
             table_row = ride.split(',');
 
             if (table_row[0].length > 0 && table_row[1].length > 0) {
-                convertedTime = convertTo24Hr(table_row[1]);
+                convertedTime = convertTo24Hr(table_row[1]); //converting time to 24 hr time
 
-                let curr_date = new Date(table_row[0]);
+                let curr_date = new Date(table_row[0]); 
 
-                corrected_date = curr_date.toJSON();
+                corrected_date = curr_date.toJSON(); //Changing the date to have the year first
 
-                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //useful for search
+                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //Gathering only the necessary values of the date to be stored
                 
                 let rideNew = new FHVRide(a_the_date, convertedTime, table_row[2], fhv_names[i]);
                 fhv_rides.push(rideNew);
