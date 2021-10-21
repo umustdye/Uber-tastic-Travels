@@ -1,7 +1,8 @@
 const express = require('express');
 const UberParser = require('./uber_parser.js');
 const fhvParser = require('./fhv_parser.js');
-const Parser = require('./Noah_Parse.js');
+const Noah = require('./Noah_Parse.js');
+const cab_rides_parser = require('./cab_type_parse.js');
 var bodyParser = require('body-parser');
 const { application } = require('express');
 
@@ -22,9 +23,11 @@ server.listen(port, function(error) {
 //datasets
 uber = UberParser.ParseUber();
 fhv = fhvParser.Parsefhv();
+cab_rides = cab_rides_parser.ParseCab_Rides();
+console.log(cab_rides);
 
 //console.log(Parser.CompareBasedOnMonth());
-compareDiplo = Parser.CompareBasedOnMonth(uber, fhv, "Diplo");
+compareDiplo = Noah.CompareBasedOnMonth(uber, fhv, "Diplo");
 
 
 //public is name of html directory, basically website shtuff
@@ -47,7 +50,7 @@ server.post('/search_results', function(req, res) {
     if (currLoc.length == 0) {
         currLoc = ' | ';
     }
-    results = Parser.SearchByParameter(uber, fhv, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc);
+    results = Noah.SearchByParameter(uber, fhv, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc);
     console.log('Great Success!!');
     // console.log(results);
     if (results.length == 0) {
