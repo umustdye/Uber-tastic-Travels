@@ -3,6 +3,7 @@ const UberParser = require('./uber_parser.js');
 const fhvParser = require('./fhv_parser.js');
 const Noah = require('./Noah_Parse.js');
 const cab_rides_parser = require('./cab_type_parse.js');
+const Heidi = require('./busiest_time.js');
 var bodyParser = require('body-parser');
 const { application } = require('express');
 
@@ -28,7 +29,7 @@ cab_rides = cab_rides_parser.ParseCab_Rides();
 
 //console.log(Parser.CompareBasedOnMonth());
 //compareDiplo = Noah.CompareBasedOnMonth(uber, fhv, "Diplo");
-
+//Heidi.FindBusiestTime(uber, fhv, "Diplo");
 
 //public is name of html directory, basically website shtuff
 server.use(express.static('public'));
@@ -51,6 +52,20 @@ server.get('/save_fhv', function(req, res){
 
 server.get('/compareDiplo', function(req, res){
     res.send({comparing: compareDiplo});
+});
+
+//get the busiest hours for pick ups
+server.post('/busiest-times', function(req, res) {
+    res.send('Showing Editable Things');
+});
+
+server.put('/find_busiest_time', function(req, res) {
+    busiest_time = Heidi.FindBusiestTime(uber, fhv, req.body.Service);
+    /*console.log("Busiest Time: ");
+    busiest_time.forEach(hour => {
+        console.log(hour)
+    })*/
+    res.send({Busiest_Time: busiest_time});
 });
 
 server.post('/search_results', function(req, res) {

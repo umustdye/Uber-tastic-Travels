@@ -2,6 +2,36 @@ function FindBusiestTime(uber_rides, fhv_rides, ride_service)
 {
     var toReturn = [];
     console.log('Service = ' + ride_service);
+    //var h_0, h_1, h_2, h_3, h_4, h_5, h_6, h_7, h_8, h_9, h_10, h_11, h_12;
+    //var h_13, h_14, h_15, h_16, h_17, h_18, h_19, h_20, h_21, h_22, h_23;
+    busiest_time = [
+        {"hour": "Midnight", "value": 0},
+        {"hour": "1 AM", "value": 0},
+        {"hour": "2 AM", "value": 0},
+        {"hour": "3 AM", "value": 0},
+        {"hour": "4 AM", "value": 0},
+        {"hour": "5 AM", "value": 0},
+        {"hour": "6 AM", "value": 0},
+        {"hour": "7 AM", "value": 0},
+        {"hour": "8 AM", "value": 0},
+        {"hour": "9 AM", "value": 0},
+        {"hour": "10 AM", "value": 0},
+        {"hour": "11 AM", "value": 0},
+        {"hour": "Noon", "value": 0},
+        {"hour": "1 PM", "value": 0},
+        {"hour": "2 PM", "value": 0},
+        {"hour": "3 PM", "value": 0},
+        {"hour": "4 PM", "value": 0},
+        {"hour": "5 PM", "value": 0},
+        {"hour": "6 PM", "value": 0},
+        {"hour": "7 PM", "value": 0},
+        {"hour": "8 PM", "value": 0},
+        {"hour": "9 PM", "value": 0},
+        {"hour": "10 PM", "value": 0},
+        {"hour": "11 PM", "value": 0},
+    ]
+
+
     if (ride_service == 'Uber') {
         console.log('Inside Uber')
         for (let i = 0; i < uber_rides.length; i++) {
@@ -11,51 +41,32 @@ function FindBusiestTime(uber_rides, fhv_rides, ride_service)
                 continue;
             }
 
-
-
-            //converting date and time to ints for parameters
-            /*date_b_string = date_begin.replaceAll('-', '');
-            date_e_string = date_end.replaceAll('-', '');
-            time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');*/
-            date_b_string = date_begin.replace(/-/g, '');
-            date_e_string = date_end.replace(/-/g, '');
-            time_b_string = time_begin.replace(/:/g, '');
-            time_e_string = time_end.replace(/:/g, '');
-            console.log(date_b_string);
-            console.log(date_e_string);
-            console.log(time_b_string);
-            console.log(time_e_string);
-
-
-            date_b = parseInt(date_b_string);
-            date_e = parseInt(date_e_string);
-            time_b = parseInt(time_b_string);
-            time_e = parseInt(time_e_string);
-
-            //converting date and time to ints for internal data
-            /*rides_date_b_string = uber_rides[i].date.replaceAll('-', '');
-            rides_date_e_string = uber_rides[i].date.replaceAll('-', '');
-            rides_time_b_string = uber_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = uber_rides[i].time.replaceAll(':', '');*/
-            rides_date_b_string = uber_rides[i].date.replace(/\//g, '');
-            rides_date_e_string = uber_rides[i].date.replace(/\//g, '');
-            rides_time_b_string = uber_rides[i].time.replace(/:/g, '');
-            rides_time_e_string = uber_rides[i].time.replace(/:/g, '');
-
-
-            rides_date_b = parseInt(rides_date_b_string);
-            rides_date_e = parseInt(rides_date_e_string);
-            rides_time_b = parseInt(rides_time_b_string);
-            rides_time_e = parseInt(rides_time_e_string);
-
-            if ((rides_date_b >= date_b && rides_date_e <= date_e) && (rides_time_b >= time_b && rides_time_e <= time_e)) {
-                // console.log('We have a winner');
-                toReturn.push({"Date": uber_rides[i].date, "Time": uber_rides[i].time, "Address": '(longitude, latitude)' + uber_rides[i].longitude + ', ' + uber_rides[i].latitude});
+            //preparsed time
+            PPTime = uber_rides[i].time;
+            //console.log("Preparsed Time: "+ PPTime)
+            var time = "";
+            for(let j = 0; j < PPTime.length; j++)
+            {
+                //get only the hour
+                if(PPTime[j] == ":")
+                {
+                    break;
+                }
+                else
+                {
+                    time += PPTime[j];
+                }
+                
             }
+            //console.log("Time After Parsing: " + time);
+
+            //console.log(busiest_time[parseInt(time)].value);
+            busiest_time[parseInt(time)].value++;
         }
     }
-    else {
+    
+    else 
+    {
         console.log('Inside Other')
         for (let i = 0; i < fhv_rides.length; i++) {
             if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].date === 'undefined' || typeof fhv_rides[i].time === 'undefined')
@@ -63,49 +74,46 @@ function FindBusiestTime(uber_rides, fhv_rides, ride_service)
                 continue;
             }
 
-            //converting date and time to ints for parameters
-            /*date_b_string = date_begin.replaceAll('-', '');
-            date_e_string = date_end.replaceAll('-', '');
-            time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');*/
-
-            date_b_string = date_begin.replace(/-/g, '');
-            date_e_string = date_end.replace(/-/g, '');
-            time_b_string = time_begin.replace(/:/g, '');
-            time_e_string = time_end.replace(/:/g, '');
-
-            date_b = parseInt(date_b_string);
-            date_e = parseInt(date_e_string);
-            time_b = parseInt(time_b_string);
-            time_e = parseInt(time_e_string);
-
-            //converting date and time to ints for internal data
-            /*rides_date_b_string = fhv_rides[i].date.replaceAll('-', '');
-            rides_date_e_string = fhv_rides[i].date.replaceAll('-', '');
-            rides_time_b_string = fhv_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = fhv_rides[i].time.replaceAll(':', '');*/
-
-            rides_date_b_string = fhv_rides[i].date.replace(/-/g, '');
-            rides_date_e_string = fhv_rides[i].date.replace(/-/g, '');
-            rides_time_b_string = fhv_rides[i].time.replace(/:/g, '');
-            rides_time_e_string = fhv_rides[i].time.replace(/:/g, '');
-
-            rides_date_b = parseInt(rides_date_b_string);
-            rides_date_e = parseInt(rides_date_e_string);
-            rides_time_b = parseInt(rides_time_b_string);
-            rides_time_e = parseInt(rides_time_e_string);
-            //console.log('PARAMETERS:', ride_service, date_begin, date_end, time_begin, time_end, location);
-            //console.log('ELSE: ', fhv_rides[i].date, fhv_rides[i].time, fhv_rides[i].address);
-
-            //console.log('PARAMETERS:', ride_service, date_b, date_e, time_b, time_e, location);
-            //console.log('ELSE: ', rides_date_b, rides_date_e, rides_time_b, rides_time_e);
-            if ((ride_service == fhv_rides[i].name) && (rides_date_b >= date_b && rides_date_e <= date_e) && (rides_time_b >= time_b && rides_time_e <= time_e) && fhv_rides[i].address.includes(location)) {
-                // console.log('We have a winner');
-                toReturn.push({"Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address});
+            if(fhv_rides[i].name != ride_service)
+            {
+                continue;
             }
+
+            //preparsed time
+            PPTime = fhv_rides[i].time;
+            //console.log("Preparsed Time: "+ PPTime)
+            var time = "";
+            for(let j = 0; j < PPTime.length; j++)
+            {
+                if((j == 0) && (PPTime[j] == "0"))
+                {
+                    continue;
+                }
+                //get only the hour
+                if(PPTime[j] == ":")
+                {
+                    break;
+                }
+                else
+                {
+                    time += PPTime[j];
+                }
+                
+            }
+            //console.log("Time After Parsing: " + time);
+
+            //console.log(busiest_time[parseInt(time)].value);
+            busiest_time[parseInt(time)].value++;
+
         }
     }
-    return toReturn;
+
+    /*console.log("Busiest Time: ");
+    busiest_time.forEach(hour => {
+        console.log(hour)
+    })*/
+
+    return busiest_time;
 }
 
 module.exports = { FindBusiestTime };

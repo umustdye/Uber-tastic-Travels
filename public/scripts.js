@@ -172,6 +172,89 @@ $(function () {
         });
     });
 
+
+
+
+// CREATE/POST
+$('#busiest-times').on('click', function (event) {
+    event.preventDefault();
+
+    $.ajax({
+        url: '/busiest-times',
+        method: 'POST',
+        contentType: 'application/json',
+
+        success: function (response) {
+            var tbodyEl = $('tbody');
+
+            tbodyEl.html('');
+
+
+                tbodyEl.append('\
+                    <tr>\
+                        <td>' + '<b>Select a Riding Service to view Pick-ups per Hour</b> | ' + '</td>\
+                        <td>\
+                            Ride Service: <select class="service_selector_time" id="ride_service_time">\
+                            <option value="Uber">Uber</option>\
+                            <option value="American">American</option>\
+                            <option value="Diplo">Diplo</option>\
+                            <option value="Firstclass">Firstclass</option>\
+                            <option value="Highclass">Highclass</option>\
+                            <option value="Prestige">Prestige</option>\
+                            </select>\
+                            <button class="service4Time"> Add Ride </button>\
+                        </td>\
+                    </tr>\
+                ');
+        }
+    });
+});
+
+
+
+    //Process busiest-time query and search
+    $('table').on('click', '.service4Time', function () {
+        console.log("Before...")
+        var rowEl = $(this).closest('tr');
+        var service = rowEl.find('.service_selector_time').val();
+        console.log("After...")
+        $.ajax({
+            url: '/find_busiest_time',
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({ Service: service }),
+            success: function (response) {
+                //console.log(response);
+                var tbodyEl = $('tbody');
+
+                tbodyEl.html('');
+
+                tbodyEl.append('\
+                <tr>' + '<b>' + 'service' + ' Pick-ups per Hour</b> ' + '</tr>\
+                <tr>\
+                    <td class="hour">' + "Hour" + '</td>\
+                    <td class="value">' + "Number of Rides" + '</td>\
+                </tr>\
+                ');
+
+                response.Busiest_Time.forEach(function (time) {
+                    tbodyEl.append('\
+                    <tr>\
+                        <td class="hour">' + time.hour + '</td>\
+                        <td class="value">' + time.value + '</td>\
+                    </tr>\
+                ');
+
+                });
+            }
+        });
+    });
+
+
+
+
+
+
     // CREATE/POST
     $('#add_fhv_ride').on('click', function (event) {
         event.preventDefault();
