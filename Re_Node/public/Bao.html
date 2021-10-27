@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<!--
+tr - table row
+th - table head
+td - table data
+h# - header
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Example</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#textareabutton').click(function(){
+        var q  = $('#textarea').val(),
+            $p = $('<p>').html( q );
+        $('#questions').append( $p );
+      });
+      $('#submit').click(function(){
+        var tab;
+        tab = $('#questions p').serializeArray();
+        // now do something with $.ajax to submit the questions
+        $.post("myphp.php",tab,function(resp){
+          // what do I do with the server's reply ???
+        });
+      });
+    });
+    </script>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <textarea id='textarea'></textarea>
+    <button type='button' id='textareabutton'>Add question</button>
+    <div id='questions'></div>
+    <button type='button' id='submit'>Submit questions</button>
+</body>
+
+</html>

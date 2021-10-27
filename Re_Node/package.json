@@ -1,0 +1,20 @@
+{
+  "name": "re_node",
+  "version": "0.0.0",
+  "description": "Re_Node",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "author": {
+    "name": "Bao Lam Le"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "html": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}

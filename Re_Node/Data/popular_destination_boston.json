@@ -1,0 +1,98 @@
+[
+   {
+      "Destination": "North Station",
+      "Count": 57119
+   },
+   {
+      "Destination": "Northeastern University",
+      "Count": 57755
+   },
+   {
+      "Destination": "West End",
+      "Count": 57575
+   },
+   {
+      "Destination": "Haymarket Square",
+      "Count": 57764
+   },
+   {
+      "Destination": "South Station",
+      "Count": 57749
+   },
+   {
+      "Destination": "Fenway",
+      "Count": 57757
+   },
+   {
+      "Destination": "Theatre District",
+      "Count": 57798
+   },
+   {
+      "Destination": "Beacon Hill",
+      "Count": 57403
+   },
+   {
+      "Destination": "Back Bay",
+      "Count": 57780
+   },
+   {
+      "Destination": "North End",
+      "Count": 57756
+   },
+   {
+      "Destination": "Financial District",
+      "Count": 58851
+   },
+   {
+      "Destination": "Boston University",
+      "Count": 57764
+   },
+   {
+      "Source": "North Station",
+      "Count": 57119
+   },
+   {
+      "Source": "Northeastern University",
+      "Count": 57755
+   },
+   {
+      "Source": "West End",
+      "Count": 57575
+   },
+   {
+      "Source": "Haymarket Square",
+      "Count": 57764
+   },
+   {
+      "Source": "South Station",
+      "Count": 57749
+   },
+   {
+      "Source": "Fenway",
+      "Count": 57757
+   },
+   {
+      "Source": "Theatre District",
+      "Count": 57798
+   },
+   {
+      "Source": "Beacon Hill",
+      "Count": 57403
+   },
+   {
+      "Source": "Back Bay",
+      "Count": 57780
+   },
+   {
+      "Source": "North End",
+      "Count": 57756
+   },
+   {
+      "Source": "Financial District",
+      "Count": 58851
+   },
+   {
+      "Source": "Boston University",
+      "Count": 57764
+   }
+]

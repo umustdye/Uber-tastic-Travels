@@ -1,0 +1,80 @@
+[
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Shared",
+      "Lowest_price": 0.5565862708719852,
+      "Highest_price": 19.565217391304348
+   },
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Lux",
+      "Lowest_price": 4.726890756302521,
+      "Highest_price": 42.391304347826086
+   },
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Lyft",
+      "Lowest_price": 2.2245762711864407,
+      "Highest_price": 29.34782608695652
+   },
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Lux Black XL",
+      "Lowest_price": 7.503949447077409,
+      "Highest_price": 114.13043478260869
+   },
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Lyft XL",
+      "Lowest_price": 4.107424960505529,
+      "Highest_price": 38.13559322033898
+   },
+   {
+      "Cab_Type": "Lyft",
+      "Name": "Lux Black",
+      "Lowest_price": 6.018518518518518,
+      "Highest_price": 65.47619047619048
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "UberXL",
+      "Lowest_price": 2.845528455284553,
+      "Highest_price": 475
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "Black",
+      "Lowest_price": 3.9936102236421727,
+      "Highest_price": 750
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "UberX",
+      "Lowest_price": 1.8370607028753994,
+      "Highest_price": 375
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "WAV",
+      "Lowest_price": 1.8370607028753994,
+      "Highest_price": 375
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "Black SUV",
+      "Lowest_price": 5.563002680965147,
+      "Highest_price": 1375
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "UberPool",
+      "Lowest_price": 1.4745308310991958,
+      "Highest_price": 375
+   },
+   {
+      "Cab_Type": "Uber",
+      "Name": "Taxi",
+      "Lowest_price": 0,
+      "Highest_price": 0
+   }
+]
