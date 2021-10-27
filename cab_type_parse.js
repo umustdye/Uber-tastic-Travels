@@ -6,7 +6,7 @@ const fileName = "csv_files\\cab_rides.csv";
 
 function ParseCab_Rides()
 {
-    console.log('About to read Uber dataset file...');
+    console.log('About to read cab_rides dataset file...');
 
     fileData = fs.readFileSync(fileName, 'utf8');
 
