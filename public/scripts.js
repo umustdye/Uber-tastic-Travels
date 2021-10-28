@@ -456,7 +456,39 @@ $('#busiest-times').on('click', function (event) {
                 tbodyEl.html('');
 
                 var data;
-                response.forEach(portion => {
+                // response.forEach(portion => {
+                //     data = {
+                //         header: ["Name", "Number of Rides"],
+                //         rows: [
+                //               [portion.name1, portion.count1],
+                //               [portion.name2, portion.count2]
+                //               ]
+                //     };
+                // });
+                anychart.onDocumentReady(function() {
+ 
+                    // set the data
+                    var data;
+                    var Cname1;
+                    var Cname2;
+                    var Cmonth;
+                    response.forEach(portion => {
+                      
+                        
+                        if (portion.month[6] == 7) {
+                            Cmonth = "July";
+                        }
+                        else if (portion.month[6] == 8) {
+                            Cmonth = "August";
+                        }
+                        else if (portion.month[6] == 9) {
+                            Cmonth = "September";
+                        }
+                       
+    
+                        Cname1 = portion.name1;
+                        Cname2 = portion.name2;
+                        
                     data = {
                         header: ["Name", "Number of Rides"],
                         rows: [
@@ -465,34 +497,22 @@ $('#busiest-times').on('click', function (event) {
                               ]
                     };
                 });
-                // anychart.onDocumentReady(function() {
- 
-                //     // set the data
-                //     var data = {
-                //         header: ["Name", "Death toll"],
-                //         rows: [
-                //           ["San-Francisco (1906)", 1500],
-                //           ["Messina (1908)", 87000],
-                //           ["Ashgabat (1948)", 175000],
-                //           ["Chile (1960)", 10000],
-                //           ["Tian Shan (1976)", 242000],
-                //           ["Armenia (1988)", 25000],
-                //           ["Iran (1990)", 50000]
-                //     ]};
+
+
+                   
+                    // create the chart
+                    var chart = anychart.bar();
              
-                //     // create the chart
-                //     var chart = anychart.bar();
+                    // add the data
+                    chart.data(data);
              
-                //     // add the data
-                //     chart.data(data);
+                    // set the chart title
+                    chart.title("Comparing " + Cname1 + " & " + Cname2 + " for the month of " + Cmonth);
              
-                //     // set the chart title
-                //     chart.title("The deadliest earthquakes in the XXth century");
-             
-                //     // draw
-                //     chart.container("container");
-                //     chart.draw();
-                //   });
+                    // draw
+                    chart.container("container");
+                    chart.draw();
+                 });
             }
         });
     });
