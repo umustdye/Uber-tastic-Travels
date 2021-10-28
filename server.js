@@ -3,6 +3,7 @@ const UberParser = require('./uber_parser.js');
 const fhvParser = require('./fhv_parser.js');
 const Noah = require('./Noah_Parse.js');
 const cab_rides_parser = require('./cab_type_parse.js');
+const Bao = require('./Bao_dataAnalytics.js');
 const Heidi = require('./busiest_time.js');
 var bodyParser = require('body-parser');
 const { application } = require('express');
@@ -26,9 +27,10 @@ uber = UberParser.ParseUber();
 fhv = fhvParser.Parsefhv();
 cab_rides = cab_rides_parser.ParseCab_Rides();
 // console.log(cab_rides);
-
-//console.log(Parser.CompareBasedOnMonth());
-//compareDiplo = Noah.CompareBasedOnMonth(uber, fhv, "Diplo");
+//console.log(Bao.cab_type(cab_rides));
+//console.log(Bao.cab_price(cab_rides));
+//console.log(Bao.popular_destination_boston(cab_rides));
+//console.log(Bao.popular_routes(cab_rides));
 //Heidi.FindBusiestTime(uber, fhv, "Diplo");
 
 //public is name of html directory, basically website shtuff
@@ -38,6 +40,30 @@ server.use(bodyParser.json());
 
 server.get('/pickup_date', function(req, res){
     res.send({ uber_date: uber.slice(1, 20)});
+});
+//Bao's Analytics
+server.get('/cab_type', function(req, res)
+{
+    cab_type = Bao.cab_type(cab_rides);
+    res.send({cab_type, cab_type});
+});
+
+server.get('/cab_price', function(req, res)
+{
+    cab_price = Bao.cab_price(cab_rides);
+    res.send({cab_price, cab_price});
+});
+
+server.get('/popular_destination_boston', function(req, res)
+{
+    popular_destination_boston = Bao.popular_destination_boston(cab_rides);
+    res.send({popular_destination_boston, popular_destination_boston});
+});
+
+server.get('/popular_routes', function(req, res)
+{
+    popular_routes = Bao.popular_routes(cab_rides);
+    res.send({popular_routes, popular_routes});
 });
 
 server.get('/save_uber', function(req, res){

@@ -1,200 +1,224 @@
 var readFS = require('fs');
-const readLine = require('readline');
 
-function readCSV() {
-    readFS.readFile('csv_files\\cab_rides.csv', 'utf8', (err, data) => {
-        if (err) {
-            console.log(err);
-            return;
+//Read in CSV file and returning array of JSON objects.
+function CSVtoJSON(data) {
+
+    var line = data.split("\n");
+
+    var result = [];
+
+    for (var j = 0; j < line.length; ++j) {
+        line[j] = line[j].replace(/(\r\n|\n|\r)/gm, "");
+    }
+
+    var header = line[0].split(",");
+
+    for (var i = 1; i < line.length; ++i) {
+        var object = {};
+        var row = line[i].split(",");
+        if (typeof row == "undefined") {
+            console.log("Error");
+        }
+
+        for (var j = 0; j < header.length; ++j) {
+            if (typeof row[j] == "undefined") {
+                console.log("Element undefined in row" + i);
+            }
+            else {
+                object[header[j]] = row[j];
+            }
+        }
+
+        result.push(object);
+    }
+
+    return result;
+}
+
+//Analytic on # of uber vs. lyft cars and total cars.
+function cab_type(data) {
+
+    var final_data = data;
+    var num_uber = 0, num_lyft = 0;
+
+    for (var i = 0; i < final_data.length; ++i) {
+        if (final_data[i].cab_type == "Uber") {
+            ++num_uber;
         }
         else {
-
-            var element = data.split(',');
-
-            //made arrays for each category so we can access it individually.
-            var distance = new Array();
-            var cab_type = new Array();
-            var time = new Array();
-            var destination = new Array();
-            var source = new Array();
-            var price = new Array();
-            var surge_multiplier = new Array();
-            var id = new Array();
-            var product_id = new Array();
-            var name = new Array();
-            let i = 9;
-
-            while (i < element.length) {
-                var split = new String();
-                split = element[i].split('\r');
-                if (i != 9) {
-                    name.push(split[0]);
-                }
-                distance.push(split[1]);
-                ++i;
-                cab_type.push(element[i]);
-                ++i;
-                time.push(element[i]);
-                ++i;
-                destination.push(element[i]);
-                ++i;
-                source.push(element[i]);
-                ++i;
-                price.push(element[i]);
-                ++i;
-                surge_multiplier.push(element[i]);
-                ++i;
-                id.push(element[i]);
-                ++i;
-                product_id.push(element[i]);
-                ++i;
-            }
-
-            //deletes all newline
-            for (let j = 0; j < distance.length; ++j) {
-                distance[j] = distance[j].replace(/(\r\n|\n|\r)/gm, "");
-            }
-
+            ++num_lyft;
         }
+    }
 
-        console.log(distance);
+    const obj = {
+        "Uber": num_uber, "Lyft": num_lyft, "Total": (num_lyft + num_uber)
+    };
 
-        //Data analytics here
-        var num_uber = 0;
-        var num_lyft = 0;
+    return obj;
+}
 
-        for (let i = 0; i < cab_type.length; ++i) {
-            if (cab_type[i] == "Uber") {
-                ++num_uber;
+//Analytic on price per mile of what cab type (uber vs. lyft) and how expensive or cheap the cab services are.
+function cab_price(data) {
+    var final_data = data;
+
+    const low_lyftPPM = new Map();
+    const low_uberPPM = new Map();
+    const high_lyftPPM = new Map();
+    const high_uberPPM = new Map();
+    var PPM;
+
+
+    for (let i = 0; i < final_data.length; ++i) {
+        PPM = final_data[i].price / final_data[i].distance;
+        if (final_data[i].cab_type == "Uber") {
+            if (!low_uberPPM.has(final_data[i].name)) {
+                low_uberPPM.set(final_data[i].name, PPM);
+                high_uberPPM.set(final_data[i].name, PPM);
             }
-            else {
-                ++num_lyft;
-            }
-        }
-
-        console.log("Uber Trips: %d\n", num_uber);
-        console.log("Lyft Trips: %d\n", num_lyft);
-
-        //vehicle price per mile between uber and lyft.
-        //low represents the cheapest service of the car's make/brand/service type based on the mile per hour.
-        //high represents the most expensive service of the car's make/brand/service type based on the mile per hour.
-        const low_lyftPPM = new Map();
-        const low_uberPPM = new Map();
-        const high_lyftPPM = new Map();
-        const high_uberPPM = new Map();
-        var PPM;
-
-        for (let i = 0; i < cab_type.length; ++i) {
-            PPM = price[i] / distance[i];
-            if (cab_type[i] == "Uber") {
-                if (!low_uberPPM.has(name[i])) {
-                    low_uberPPM.set(name[i], PPM);
-                    high_uberPPM.set(name[i], PPM);
+            else if (low_uberPPM.has(final_data[i].name)) {
+                if (low_uberPPM.get(final_data[i].name) > PPM) {
+                    low_uberPPM.set(final_data[i].name, PPM);
                 }
-                else if (low_uberPPM.has(name[i])) {
-                    if (low_uberPPM.get(name[i]) > PPM) {
-                        low_uberPPM.set(name[i], PPM);
-                    }
-                    if (high_uberPPM.get(name[i]) < PPM) {
-                        high_uberPPM.set(name[i], PPM);
-                    }
-                }
-            }
-            else {
-                if (!low_lyftPPM.has(name[i])) {
-                    low_lyftPPM.set(name[i], PPM);
-                    high_lyftPPM.set(name[i], PPM);
-                }
-                else if (low_lyftPPM.has(name[i])) {
-                    if (low_lyftPPM.get(name[i]) > PPM) {
-                        low_lyftPPM.set(name[i], PPM);
-                    }
-                    if (high_lyftPPM.get(name[i]) < PPM) {
-                        high_lyftPPM.set(name[i], PPM);
-                    }
+                if (high_uberPPM.get(final_data[i].name) < PPM) {
+                    high_uberPPM.set(final_data[i].name, PPM);
                 }
             }
         }
-
-        const it1 = low_lyftPPM[Symbol.iterator]();
-        const it2 = high_lyftPPM[Symbol.iterator]();
-        const it3 = low_uberPPM[Symbol.iterator]();
-        const it4 = high_uberPPM[Symbol.iterator]();
-
-        console.log("\nCheapest Lyft Services:\n");
-        for (const item of it1) {
-            console.log(item);
-        }
-
-        console.log("\nMost expensive Lyft Services:\n");
-        for (const item of it2) {
-            console.log(item);
-        }
-
-        console.log("\nCheapest uber services: \n")
-        for (const item of it3) {
-            console.log(item);
-        }
-
-        console.log("\nMost expensive uber services:\n");
-        for (const item of it4) {
-            console.log(item);
-        }
-
-        //error checking
-        //need more debugging
-        var expensive_price = 0;
-        for (let i = 0; i < price.length; ++i) {
-            if (expensive_price < price[i]) {
-                expensive_price = price[i];
+        else {
+            if (!low_lyftPPM.has(final_data[i].name)) {
+                low_lyftPPM.set(final_data[i].name, PPM);
+                high_lyftPPM.set(final_data[i].name, PPM);
+            }
+            else if (low_lyftPPM.has(final_data[i].name)) {
+                if (low_lyftPPM.get(final_data[i].name) > PPM) {
+                    low_lyftPPM.set(final_data[i].name, PPM);
+                }
+                if (high_lyftPPM.get(final_data[i].name) < PPM) {
+                    high_lyftPPM.set(final_data[i].name, PPM);
+                }
             }
         }
+    }
 
-        console.log(expensive_price);
+    
+    const result = [];
 
+    var low = [];
+    var high = [];
+    for (var i of low_lyftPPM.keys()) {
+        var obj = {};
+        obj = { "Cab_Type": "Lyft", "Name": i, "PPM": low_lyftPPM.get(i) };
+        low.push(obj);
+    }
 
-        //Most popular source and destination
-        const dest_data = new Map();
-        const src_data = new Map();
-        var temp;
+    for (var i of high_lyftPPM.keys()) {
+        var obj = {};
+        obj = { "Cab_Type": "Lyft", "Name": i, "PPM": high_lyftPPM.get(i) };
+        high.push(obj);
+    }
 
-        for (let i = 0; i < distance.length; ++i) {
-            if (!dest_data.has(destination[i])) {
-                dest_data.set(destination[i], 1);
-            }
-            else {
-                dest_data.set(destination[i], dest_data.get(destination[i]) + 1);
-            }
+    for (var i = 0; i < low.length; ++i) {
+        var obj = {};
+        obj = { "Cab_Type": "Lyft", "Name": low[i].Name, "Lowest_price": low[i].PPM, "Highest_price": high[i].PPM };
+        result.push(obj);
+    }
 
-            if (!src_data.has(destination[i])) {
-                src_data.set(destination[i], 1);
-            }
-            else {
-                src_data.set(destination[i], src_data.get(destination[i]) + 1);
-            }
+    var low = new Array();
+    var high = new Array();
+
+    for (var i of low_uberPPM.keys()) {
+        var obj = {};
+        obj = { "Cab_Type": "Uber", "Name": i, "PPM": low_uberPPM.get(i) };
+        low.push(obj);
+    }
+
+    for (var i of high_uberPPM.keys()) {
+        var obj = {};
+        obj = { "Cab_Type": "Uber", "Name": i, "PPM": high_uberPPM.get(i) };
+        high.push(obj);
+    }
+
+    for (var i = 0; i < low.length; ++i) {
+        var obj = {};
+        obj = { "Cab_Type": "Uber", "Name": low[i].Name, "Lowest_price": low[i].PPM, "Highest_price": high[i].PPM };
+        result.push(obj);
+    }
+
+    return result;
+}
+
+//Just show an overview of the most picked source and destination, the data doesn't correlate with each other in any way.
+//will add another analytic where both data correlate with each other.
+function popular_destination_boston(data) {
+    var dest = new Map();
+    var src = new Map();
+    var result = [];
+    for (let i = 0; i < data.length; ++i) {
+        if (!dest.has(data[i].destination)) {
+            dest.set(data[i].destination, 1);
+        }
+        else {
+            dest.set(data[i].destination, dest.get(data[i].destination) + 1);
         }
 
-        const it5 = dest_data[Symbol.iterator]();
-        const it6 = src_data[Symbol.iterator]();
-
-        console.log("\nMost popular destinations:\n");
-        for (const item of it5) {
-            console.log(item);
+        if (!src.has(data[i].destination)) {
+            src.set(data[i].destination, 1);
         }
-
-        console.log("\nMost popular source:\n");
-        for (const item of it6) {
-            console.log(item);
+        else {
+            src.set(data[i].destination, src.get(data[i].destination) + 1);
         }
+    }
 
+    for (var i of dest.keys()) {
+        var obj = {};
+        obj = { "Destination": i, "Count": dest.get(i) }
+        result.push(obj);
+    }
 
-        //need debugging
+    for (var i of src.keys()) {
+        var obj = {};
+        obj = { "Source": i, "Count": src.get(i) }
+        result.push(obj);
+    }
 
-    });
-
-
-
+    return result;
 }
 
 
-module.exports = { readCSV };
+//maps out which source goes to which destination and output a list of popular "route" (source to destination).
+function popular_routes(data) {
+
+    var result = [];
+    var temp = [];
+
+    for (var i = 0; i < data.length; ++i) {
+        var new_src = 0;
+        var new_dest = 0;
+        var obj = {};
+        if (result.length == 0) {
+            obj = { "source": data[i].source, "destination": data[i].destination, "count": 1 }
+            result.push(obj);  
+        }
+        else {
+            for (var j = 0; j < result.length; ++j) {
+                if (result[j].source == data[i].source) {
+                    new_src = 1;
+                    if (result[j].destination == data[i].destination) {
+                        new_dest = 1;
+                        result[j].count = result[j].count + 1;
+                        break;
+                    }
+                }
+            }
+            //new source
+            if (new_src == 0 || new_dest == 0) {
+                obj = { "source": data[i].source, "destination": data[i].destination, "count": 1 }
+                result.push(obj);
+            }
+        }
+    }
+
+    return result;
+}
+
+module.exports = { CSVtoJSON, cab_type, cab_price, popular_destination_boston, popular_routes };

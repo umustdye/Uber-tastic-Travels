@@ -30,22 +30,6 @@ function parseToJSON(data)
 
 }
 
-//unparse
-function parseToObject(data)
-{
-    /*
-    $(jQuery.parseJSON(JSON.stringify(dataArray))).each(function() {  
-    var ID = this.id;
-    var TITLE = this.Title;
-    }); 
-    or
-    $(jQuery.parseJSON(dataArray)).each(function() {  
-    var ID = this.id;
-    var TITLE = this.Title;
-    });
-*/
- 
-}
 
 //pass in fileData
 function parseCSVToJSON(data)
