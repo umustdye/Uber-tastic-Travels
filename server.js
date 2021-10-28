@@ -135,16 +135,10 @@ server.post('/add_uber_ride', function(req, res) {
 
 //compare Uber to other riding services
 server.post('/compare_results', function(req, res) {
-    var results = [];
-
-    console.log(req.body.rideService);
-
-    results = Noah.CompareBasedOnMonth(uber, fhv, req.body.rideService);
-    console.log('Great Success!!');
-    // console.log(results);
-    if (results.length == 0) {
-        results = [{"Month": 'No Data Available', "uber_rides": 'No Data Available', "f_rides": 'No Data Available'}];
-    }
-    // console.log(results);
-    res.send({comparing: results});
+    var results;
+    console.log('Server', req.body.rideService1, req.body.rideService2, req.body.date);
+    results = Noah.CompareBasedOnMonth(uber, fhv, req.body.rideService1, req.body.rideService2, req.body.date)
+    console.log(results);
+    res.send(results);
 });
+

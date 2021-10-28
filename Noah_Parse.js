@@ -1,54 +1,86 @@
 const fs = require('fs');
 
-function CompareBasedOnMonth(uber_rides, fhv_rides, f_name) 
+function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date) 
 {
-    compare = [];
-    console.log('Comparing Uber to ' + f_name)
+    var compare = [];
+    first_count = 0;
+    second_count = 0;
+    console.log('Comparing ', name_1, ' to ', name_2);
     //check all the months
-    for (let specified_month = 1; specified_month < 13; specified_month++)
-    {
-        var u_rides = 0;
-        var f_rides = 0;
-        //specified_month = 7;
-        //f_name = 'Diplo'; 
 
+    if (name_1 == 'Uber') {
         for (let i = 0; i < uber_rides.length; i++) {
-            if(typeof uber_rides[i].date.charAt(0) === 'undefined')
-            {
-                console.log("Month" + uber_rides[i].date.charAt(0) + "is not defined...");
-                continue;
-            }
-
-
-            if (uber_rides[i].date.charAt(0) == specified_month) {
-                u_rides = u_rides + 1;
+            if (uber_rides[i].date[6] == date[6]) {
+                first_count += 1;
             }
         }
-
+    }
+    else {
         for (let i = 0; i < fhv_rides.length; i++) {
-            if(typeof fhv_rides[i].date === 'undefined')
-            {
-                //console.log("Month " + i + " is not defined...");
-                continue;
-            }
-
-
-            if ((fhv_rides[i].date.charAt(0) == specified_month) && (fhv_rides[i].name == f_name)) 
-            {
-                f_rides += 1;
+            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_1)) {
+                first_count += 1;
             }
         }
-
-        //save as JSON Object
-        if(u_rides > 0 && f_rides > 0)
-        {
-            compare.push({"month": specified_month, "u_rides": u_rides, "f_name": f_name, "f_rides": f_rides});
-        }
-        
     }
 
+    if (name_2 == 'Uber') {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if (uber_rides[i].date[6] == date[6]) {
+                second_count += 1;
+            }
+        }
+    }
+    else {
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_2)) {
+                second_count += 1;
+            }
+        }
+    }
+    // for (let specified_month = 1; specified_month < 13; specified_month++)
+    // {
+    //     var u_rides = 0;
+    //     var f_rides = 0;
+    //     //specified_month = 7;
+    //     //f_name = 'Diplo'; 
+
+    //     for (let i = 0; i < uber_rides.length; i++) {
+    //         if(typeof uber_rides[i].date.charAt(0) === 'undefined')
+    //         {
+    //             console.log("Month" + uber_rides[i].date.charAt(0) + "is not defined...");
+    //             continue;
+    //         }
 
 
+    //         if (uber_rides[i].date.charAt(0) == specified_month) {
+    //             u_rides = u_rides + 1;
+    //         }
+    //     }
+
+    //     for (let i = 0; i < fhv_rides.length; i++) {
+    //         if(typeof fhv_rides[i].date === 'undefined')
+    //         {
+    //             //console.log("Month " + i + " is not defined...");
+    //             continue;
+    //         }
+
+
+    //         if ((fhv_rides[i].date.charAt(0) == specified_month) && (fhv_rides[i].name == f_name)) 
+    //         {
+    //             f_rides += 1;
+    //         }
+    //     }
+
+    //     //save as JSON Object
+    //     if(u_rides > 0 && f_rides > 0)
+    //     {
+    //         compare.push({"month": specified_month, "u_rides": u_rides, "f_name": f_name, "f_rides": f_rides});
+    //     }
+        
+    // }
+
+
+    compare.push({"month": date, "name1": name_1, "name2": name_2, "count1": first_count, "count2": second_count});
     /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
     output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
     output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}*/

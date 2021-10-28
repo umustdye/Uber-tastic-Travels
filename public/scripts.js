@@ -435,39 +435,64 @@ $('#busiest-times').on('click', function (event) {
 
 
     // CREATE/POST
-    $('#compare_parameters').on('submit', function(event) {
+    $('#compare_parameters').on('submit', function (event) {
         event.preventDefault();
 
-        var ride_service_compare = $('#ride_service_compare');
+        var ride_service_1 = $('#ride_service_compare_1');
+        var ride_service_2 = $('#ride_service_compare_2');
+        var date = $('#compare_date');
 
+        console.log('Scripts', ride_service_1.val(), ride_service_2.val(), date.val());
 
         $.ajax({
             url: '/compare_results',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ rideService: ride_service_compare.val() }),
-            success: function(response) {
+            data: JSON.stringify({ rideService1: ride_service_1.val(), rideService2: ride_service_2.val(), date: date.val()}),
+            success: function (response) {
+                console.log(response);
                 var tbodyEl = $('tbody');
 
                 tbodyEl.html('');
-                tbodyEl.append('\
-                <tr>\
-                    <td class="month">' + "month" + '</td>\
-                    <td class="u_rides">' + "Uber Rides" + '</td>\
-                    <td class="f_rides">' + response.comparing[0].f_name + " Rides" + '</td>\
-                </tr>\
-                ');
 
-                response.comparing.forEach(function(compare) {
-                    tbodyEl.append('\
-                    <tr>\
-                        <td class="month">' + compare.month + '</td>\
-                        <td class="u_rides">' + compare.u_rides + '</td>\
-                        <td class="f_rides">' + compare.f_rides + '</td>\
-                    </tr>\
-                    ');
-            
-            });
+                var data;
+                response.forEach(portion => {
+                    data = {
+                        header: ["Name", "Number of Rides"],
+                        rows: [
+                              [portion.name1, portion.count1],
+                              [portion.name2, portion.count2]
+                              ]
+                    };
+                });
+                // anychart.onDocumentReady(function() {
+ 
+                //     // set the data
+                //     var data = {
+                //         header: ["Name", "Death toll"],
+                //         rows: [
+                //           ["San-Francisco (1906)", 1500],
+                //           ["Messina (1908)", 87000],
+                //           ["Ashgabat (1948)", 175000],
+                //           ["Chile (1960)", 10000],
+                //           ["Tian Shan (1976)", 242000],
+                //           ["Armenia (1988)", 25000],
+                //           ["Iran (1990)", 50000]
+                //     ]};
+             
+                //     // create the chart
+                //     var chart = anychart.bar();
+             
+                //     // add the data
+                //     chart.data(data);
+             
+                //     // set the chart title
+                //     chart.title("The deadliest earthquakes in the XXth century");
+             
+                //     // draw
+                //     chart.container("container");
+                //     chart.draw();
+                //   });
             }
         });
     });
