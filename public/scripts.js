@@ -588,3 +588,7 @@ function EndTimeCheck(time_to_check) {
         time_to_check.value = time_begin;
     }
 }
+
+function ClearDiv() {
+    document.getElementById("container").innerHTML = "";
+}
