@@ -221,4 +221,19 @@ function popular_routes(data) {
     return result;
 }
 
-module.exports = { CSVtoJSON, cab_type, cab_price, popular_destination_boston, popular_routes };
+function unix_to_time(data) {
+    var result = [];
+    for (var i = 0; i < data.length; ++i) {
+        var date = new Date(data[i].time_stamp * 1000);
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds();
+
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        result.push(formattedTime);
+    }
+
+    return result;
+}
+
+module.exports = { CSVtoJSON, cab_type, cab_price, popular_destination_boston, popular_routes, unix_to_time };
