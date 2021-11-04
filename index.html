@@ -7,6 +7,10 @@
     <title>Uber Specs</title>
 </head>
 <body>
+    <button id="cab_type">Cab Type</button>
+    <button id="cab_price">Cab Price</button>
+    <button id="popular_destination_boston">Most Popular Destination in Boston</button>
+    <button id="popular_routes">Most Popular Routes</button>
     <!-- <button id="get-pickup">Uber Oldests Pick-up Dates</button> -->
     <button id="busiest-times">Pick-ups By The Hour</button>
     <!-- <button id="compareDiplo">Compare Uber to Other Services</button> -->
@@ -24,7 +28,6 @@
         </thead>
         <tbody></tbody>
     </table>
-    <hr>
     <h1>Search</h1>
     <form id='search_parameters'>
         <br> Ride Service: <br>
@@ -49,34 +52,22 @@
         <label for="search_type"> Edit Search Results </label><br><br>
         <button id='initiate_search'>Search</button>
     </form>
-    <hr>
-    <h1>Compare Service Performance</h1>
+
+    <h1>Compare Uber to Other Services</h1>
     <form id='compare_parameters'>
-        Select a Ride Service: <select id='ride_service_compare_1'>
+        <br> Ride Service: <br>
+        Choose a Ride Service: <select id='ride_service_compare'>
             <option value='American'>American</option>
             <option value='Diplo'>Diplo</option>
             <option value='Firstclass'>Firstclass</option>
             <option value='Highclass'>Highclass</option>
             <option value='Prestige'>Prestige</option>
-            <option value='Uber'>Uber</option>
-        </select><br><br>
-        Select Another Ride Service: <select id='ride_service_compare_2'>
-            <option value='American'>American</option>
-            <option value='Diplo'>Diplo</option>
-            <option value='Firstclass'>Firstclass</option>
-            <option value='Highclass'>Highclass</option>
-            <option value='Prestige'>Prestige</option>
-            <option value='Uber'>Uber</option>
-        </select><br><br>
-        Select a Month to Compare: <input type='month' id='compare_date' min="2014-07" max="2014-09" required>
-        <br><br><button onclick="ClearDiv()">Compare</button>
+        </select>
+        <button>Compare Uber to Other Services</button>
     </form>
-    <hr>
-    <div id="container" style="width: 100%; height: 100%"></div>
 
     <script src="./jQuery.js"></script>
     <script src="./scripts.js"></script>
-    <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
     
 </body>
 </html>

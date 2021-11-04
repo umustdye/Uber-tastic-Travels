@@ -2,7 +2,7 @@ var readFS = require('fs');
 const readLine = require('readline');
 
 function readCSV() {
-    readFS.readFile('/Users/Bao Lam/source/repos/ExpressApp1/ExpressApp1/cab_rides.csv', 'utf8', (err, data) => {
+    readFS.readFile('csv_files\\cab_rides.csv', 'utf8', (err, data) => {
         if (err) {
             console.log(err);
             return;

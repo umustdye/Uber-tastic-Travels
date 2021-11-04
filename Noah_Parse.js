@@ -1,239 +1,125 @@
 const fs = require('fs');
 
-class UberRide {
-    constructor(date, time, latitude, longitude) {
-        this.date = date;
-        this.time = time;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
-}
+function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date) 
+{
+    var compare = [];
+    first_count = 0;
+    second_count = 0;
+    console.log('Comparing ', name_1, ' to ', name_2);
+    //check all the months
 
-class FHVRide {
-    constructor(date, time, address, name) {
-        this.date = date;
-        this.time = time;
-        this.address = address;
-        this.name = name;
-    }
-}
-
-var uber_rides = []
-var fhv_rides = []
-
-function convertTo24Hr (toConvert) {
-    if (toConvert.includes('AM')) {
-        if ((toConvert[0] == 1) && (toConvert[1] == 2)) { //12 AM
-            converted = '00:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 1) && (toConvert[1] == 1)) { //11 AM
-            converted = '11:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 1) && (toConvert[1] == 0)) { //10 AM
-            converted = '10:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 9)) { //9 AM
-            converted = '09:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 8)) { //8 AM
-            converted = '08:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 7)) { //7 AM
-            converted = '07:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 6)) { //6 AM
-            converted = '06:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 5)) { //5 AM
-            converted = '05:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 4)) { //4 AM
-            converted = '04:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 3)) { //3 AM
-            converted = '03:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 2)) { //2 AM
-            converted = '02:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else { //1 AM
-            converted = '01:' + toConvert[2] + toConvert[3];
-            return converted;
+    if (name_1 == 'Uber') {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if (uber_rides[i].date[6] == date[6]) {
+                first_count += 1;
+            }
         }
     }
     else {
-        if ((toConvert[0] == 1) && (toConvert[1] == 2)) { //12 PM
-            converted = '12:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 1) && (toConvert[1] == 1)) { //11 PM
-            converted = '23:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 1) && (toConvert[1] == 0)) { //10 PM
-            converted = '22:' + toConvert[3] + toConvert[4];
-            return converted;
-        }
-        else if ((toConvert[0] == 9)) { //9 PM
-            converted = '21:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 8)) { //8 PM
-            converted = '20:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 7)) { //7 PM
-            converted = '19:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 6)) { //6 PM
-            converted = '18:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 5)) { //5 PM
-            converted = '17:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 4)) { //4 PM
-            converted = '16:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 3)) { //3 PM
-            converted = '15:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else if ((toConvert[0] == 2)) { //2 PM
-            converted = '14:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-        else { //1 PM
-            converted = '13:' + toConvert[2] + toConvert[3];
-            return converted;
-        }
-    }
-}
-
-function ParseCSV() {
-    console.log('Reading in Files');
-
-    var uber_set = ['./csv_files/uber-raw-data-apr14.csv', './csv_files/uber-raw-data-may14.csv', './csv_files/uber-raw-data-jun14.csv', './csv_files/uber-raw-data-jul14.csv', './csv_files/uber-raw-data-aug14.csv', './csv_files/uber-raw-data-sep14.csv'];
-
-    for (let i = 0; i < uber_set.length; i++) {
-        data = fs.readFileSync(uber_set[i], 'utf8');
-
-        data = data.replaceAll(':00\"','');
-        data = data.replaceAll("\"", "");
-        // data = data.replace(/\"/g, '')
-        data = data.replaceAll('/2014 ','/2014,');
-        data = data.replaceAll('Date/Time','Date,Time');
-        data = data.replaceAll('/','-');
-        // data = data.replace(/Date/Time/s,'Date,Time')
-        // data = data.replace(/2014/g,'/2014,')
-        // console.log(data)
-
-        const data_table = data.split('\n').slice(1);
-
-        data_table.forEach(ride => {
-            table_row = ride.split(',');
-
-            if (table_row[0].length > 0 && table_row[1].length > 0) {
-                let curr_date = new Date(table_row[0]);
-
-                corrected_date = curr_date.toJSON();
-
-                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //useful for search
-                
-                let rideNew = new UberRide(a_the_date, table_row[1], table_row[2], table_row[3]);
-                uber_rides.push(rideNew);
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_1)) {
+                first_count += 1;
             }
-        })
-
+        }
     }
 
-    var fhv_set = ['./csv_files/other-Prestige_B01338.csv', './csv_files/other-Highclass_B01717.csv', './csv_files/other-Firstclass_B01536.csv', './csv_files/other-Diplo_B01196.csv', './csv_files/other-American_B01362.csv'];
-    var fhv_names = ['Prestige', 'Highclass', 'Firstclass', 'Diplo', 'American'];
-    for (let i = 0; i < fhv_set.length; i++) {
-        data = fs.readFileSync(fhv_set[i], 'utf8');
+    if (name_2 == 'Uber') {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if (uber_rides[i].date[6] == date[6]) {
+                second_count += 1;
+            }
+        }
+    }
+    else {
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_2)) {
+                second_count += 1;
+            }
+        }
+    }
+    // for (let specified_month = 1; specified_month < 13; specified_month++)
+    // {
+    //     var u_rides = 0;
+    //     var f_rides = 0;
+    //     //specified_month = 7;
+    //     //f_name = 'Diplo'; 
 
-        data = data.replaceAll('\" ','');
-        data = data.replaceAll('\"','');
-        data = data.replaceAll('/','-');
+    //     for (let i = 0; i < uber_rides.length; i++) {
+    //         if(typeof uber_rides[i].date.charAt(0) === 'undefined')
+    //         {
+    //             console.log("Month" + uber_rides[i].date.charAt(0) + "is not defined...");
+    //             continue;
+    //         }
+
+
+    //         if (uber_rides[i].date.charAt(0) == specified_month) {
+    //             u_rides = u_rides + 1;
+    //         }
+    //     }
+
+    //     for (let i = 0; i < fhv_rides.length; i++) {
+    //         if(typeof fhv_rides[i].date === 'undefined')
+    //         {
+    //             //console.log("Month " + i + " is not defined...");
+    //             continue;
+    //         }
+
+
+    //         if ((fhv_rides[i].date.charAt(0) == specified_month) && (fhv_rides[i].name == f_name)) 
+    //         {
+    //             f_rides += 1;
+    //         }
+    //     }
+
+    //     //save as JSON Object
+    //     if(u_rides > 0 && f_rides > 0)
+    //     {
+    //         compare.push({"month": specified_month, "u_rides": u_rides, "f_name": f_name, "f_rides": f_rides});
+    //     }
         
-        // data = data.replace('\" ','')
-        // data = data.replace('\"','')
-        // console.log(data);
+    // }
 
-        const data_table = data.split('\n').slice(1);
 
-        data_table.forEach(ride => {
-            table_row = ride.split(',');
-
-            if (table_row[0].length > 0 && table_row[1].length > 0) {
-                convertedTime = convertTo24Hr(table_row[1]);
-
-                let curr_date = new Date(table_row[0]);
-
-                corrected_date = curr_date.toJSON();
-
-                a_the_date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //useful for search
-                
-                let rideNew = new FHVRide(a_the_date, convertedTime, table_row[2], fhv_names[i]);
-                fhv_rides.push(rideNew);
-            }
-        })
-    }
-
-    console.log('Files Read Successfully');
-}
-
-function CompareBasedOnMonth() {
-    var u_rides = 0;
-    var f_rides = 0;
-    var specified_month = 7;
-    var f_name = 'Diplo';
-
-    console.log('Comparing Uber to ' + f_name)
-
-    for (let i = 0; i < uber_rides.length; i++) {
-        if (uber_rides[i].date.charAt(6) == specified_month) {
-            u_rides = u_rides + 1;
-        }
-    }
-
-    for (let i = 0; i < fhv_rides.length; i++) {
-        if ((fhv_rides[i].date.charAt(0) == specified_month) && (fhv_rides[i].name == f_name)) {
-            f_rides = f_rides + 1;
-        }
-    }
-    console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
+    compare.push({"month": date, "name1": name_1, "name2": name_2, "count1": first_count, "count2": second_count});
+    /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
     output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
-    output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}
+    output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}*/
     console.log('Finished Calculation');
-    return output;
+    //console.log(compare);
+    return compare
 }
 
-function SearchByParameter(ride_service, date_begin, date_end, time_begin, time_end, location) {
+function TrendsForUber() {
+    
+}
+
+
+function SearchByParameter(uber_rides, fhv_rides, ride_service, date_begin, date_end, time_begin, time_end, location, search_type) {
     var toReturn = [];
     console.log('Service = ' + ride_service);
     if (ride_service == 'Uber') {
         console.log('Inside Uber')
         for (let i = 0; i < uber_rides.length; i++) {
+            
+            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].date === 'undefined' || typeof uber_rides[i].time === 'undefined')
+            {
+                continue;
+            }
+
             //converting date and time to ints for parameters
-            date_b_string = date_begin.replaceAll('-', '');
+            /*date_b_string = date_begin.replaceAll('-', '');
             date_e_string = date_end.replaceAll('-', '');
             time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');
+            time_e_string = time_end.replaceAll(':', '');*/
+            date_b_string = date_begin.replace(/-/g, '');
+            date_e_string = date_end.replace(/-/g, '');
+            time_b_string = time_begin.replace(/:/g, '');
+            time_e_string = time_end.replace(/:/g, '');
+            // console.log(date_b_string);
+            // console.log(date_e_string);
+            // console.log(time_b_string);
+            // console.log(time_e_string);
+
 
             date_b = parseInt(date_b_string);
             date_e = parseInt(date_e_string);
@@ -241,30 +127,46 @@ function SearchByParameter(ride_service, date_begin, date_end, time_begin, time_
             time_e = parseInt(time_e_string);
 
             //converting date and time to ints for internal data
-            rides_date_b_string = uber_rides[i].date.replaceAll('-', '');
+            /*rides_date_b_string = uber_rides[i].date.replaceAll('-', '');
             rides_date_e_string = uber_rides[i].date.replaceAll('-', '');
             rides_time_b_string = uber_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = uber_rides[i].time.replaceAll(':', '');
+            rides_time_e_string = uber_rides[i].time.replaceAll(':', '');*/
+            rides_date_string = uber_rides[i].date.replace(/-/g, '');
+            rides_time_string = uber_rides[i].time.replace(/:/g, '');
 
-            rides_date_b = parseInt(rides_date_b_string);
-            rides_date_e = parseInt(rides_date_e_string);
-            rides_time_b = parseInt(rides_time_b_string);
-            rides_time_e = parseInt(rides_time_e_string);
+            rides_date = parseInt(rides_date_string);
+            rides_time = parseInt(rides_time_string);
 
-            if ((rides_date_b >= date_b && rides_date_e <= date_e) && (rides_time_b >= time_b && rides_time_e <= time_e)) {
-                // console.log('We have a winner');
-                toReturn.push({"Date": uber_rides[i].date, "Time": uber_rides[i].time, "Address": '(longitude, latitude)' + uber_rides[i].longitude + ', ' + uber_rides[i].latitude});
+            //console.log(rides_date_b, date_b, date_e, (rides_date_b >= date_b && rides_date_e <= date_e), rides_time_b, time_b, time_e, (rides_time_b >= time_b && rides_time_e <= time_e))
+            if ((rides_date >= date_b && rides_date <= date_e) && (rides_time >= time_b && rides_time <= time_e)) {
+                console.log('We have a winner');
+                if (search_type == 'view_only') {
+                    toReturn.push({"Date": uber_rides[i].date, "Time": uber_rides[i].time, "Address": '(longitude, latitude) ' + uber_rides[i].longitude + ', ' + uber_rides[i].latitude + ' | Base: ' + uber_rides[i].base, "Type": "view_only"});
+                }
+                else {
+                    toReturn.push({"Identifier": uber_rides[i].identifier, "Date": uber_rides[i].date, "Time": uber_rides[i].time, "Longitude": uber_rides[i].longitude, "Latitude": uber_rides[i].latitude, "Base": uber_rides[i].base, "Type": "edit_uber"});
+                }
             }
         }
     }
     else {
         console.log('Inside Other')
         for (let i = 0; i < fhv_rides.length; i++) {
+            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].date === 'undefined' || typeof fhv_rides[i].time === 'undefined')
+            {
+                continue;
+            }
+
             //converting date and time to ints for parameters
-            date_b_string = date_begin.replaceAll('-', '');
+            /*date_b_string = date_begin.replaceAll('-', '');
             date_e_string = date_end.replaceAll('-', '');
             time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');
+            time_e_string = time_end.replaceAll(':', '');*/
+
+            date_b_string = date_begin.replace(/-/g, '');
+            date_e_string = date_end.replace(/-/g, '');
+            time_b_string = time_begin.replace(/:/g, '');
+            time_e_string = time_end.replace(/:/g, '');
 
             date_b = parseInt(date_b_string);
             date_e = parseInt(date_e_string);
@@ -272,24 +174,121 @@ function SearchByParameter(ride_service, date_begin, date_end, time_begin, time_
             time_e = parseInt(time_e_string);
 
             //converting date and time to ints for internal data
-            rides_date_b_string = fhv_rides[i].date.replaceAll('-', '');
+            /*rides_date_b_string = fhv_rides[i].date.replaceAll('-', '');
             rides_date_e_string = fhv_rides[i].date.replaceAll('-', '');
             rides_time_b_string = fhv_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = fhv_rides[i].time.replaceAll(':', '');
+            rides_time_e_string = fhv_rides[i].time.replaceAll(':', '');*/
 
-            rides_date_b = parseInt(rides_date_b_string);
-            rides_date_e = parseInt(rides_date_e_string);
-            rides_time_b = parseInt(rides_time_b_string);
-            rides_time_e = parseInt(rides_time_e_string);
-            // console.log('PARAMETERS:', ride_service, date_begin, date_end, time_begin, time_end, location);
-            // console.log('ELSE: ', fhv_rides[i].date, fhv_rides[i].time, fhv_rides[i].address);
-            if ((ride_service == fhv_rides[i].name) && (rides_date_b >= date_b && rides_date_e <= date_e) && (rides_time_b >= time_b && rides_time_e <= time_e) && fhv_rides[i].address.includes(location)) {
-                // console.log('We have a winner');
-                toReturn.push({"Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address});
+            rides_date_string = fhv_rides[i].date.replace(/-/g, '');
+            rides_time_string = fhv_rides[i].time.replace(/:/g, '');
+
+            rides_date = parseInt(rides_date_string);
+            rides_time = parseInt(rides_time_string);
+            //console.log('PARAMETERS:', ride_service, date_begin, date_end, time_begin, time_end, location);
+            //console.log('ELSE: ', fhv_rides[i].date, fhv_rides[i].time, fhv_rides[i].address);
+
+            //console.log('PARAMETERS:', ride_service, date_b, date_e, time_b, time_e, location);
+            //console.log('ELSE: ', rides_date_b, rides_date_e, rides_time_b, rides_time_e);
+            //console.log(rides_date, date_b, date_e, (rides_date >= date_b && rides_date <= date_e), rides_time, time_b, time_e, (rides_time >= time_b && rides_time <= time_e))
+            if ((ride_service == fhv_rides[i].name) && (rides_date >= date_b && rides_date <= date_e) && (rides_time >= time_b && rides_time <= time_e) && fhv_rides[i].address.includes(location)) {
+                console.log('We have a winner');
+                if (search_type == 'view_only') {
+                    toReturn.push({"Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address, "Type": "view_only"});
+                }
+                else {
+                    toReturn.push({"Identifier": fhv_rides[i].identifier, "Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address, "Type": "edit_fhv"});
+                }
             }
         }
     }
     return toReturn;
 }
 
-module.exports = { CompareBasedOnMonth, ParseCSV, SearchByParameter };
+function AddUber(uber_rides, date, time, longitude, latitude, base) {
+    console.log(date, time, longitude, latitude, base)
+    uber_rides.push({"date": date, "time": time, "latitude": latitude, "longitude": longitude, "base": base, "identifier": uber_rides.length});
+    console.log(uber_rides[uber_rides.length - 1])
+}
+
+function AddFHV(fhv_rides, name, date, time, address) {
+    console.log(date, time, address);
+    fhv_rides.push({"date": date, "time": time, "address": address, "name": name, "identifier": fhv_rides.length});
+    console.log(fhv_rides[fhv_rides.length - 1])
+}
+
+function UpdateFHV(fhv_rides, identifier, date, time, address) {
+    console.log(identifier, date, time, address)
+
+    for (let i = 0; i < fhv_rides.length; i++) {
+        if(typeof fhv_rides[i] === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+        else if (fhv_rides[i].identifier == identifier) {
+            fhv_rides[i].date = date;
+            fhv_rides[i].time = time;
+            fhv_rides[i].address = address;
+            return 0;
+        }
+        else {
+            // do nothing
+        }
+    }
+}
+
+function UpdateUber(uber_rides, identifier, date, time, longitude, latitude, base) {
+    console.log(identifier, date, time, longitude, latitude, base)
+    for (let i = 0; i < uber_rides.length; i++) {
+        if(typeof uber_rides[i] === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+        else if (uber_rides[i].identifier == identifier) {
+            uber_rides[i].date = date;
+            uber_rides[i].time = time;
+            uber_rides[i].longitude = longitude;
+            uber_rides[i].latitude = latitude;
+            uber_rides[i].base = base;
+            return 0;
+        }
+        else {
+            // do nothing
+        }
+    }
+}
+
+function RemoveFHV(fhv_rides, identifier) {
+    for (let i = 0; i < fhv_rides.length; i++) {
+        if(typeof fhv_rides[i] === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+        else if (fhv_rides[i].identifier == identifier) {
+            delete fhv_rides[i];
+            console.log(fhv_rides[i + 1])
+            return 0;
+        }
+        else {
+            // do nothing
+        }
+    }
+}
+
+function RemoveUber(uber_rides, identifier) {
+    for (let i = 0; i < uber_rides.length; i++) {
+        if(typeof uber_rides[i] === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+        else if (uber_rides[i].identifier == identifier) {
+            delete uber_rides[i];
+            console.log(uber_rides[i + 1])
+            return 0;
+        }
+        else {
+            // do nothing
+        }
+    }
+}
+
+module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, RemoveFHV, RemoveUber, AddUber, AddFHV };

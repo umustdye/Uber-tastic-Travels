@@ -1,4 +1,105 @@
 $(function () {
+
+// GET/cab_type
+$('#cab_type').on('click', function () {
+    $.ajax({
+        url: '/cab_type',
+        contentType: 'application/json',
+        success: function (response) {
+
+            var tbodyEl = $('tbody');
+
+            tbodyEl.html('');
+
+                tbodyEl.append('\
+                <tr>\
+                    <td class="Uber">' + 'Uber: ' + response.cab_type.Uber + '</td>\
+                    <td class="Lyft">' + 'Lyft: ' + response.cab_type.Lyft + '</td>\
+                    <td class="Total">' + 'Total: ' + response.cab_type.Total + '</td>\
+                </tr>\
+            ');
+
+        }
+    });
+});
+
+
+
+    // GET/cab_price
+    $('#cab_price').on('click', function () {
+        $.ajax({
+            url: '/cab_price',
+            contentType: 'application/json',
+            success: function (response) {
+
+                var tbodyEl = $('tbody');
+
+                tbodyEl.html('');
+
+                response.cab_price.forEach(function (cab) {
+                    tbodyEl.append('\
+                    <tr>\
+                        <td class="Cab_Type">' + cab.Cab_Type + '</td>\
+                        <td class="Name">' + cab.Name + '</td>\
+                        <td class="Lowest_price">' + cab.Lowest_price + '</td>\
+                        <td class="Highest_price">' + cab.Highest_price + '</td>\
+                    </tr>\
+                ');
+
+                });
+            }
+        });
+    });
+
+        // GET/popular_destination_boston
+        $('#popular_destination_boston').on('click', function () {
+            $.ajax({
+                url: '/popular_destination_boston',
+                contentType: 'application/json',
+                success: function (response) {
+    
+                    var tbodyEl = $('tbody');
+    
+                    tbodyEl.html('');
+    
+                    response.popular_destination_boston.forEach(function (cab) {
+                        tbodyEl.append('\
+                        <tr>\
+                            <td class="Destination">' + cab.Destination + '</td>\
+                            <td class="Count">' + cab.Count + '</td>\
+                        </tr>\
+                    ');
+    
+                    });
+                }
+            });
+        });
+
+// GET/popular_routes
+$('#popular_routes').on('click', function () {
+    $.ajax({
+        url: '/popular_routes',
+        contentType: 'application/json',
+        success: function (response) {
+
+            var tbodyEl = $('tbody');
+
+            tbodyEl.html('');
+
+            response.popular_routes.forEach(function (cab) {
+                tbodyEl.append('\
+                <tr>\
+                    <td class="source">' + cab.source + '</td>\
+                    <td class="destination">' + cab.destination + '</td>\
+                    <td class="count">' + cab.count + '</td>\
+                </tr>\
+            ');
+
+            });
+        }
+    });
+});
+
     // GET/pickup
     $('#get-pickup').on('click', function () {
         $.ajax({
@@ -435,84 +536,39 @@ $('#busiest-times').on('click', function (event) {
 
 
     // CREATE/POST
-    $('#compare_parameters').on('submit', function (event) {
+    $('#compare_parameters').on('submit', function(event) {
         event.preventDefault();
 
-        var ride_service_1 = $('#ride_service_compare_1');
-        var ride_service_2 = $('#ride_service_compare_2');
-        var date = $('#compare_date');
+        var ride_service_compare = $('#ride_service_compare');
 
-        console.log('Scripts', ride_service_1.val(), ride_service_2.val(), date.val());
 
         $.ajax({
             url: '/compare_results',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ rideService1: ride_service_1.val(), rideService2: ride_service_2.val(), date: date.val()}),
-            success: function (response) {
-                console.log(response);
+            data: JSON.stringify({ rideService: ride_service_compare.val() }),
+            success: function(response) {
                 var tbodyEl = $('tbody');
 
                 tbodyEl.html('');
+                tbodyEl.append('\
+                <tr>\
+                    <td class="month">' + "month" + '</td>\
+                    <td class="u_rides">' + "Uber Rides" + '</td>\
+                    <td class="f_rides">' + response.comparing[0].f_name + " Rides" + '</td>\
+                </tr>\
+                ');
 
-                var data;
-                // response.forEach(portion => {
-                //     data = {
-                //         header: ["Name", "Number of Rides"],
-                //         rows: [
-                //               [portion.name1, portion.count1],
-                //               [portion.name2, portion.count2]
-                //               ]
-                //     };
-                // });
-                anychart.onDocumentReady(function() {
- 
-                    // set the data
-                    var data;
-                    var Cname1;
-                    var Cname2;
-                    var Cmonth;
-                    response.forEach(portion => {
-                      
-                        
-                        if (portion.month[6] == 7) {
-                            Cmonth = "July";
-                        }
-                        else if (portion.month[6] == 8) {
-                            Cmonth = "August";
-                        }
-                        else if (portion.month[6] == 9) {
-                            Cmonth = "September";
-                        }
-                       
-    
-                        Cname1 = portion.name1;
-                        Cname2 = portion.name2;
-                        
-                    data = {
-                        header: ["Name", "Number of Rides"],
-                        rows: [
-                              [portion.name1, portion.count1],
-                              [portion.name2, portion.count2]
-                              ]
-                    };
-                });
-
-
-                   
-                    // create the chart
-                    var chart = anychart.bar();
-             
-                    // add the data
-                    chart.data(data);
-             
-                    // set the chart title
-                    chart.title("Comparing " + Cname1 + " & " + Cname2 + " for the month of " + Cmonth);
-             
-                    // draw
-                    chart.container("container");
-                    chart.draw();
-                 });
+                response.comparing.forEach(function(compare) {
+                    tbodyEl.append('\
+                    <tr>\
+                        <td class="month">' + compare.month + '</td>\
+                        <td class="u_rides">' + compare.u_rides + '</td>\
+                        <td class="f_rides">' + compare.f_rides + '</td>\
+                    </tr>\
+                    ');
+            
+            });
             }
         });
     });
@@ -587,8 +643,4 @@ function EndTimeCheck(time_to_check) {
     if (time_to_check.value < time_begin && time_end.length != 0) {
         time_to_check.value = time_begin;
     }
-}
-
-function ClearDiv() {
-    document.getElementById("container").innerHTML = "";
 }
