@@ -162,8 +162,8 @@ server.post('/add_uber_ride', function(req, res) {
 //compare Uber to other riding services
 server.post('/compare_results', function(req, res) {
     var results;
-    console.log('Server', req.body.rideService1, req.body.rideService2, req.body.date);
-    results = Noah.CompareBasedOnMonth(uber, fhv, req.body.rideService1, req.body.rideService2, req.body.date)
+    console.log('Server', req.body.rideService1, req.body.rideService2, req.body.date, req.body.date2);
+    results = Noah.CompareBasedOnMonth(uber, fhv, req.body.rideService1, req.body.rideService2, req.body.date,req.body.date2);
     console.log(results);
     res.send(results);
 });

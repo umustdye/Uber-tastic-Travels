@@ -441,14 +441,15 @@ $('#busiest-times').on('click', function (event) {
         var ride_service_1 = $('#ride_service_compare_1');
         var ride_service_2 = $('#ride_service_compare_2');
         var date = $('#compare_date');
+        var date2 = $('#compare_date2');
 
-        console.log('Scripts', ride_service_1.val(), ride_service_2.val(), date.val());
+        console.log('Scripts', ride_service_1.val(), ride_service_2.val(), date.val(),date2.val());
 
         $.ajax({
             url: '/compare_results',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ rideService1: ride_service_1.val(), rideService2: ride_service_2.val(), date: date.val()}),
+            data: JSON.stringify({ rideService1: ride_service_1.val(), rideService2: ride_service_2.val(), date: date.val(), date2: date2.val()}),
             success: function (response) {
                 console.log(response);
                 var tbodyEl = $('tbody');
@@ -472,6 +473,7 @@ $('#busiest-times').on('click', function (event) {
                     var Cname1;
                     var Cname2;
                     var Cmonth;
+                    var Cmonth2;
                     response.forEach(portion => {
                       
                         
@@ -484,6 +486,17 @@ $('#busiest-times').on('click', function (event) {
                         else if (portion.month[6] == 9) {
                             Cmonth = "September";
                         }
+
+                       if (portion.month2[6] == 7) {
+                            Cmonth2 = "July";
+                        }
+                        else if (portion.month2[6] == 8) {
+                            Cmonth2 = "August";
+                        }
+                        else if (portion.month2[6] == 9) {
+                            Cmonth2 = "September";
+                        }
+
                        
     
                         Cname1 = portion.name1;
@@ -492,8 +505,8 @@ $('#busiest-times').on('click', function (event) {
                     data = {
                         header: ["Name", "Number of Rides"],
                         rows: [
-                              [portion.name1, portion.count1],
-                              [portion.name2, portion.count2]
+                              ["1. " + portion.name1, portion.count1],
+                              ["2. " + portion.name2, portion.count2]
                               ]
                     };
                 });
@@ -507,7 +520,7 @@ $('#busiest-times').on('click', function (event) {
                     chart.data(data);
              
                     // set the chart title
-                    chart.title("Comparing " + Cname1 + " & " + Cname2 + " for the month of " + Cmonth);
+                    chart.title("Comparing " + Cname1 + " for the month of " + Cmonth + " & " + Cname2 + " for the month of " + Cmonth2 );
              
                     // draw
                     chart.container("container");
@@ -559,6 +572,57 @@ function DateChange(ride_service) {
         date_range.min = "2014-04-01";
         date_range.max = "2014-09-30";
     }
+}
+
+function MonthChange(ride_service) {
+    
+    if (ride_service.value == 'Uber') {
+        var date_range = document.getElementById('compare_date');
+        date_range.min = "2014-04";
+        date_range.max = "2014-09";
+
+
+        
+    }
+    else{
+        var date_range = document.getElementById('compare_date');
+        date_range.min = "2014-07";
+        date_range.max = "2014-09";
+
+        if (date_range.value < date_range.min && date_range.value != 0) {
+            date_range.value = date_range.min;
+        }
+        if (date_range.value > date_range.max && date_range.value != 0) {
+            date_range.value = date_range.max;
+        }
+    }
+
+}
+
+function MonthChange2(ride_service) {
+    
+    if (ride_service.value == 'Uber') {
+        var date_range = document.getElementById('compare_date2');
+        date_range.min = "2014-04";
+        date_range.max = "2014-09";
+
+     
+
+        
+    }
+    else{
+        var date_range = document.getElementById('compare_date2');
+        date_range.min = "2014-07";
+        date_range.max = "2014-09";
+
+        if (date_range.value < date_range.min && date_range.value != 0) {
+            date_range.value = date_range.min;
+        }
+        if (date_range.value > date_range.max && date_range.value != 0) {
+            date_range.value = date_range.max;
+        }
+    }
+
 }
 
 function BeginDateCheck(date_to_check) {

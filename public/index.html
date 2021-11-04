@@ -45,30 +45,31 @@
         <br><br> Location: <br>
         Street Name: <input type='text' id='location'>
         <br><br>
-        <input type="checkbox" id="search_type" name="search_type">
+        <input type="checkbox" id="search_type" name ="search_type"> 
         <label for="search_type"> Edit Search Results </label><br><br>
         <button id='initiate_search'>Search</button>
     </form>
     <hr>
     <h1>Compare Service Performance</h1>
     <form id='compare_parameters'>
-        Select a Ride Service: <select id='ride_service_compare_1'>
+        Select a Ride Service: <select id='ride_service_compare_1' onchange="MonthChange(this)">
             <option value='American'>American</option>
             <option value='Diplo'>Diplo</option>
             <option value='Firstclass'>Firstclass</option>
             <option value='Highclass'>Highclass</option>
             <option value='Prestige'>Prestige</option>
             <option value='Uber'>Uber</option>
-        </select><br><br>
-        Select Another Ride Service: <select id='ride_service_compare_2'>
+        </select> 
+        Select a Month to Compare: <input type='month' id='compare_date' min="2014-07" max="2014-09" required><br><br>
+        Select Another Ride Service: <select id='ride_service_compare_2' onchange="MonthChange2(this)">
             <option value='American'>American</option>
             <option value='Diplo'>Diplo</option>
             <option value='Firstclass'>Firstclass</option>
             <option value='Highclass'>Highclass</option>
             <option value='Prestige'>Prestige</option>
             <option value='Uber'>Uber</option>
-        </select><br><br>
-        Select a Month to Compare: <input type='month' id='compare_date' min="2014-07" max="2014-09" required>
+        </select>
+        Select a Month to Compare: <input type='month' id='compare_date2' min="2014-07" max="2014-09" required>
         <br><br><button onclick="ClearDiv()">Compare</button>
     </form>
     <hr>

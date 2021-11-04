@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date) 
+function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date, date2) 
 {
     var compare = [];
     first_count = 0;
@@ -25,14 +25,14 @@ function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date)
 
     if (name_2 == 'Uber') {
         for (let i = 0; i < uber_rides.length; i++) {
-            if (uber_rides[i].date[6] == date[6]) {
+            if (uber_rides[i].date[6] == date2[6]) {
                 second_count += 1;
             }
         }
     }
     else {
         for (let i = 0; i < fhv_rides.length; i++) {
-            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_2)) {
+            if ((fhv_rides[i].date[6] == date2[6]) && (fhv_rides[i].name == name_2)) {
                 second_count += 1;
             }
         }
@@ -80,7 +80,7 @@ function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date)
     // }
 
 
-    compare.push({"month": date, "name1": name_1, "name2": name_2, "count1": first_count, "count2": second_count});
+    compare.push({"month": date, "name1": name_1,"month2": date2, "name2": name_2, "count1": first_count, "count2": second_count});
     /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
     output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
     output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}*/
