@@ -26,6 +26,8 @@ server.listen(port, function(error) {
 uber = UberParser.ParseUber();
 fhv = fhvParser.Parsefhv();
 cab_rides = cab_rides_parser.ParseCab_Rides();
+// cab_rides_parser.parseJSONToCSV(cab_rides);
+
 // console.log(cab_rides);
 //console.log(Bao.cab_type(cab_rides));
 //console.log(Bao.cab_price(cab_rides));
@@ -76,6 +78,11 @@ server.get('/save_fhv', function(req, res){
     res.send("Successfully saved fhv dataset to file...");
 });
 
+server.get('/save_lyft', function(req, res){
+    cab_rides_parser.parseJSONToCSV(cab_rides);
+    res.send("Successfully saved cab dataset to file...");
+});
+
 server.get('/compareDiplo', function(req, res){
     res.send({comparing: compareDiplo});
 });
@@ -97,12 +104,20 @@ server.put('/find_busiest_time', function(req, res) {
 server.post('/search_results', function(req, res) {
     var results = [];
     var currLoc = req.body.address;
-    console.log(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address, req.body.searchType);
+    console.log(req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, req.body.address, req.body.source, req.body.destination, req.body.lyftType, req.body.searchType);
     if (currLoc.length == 0) {
-        currLoc = ' | ';
+        currLoc = 0;
     }
     
-    results = Noah.SearchByParameter(uber, fhv, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc, req.body.searchType);
+    if(req.body.rideService.includes('Uber')) {
+        results = Noah.SearchByParameter(uber, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc, req.body.source, req.body.destination, req.body.lyftType, req.body.searchType);
+    }
+    else if(req.body.rideService.includes('Lyft')) {
+        results = Noah.SearchByParameter(cab_rides, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc, req.body.source, req.body.destination, req.body.lyftType, req.body.searchType);
+    }
+    else {
+        results = Noah.SearchByParameter(fhv, req.body.rideService, req.body.dateBegin, req.body.dateEnd, req.body.timeBegin, req.body.timeEnd, currLoc, req.body.source, req.body.destination, req.body.lyftType, req.body.searchType);
+    }
     console.log('Great Success!!');
     // console.log(results);
     if (results.length == 0) {
@@ -125,6 +140,13 @@ server.put('/add_uber', function(req, res) {
     res.send('Ride Added Successfully');
 });
 
+server.put('/add_lyft', function(req, res) {
+    console.log(req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
+    Noah.AddLyft(cab_rides, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
+
+    res.send('Ride Added Successfully');
+});
+
 //Modify Existing Ride
 server.put('/modify_fhv/:Identifier', function(req, res) {
     Noah.UpdateFHV(fhv, req.params.Identifier, req.body.Date, req.body.Time, req.body.Address);
@@ -136,6 +158,14 @@ server.put('/modify_uber/:Identifier', function(req, res) {
     Noah.UpdateUber(uber, req.params.Identifier, req.body.Date, req.body.Time, req.body.Longitude, req.body.Latitude, req.body.Base);
 
     res.send('Ride Updated Successfully');
+});
+
+server.put('/modify_lyft/:Identifier', function(req, res) {
+    console.log(req.params.Identifier, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
+    Noah.UpdateLyft(cab_rides, req.params.Identifier, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
+    
+    res.send('Ride Updated Successfully');
+    
 });
 
 //Remove existing ride
@@ -151,11 +181,21 @@ server.delete('/delete_uber/:Identifier', function(req, res) {
     res.send('Ride Removed Successfully');
 });
 
+server.delete('/delete_lyft/:Identifier', function(req, res) {
+    Noah.RemoveLyft(cab_rides, req.params.Identifier);
+
+    res.send('Ride Removed Successfully');
+});
+
 server.post('/add_fhv_ride', function(req, res) {
     res.send('Showing Editable Things');
 });
 
 server.post('/add_uber_ride', function(req, res) {
+    res.send('Showing Editable Things');
+});
+
+server.post('/add_lyft_ride', function(req, res) {
     res.send('Showing Editable Things');
 });
 

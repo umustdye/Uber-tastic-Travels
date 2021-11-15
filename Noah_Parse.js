@@ -37,48 +37,6 @@ function CompareBasedOnMonth(uber_rides, fhv_rides, name_1, name_2, date, date2)
             }
         }
     }
-    // for (let specified_month = 1; specified_month < 13; specified_month++)
-    // {
-    //     var u_rides = 0;
-    //     var f_rides = 0;
-    //     //specified_month = 7;
-    //     //f_name = 'Diplo'; 
-
-    //     for (let i = 0; i < uber_rides.length; i++) {
-    //         if(typeof uber_rides[i].date.charAt(0) === 'undefined')
-    //         {
-    //             console.log("Month" + uber_rides[i].date.charAt(0) + "is not defined...");
-    //             continue;
-    //         }
-
-
-    //         if (uber_rides[i].date.charAt(0) == specified_month) {
-    //             u_rides = u_rides + 1;
-    //         }
-    //     }
-
-    //     for (let i = 0; i < fhv_rides.length; i++) {
-    //         if(typeof fhv_rides[i].date === 'undefined')
-    //         {
-    //             //console.log("Month " + i + " is not defined...");
-    //             continue;
-    //         }
-
-
-    //         if ((fhv_rides[i].date.charAt(0) == specified_month) && (fhv_rides[i].name == f_name)) 
-    //         {
-    //             f_rides += 1;
-    //         }
-    //     }
-
-    //     //save as JSON Object
-    //     if(u_rides > 0 && f_rides > 0)
-    //     {
-    //         compare.push({"month": specified_month, "u_rides": u_rides, "f_name": f_name, "f_rides": f_rides});
-    //     }
-        
-    // }
-
 
     compare.push({"month": date, "name1": name_1,"month2": date2, "name2": name_2, "count1": first_count, "count2": second_count});
     /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
@@ -94,23 +52,19 @@ function TrendsForUber() {
 }
 
 
-function SearchByParameter(uber_rides, fhv_rides, ride_service, date_begin, date_end, time_begin, time_end, location, search_type) {
+function SearchByParameter(rides, ride_service, date_begin, date_end, time_begin, time_end, location, source, destination, lyft_type, search_type) {
     var toReturn = [];
     console.log('Service = ' + ride_service);
     if (ride_service == 'Uber') {
         console.log('Inside Uber')
-        for (let i = 0; i < uber_rides.length; i++) {
+        for (let i = 0; i < rides.length; i++) {
             
-            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].date === 'undefined' || typeof uber_rides[i].time === 'undefined')
+            if(typeof rides[i] === 'undefined' || typeof rides[i].date === 'undefined' || typeof rides[i].time === 'undefined')
             {
                 continue;
             }
 
             //converting date and time to ints for parameters
-            /*date_b_string = date_begin.replaceAll('-', '');
-            date_e_string = date_end.replaceAll('-', '');
-            time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');*/
             date_b_string = date_begin.replace(/-/g, '');
             date_e_string = date_end.replace(/-/g, '');
             time_b_string = time_begin.replace(/:/g, '');
@@ -127,12 +81,8 @@ function SearchByParameter(uber_rides, fhv_rides, ride_service, date_begin, date
             time_e = parseInt(time_e_string);
 
             //converting date and time to ints for internal data
-            /*rides_date_b_string = uber_rides[i].date.replaceAll('-', '');
-            rides_date_e_string = uber_rides[i].date.replaceAll('-', '');
-            rides_time_b_string = uber_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = uber_rides[i].time.replaceAll(':', '');*/
-            rides_date_string = uber_rides[i].date.replace(/-/g, '');
-            rides_time_string = uber_rides[i].time.replace(/:/g, '');
+            rides_date_string = rides[i].date.replace(/-/g, '');
+            rides_time_string = rides[i].time.replace(/:/g, '');
 
             rides_date = parseInt(rides_date_string);
             rides_time = parseInt(rides_time_string);
@@ -141,28 +91,43 @@ function SearchByParameter(uber_rides, fhv_rides, ride_service, date_begin, date
             if ((rides_date >= date_b && rides_date <= date_e) && (rides_time >= time_b && rides_time <= time_e)) {
                 console.log('We have a winner');
                 if (search_type == 'view_only') {
-                    toReturn.push({"Date": uber_rides[i].date, "Time": uber_rides[i].time, "Address": '(longitude, latitude) ' + uber_rides[i].longitude + ', ' + uber_rides[i].latitude + ' | Base: ' + uber_rides[i].base, "Type": "view_only"});
+                    toReturn.push({"Date": rides[i].date, "Time": rides[i].time, "Address": '(longitude, latitude) ' + rides[i].longitude + ', ' + rides[i].latitude + ' | Base: ' + rides[i].base, "Type": "view_only"});
                 }
                 else {
-                    toReturn.push({"Identifier": uber_rides[i].identifier, "Date": uber_rides[i].date, "Time": uber_rides[i].time, "Longitude": uber_rides[i].longitude, "Latitude": uber_rides[i].latitude, "Base": uber_rides[i].base, "Type": "edit_uber"});
+                    toReturn.push({"Identifier": rides[i].identifier, "Date": rides[i].date, "Time": rides[i].time, "Longitude": rides[i].longitude, "Latitude": rides[i].latitude, "Base": rides[i].base, "Type": "edit_uber"});
+                }
+            }
+        }
+    }
+    else if (ride_service == 'Lyft') {
+        console.log('Inside Lyft');
+        for (let i = 0; i < rides.length; i++) {
+            
+            if(typeof rides[i] === 'undefined' || typeof rides[i].identifier === 'undefined' || typeof rides[i].source === 'undefined' || typeof rides[i].destination === 'undefined' || typeof rides[i].name === 'undefined')
+            {
+                continue;
+            }
+
+            if (rides[i].source == source && rides[i].destination == destination && rides[i].name == lyft_type) {
+                console.log('We have a winner');
+                if (search_type == 'view_only') {
+                    toReturn.push({"Source": rides[i].source, "Destination": rides[i].destination, "lyftType": rides[i].name, "Price": rides[i].price, "Distance": rides[i].distance, "Type": "view_only_l"});
+                }
+                else {
+                    toReturn.push({"Identifier": rides[i].identifier, "Source": rides[i].source, "Destination": rides[i].destination, "lyftType": rides[i].name, "Price": rides[i].price, "Distance": rides[i].distance, "Type": "edit_lyft"});
                 }
             }
         }
     }
     else {
         console.log('Inside Other')
-        for (let i = 0; i < fhv_rides.length; i++) {
-            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].date === 'undefined' || typeof fhv_rides[i].time === 'undefined')
+        for (let i = 0; i < rides.length; i++) {
+            if(typeof rides[i] === 'undefined' || typeof rides[i].date === 'undefined' || typeof rides[i].time === 'undefined')
             {
                 continue;
             }
 
             //converting date and time to ints for parameters
-            /*date_b_string = date_begin.replaceAll('-', '');
-            date_e_string = date_end.replaceAll('-', '');
-            time_b_string = time_begin.replaceAll(':', '');
-            time_e_string = time_end.replaceAll(':', '');*/
-
             date_b_string = date_begin.replace(/-/g, '');
             date_e_string = date_end.replace(/-/g, '');
             time_b_string = time_begin.replace(/:/g, '');
@@ -174,29 +139,24 @@ function SearchByParameter(uber_rides, fhv_rides, ride_service, date_begin, date
             time_e = parseInt(time_e_string);
 
             //converting date and time to ints for internal data
-            /*rides_date_b_string = fhv_rides[i].date.replaceAll('-', '');
-            rides_date_e_string = fhv_rides[i].date.replaceAll('-', '');
-            rides_time_b_string = fhv_rides[i].time.replaceAll(':', '');
-            rides_time_e_string = fhv_rides[i].time.replaceAll(':', '');*/
-
-            rides_date_string = fhv_rides[i].date.replace(/-/g, '');
-            rides_time_string = fhv_rides[i].time.replace(/:/g, '');
+            rides_date_string = rides[i].date.replace(/-/g, '');
+            rides_time_string = rides[i].time.replace(/:/g, '');
 
             rides_date = parseInt(rides_date_string);
             rides_time = parseInt(rides_time_string);
             //console.log('PARAMETERS:', ride_service, date_begin, date_end, time_begin, time_end, location);
-            //console.log('ELSE: ', fhv_rides[i].date, fhv_rides[i].time, fhv_rides[i].address);
+            //console.log('ELSE: ', rides[i].date, rides[i].time, rides[i].address);
 
             //console.log('PARAMETERS:', ride_service, date_b, date_e, time_b, time_e, location);
             //console.log('ELSE: ', rides_date_b, rides_date_e, rides_time_b, rides_time_e);
             //console.log(rides_date, date_b, date_e, (rides_date >= date_b && rides_date <= date_e), rides_time, time_b, time_e, (rides_time >= time_b && rides_time <= time_e))
-            if ((ride_service == fhv_rides[i].name) && (rides_date >= date_b && rides_date <= date_e) && (rides_time >= time_b && rides_time <= time_e) && fhv_rides[i].address.includes(location)) {
+            if ((ride_service == rides[i].name) && (rides_date >= date_b && rides_date <= date_e) && (rides_time >= time_b && rides_time <= time_e) && rides[i].address.includes(location)) {
                 console.log('We have a winner');
                 if (search_type == 'view_only') {
-                    toReturn.push({"Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address, "Type": "view_only"});
+                    toReturn.push({"Date": rides[i].date, "Time": rides[i].time, "Address": rides[i].address, "Type": "view_only"});
                 }
                 else {
-                    toReturn.push({"Identifier": fhv_rides[i].identifier, "Date": fhv_rides[i].date, "Time": fhv_rides[i].time, "Address": fhv_rides[i].address, "Type": "edit_fhv"});
+                    toReturn.push({"Identifier": rides[i].identifier, "Date": rides[i].date, "Time": rides[i].time, "Address": rides[i].address, "Type": "edit_fhv"});
                 }
             }
         }
@@ -214,6 +174,11 @@ function AddFHV(fhv_rides, name, date, time, address) {
     console.log(date, time, address);
     fhv_rides.push({"date": date, "time": time, "address": address, "name": name, "identifier": fhv_rides.length});
     console.log(fhv_rides[fhv_rides.length - 1])
+}
+
+function AddLyft(cab_rides, source, destination, lyft_type, price, distance) {
+    cab_rides.push({"distance":distance, "cab_type": 'Lyft', "time_stamp": 0, "destination":destination, "source":source, "price":price, "surge_multiplier": 0, "id": 0, "product_id": 0, "name":lyft_type, "identifier":cab_rides.length});
+    console.log(cab_rides[cab_rides.length - 1])
 }
 
 function UpdateFHV(fhv_rides, identifier, date, time, address) {
@@ -257,6 +222,28 @@ function UpdateUber(uber_rides, identifier, date, time, longitude, latitude, bas
     }
 }
 
+function UpdateLyft(cab_rides, identifier, source, destination, lyft_type, price, distance) {
+    console.log(identifier, source, destination, lyft_type, price, distance)
+    for (let i = 0; i < cab_rides.length; i++) {
+        if(typeof cab_rides[i] === 'undefined' || typeof cab_rides[i].identifier === 'undefined' || typeof cab_rides[i].source === 'undefined' || typeof cab_rides[i].destination === 'undefined' || typeof cab_rides[i].name === 'undefined')
+            {
+                continue;
+            }
+        else if (cab_rides[i].identifier == identifier) {
+            console.log(identifier, cab_rides[i].identifier)
+            cab_rides[i].source = source;
+            cab_rides[i].destination = destination;
+            cab_rides[i].name = lyft_type;
+            cab_rides[i].price = price;
+            cab_rides[i].distance = distance;
+            return 0;
+        }
+        else {
+            console.log(identifier, cab_rides[i].identifier)
+        }
+    }
+}
+
 function RemoveFHV(fhv_rides, identifier) {
     for (let i = 0; i < fhv_rides.length; i++) {
         if(typeof fhv_rides[i] === 'undefined')
@@ -291,4 +278,21 @@ function RemoveUber(uber_rides, identifier) {
     }
 }
 
-module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, RemoveFHV, RemoveUber, AddUber, AddFHV };
+function RemoveLyft(cab_rides, identifier) {
+    for (let i = 0; i < cab_rides.length; i++) {
+        if(typeof cab_rides[i] === 'undefined' || typeof cab_rides[i].identifier === 'undefined' || typeof cab_rides[i].source === 'undefined' || typeof cab_rides[i].destination === 'undefined' || typeof cab_rides[i].name === 'undefined')
+            {
+                continue;
+            }
+        else if (cab_rides[i].identifier == identifier) {
+            delete cab_rides[i];
+            console.log(cab_rides[i + 1])
+            return 0;
+        }
+        else {
+            // do nothing
+        }
+    }
+}
+
+module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, UpdateLyft, RemoveFHV, RemoveUber, RemoveLyft, AddUber, AddLyft, AddFHV };

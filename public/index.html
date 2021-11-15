@@ -15,8 +15,10 @@
     <button id="busiest-times">Pick-ups By The Hour</button>
     <!-- <button id="compareDiplo">Compare Uber to Other Services</button> -->
     <button id="add_uber_ride">Add an Uber Trip</button>
+    <button id="add_lyft_ride">Add a Lyft Trip</button>
     <button id="add_fhv_ride">Add a For-Hire Ride Service Trip</button>
     <button id="save_uber_ride">Save the Collection of Uber Trips</button>
+    <button id="save_lyft_ride">Save the Collection of Lyft Trips</button>
     <button id="save_fhv_ride">Save the Collection of For-Hire Ride Service Trips</button>
     <!-- <button id="indicate_search">Search</button> -->
     <hr>
@@ -28,31 +30,97 @@
         </thead>
         <tbody></tbody>
     </table>
+    <hr>
     <h1>Search</h1>
     <form id='search_parameters'>
-        <br> Ride Service: <br>
+        Ride Service: <br>
         Choose a Ride Service: <select id='ride_service' onchange="DateChange(this)">
             <option value='Uber'>Uber</option>
             <option value='American'>American</option>
             <option value='Diplo'>Diplo</option>
             <option value='Firstclass'>Firstclass</option>
             <option value='Highclass'>Highclass</option>
+            <option value='Lyft'>Lyft</option>
             <option value='Prestige'>Prestige</option>
         </select>
-        <br><br> Date Range: <br>
-        From: <input type='date' id='date_begin' min="2014-04-01" max="2014-09-30" onblur="BeginDateCheck(this)" required>
-        To: <input type='date' id='date_end' min="2014-04-01" max="2014-09-30" onblur="EndDateCheck(this)" required>
-        <br><br> Time Range: <br>
-        From: <input type='time' id='time_begin' onblur="BeginTimeCheck(this)" required>
-        To: <input type='time' id='time_end' onblur="EndTimeCheck(this)"required>
-        <br><br> Location: <br>
-        Street Name: <input type='text' id='location'>
+        <div id='not_lyft_rides_search'>
+            <br> Date Range: <br>
+            From: <input type='date' id='date_begin' min="2014-04-01" max="2014-09-30" onblur="BeginDateCheck(this)" required>
+            To: <input type='date' id='date_end' min="2014-04-01" max="2014-09-30" onblur="EndDateCheck(this)" required>
+            <br><br> Time Range: <br>
+            From: <input type='time' id='time_begin' onblur="BeginTimeCheck(this)" required>
+            To: <input type='time' id='time_end' onblur="EndTimeCheck(this)"required>
+            <div id='address_search_text' style="display:none">
+                <br> Location: <br>
+                Street Name: <input type='text' id='location'>
+            </div>
+        </div>
+        <div id='lyft_rides_search' style="display:none">
+            <!-- <br> Distance Traveled (Mi): 
+            <input type="number" id="distance_traveled" min="0.00" max="10.00" step="0.01" placeholder="0 -> 10.00">
+            <br> -->
+
+            <br> Source: 
+            <select id='source' required>
+                <option disabled selected value> Select a Location </option>
+                <option value='Haymarket Square'>Haymarket Square</option>
+                <option value='Back Bay'>Back Bay</option>
+                <option value='North End'>North End</option>
+                <option value='North Station'>North Station</option>
+                <option value='Beacon Hill'>Beacon Hill</option>
+                <option value='Boston University'>Boston University</option>
+                <option value='Fenway'>Fenway</option>
+                <option value='South Station'>South Station</option>
+                <option value='Theatre District'>Theatre District</option>
+                <option value='West End'>West End</option>
+                <option value='Financial District'>Financial District</option>
+                <option value='Northeastern University'>Northeastern University</option>
+            </select>
+            <br>
+
+            <br> Destination: 
+            <select id='destination' value='Haymarket Square' required>
+                <option disabled selected value> Select a Location </option>
+                <option value='Haymarket Square'>Haymarket Square</option>
+                <option value='Back Bay'>Back Bay</option>
+                <option value='North End'>North End</option>
+                <option value='North Station'>North Station</option>
+                <option value='Beacon Hill'>Beacon Hill</option>
+                <option value='Boston University'>Boston University</option>
+                <option value='Fenway'>Fenway</option>
+                <option value='South Station'>South Station</option>
+                <option value='Theatre District'>Theatre District</option>
+                <option value='West End'>West End</option>
+                <option value='Financial District'>Financial District</option>
+                <option value='Northeastern University'>Northeastern University</option>
+            </select>
+            <br>
+
+            <!-- <br> Price Range: <br> 
+            From: <input type='number' id='price_from' min="0.0" max="100.0" step='0.1' placeholder="0 -> 100.0">
+            To: <input type='number' id='price_to' min="0.0" max="100.0" step='0.1' placeholder="0 -> 100.0">
+            <br> -->
+
+            <br> Lyft Ride Type: 
+            <select id='lyft_type' required>
+                <option disabled selected value> Select a Type </option>
+                <option value='Shared'>Shared</option>
+                <option value='Lux'>Lux</option>
+                <option value='Lyft'>Lyft</option>
+                <option value='Lux Black XL'>Lux Black XL</option>
+                <option value='Lyft XL'>Lyft XL</option>
+                <option value='Lux Black'>Lux Black</option>
+            </select>
+            <br>
+        </div>
         <br><br>
-        <input type="checkbox" id="search_type" name="search_type">
-        <label for="search_type"> Edit Search Results </label><br><br>
+            <input type="checkbox" id="search_type" name="search_type">
+            <label for="search_type"> Edit Search Results </label>
+        <br><br>
         <button id='initiate_search'>Search</button>
     </form>
     <hr>
+
     <h1>Compare Service Performance</h1>
     <form id='compare_parameters'>
         Select a Ride Service: <select id='ride_service_compare_1' onchange="MonthChange(this)">

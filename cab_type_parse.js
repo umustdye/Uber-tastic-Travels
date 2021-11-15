@@ -55,6 +55,7 @@ function parseCSVToJSON(data)
         else
         {
             row = row.replace(/\"/g, '');
+            row = row.replace(/(\r)/gm, '');
             const column = row.split(',');
             const distance = column[0];
             const cab_type = column[1];
@@ -66,15 +67,72 @@ function parseCSVToJSON(data)
             const id = column[7];
             const product_id = column[8];
             const name = column[9];
-            const data = {"distance":distance, "cab_type":cab_type, "time_stamp":time_stamp, "destination":destination, "source":source, "price":price, "surge_multiplier":surge_multiplier, "id":id, "product_id":product_id, "name":name};
+            const identifier = column[10];
+            const data = {"distance":distance, "cab_type":cab_type, "time_stamp":time_stamp, "destination":destination, "source":source, "price":price, "surge_multiplier":surge_multiplier, "id":id, "product_id":product_id, "name":name, "identifier":identifier};
             cab_rides.push(data);
             }
 
     });
-
+    // console.log(cab_rides)
     return cab_rides;
 
 }
 
+//parse function annd write to file
+function parseJSONToCSV(data)
+{
+    console.log("Writing Cab Dataset to file...");
+    //Date,Time,Address,Name,Identifier
+    file = "distance,cab_type,time_stamp,destination,source,price,surge_multiplier,id,product_id,name,identifier";
+    index = 0;
+    for (let i = 0; i < data.length; i++)
+    {
+        if(typeof cab_rides[i] === 'undefined' || typeof cab_rides[i].identifier === 'undefined' || typeof cab_rides[i].source === 'undefined' || typeof cab_rides[i].destination === 'undefined' || typeof cab_rides[i].name === 'undefined')
+        {
+            continue;
+        }
+        //console.log(data[i])
+        //Prestige, Highclass, Firstclass, Diplo, American
+        file += "\n" + data[i].distance + ',' + data[i].cab_type + ',' + data[i].time_stamp + ',' + data[i].destination + ',' + data[i].source + ',' + data[i].price + ',' + data[i].surge_multiplier + ',' + data[i].id + ',' + data[i].product_id + ',' + data[i].name + ',' + index;
+        index++;
 
-module.exports = { ParseCab_Rides };
+    }
+    filename = "csv_files\\cab_rides.csv"
+    //filename = "csv_files\\test.csv"
+
+    fs.writeFile(filename, file, err => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        //file written successfully
+      })
+
+      console.log('Save Complete')
+
+}
+
+// function thing(cab_rides) {
+//     sourceNames = []
+//     sourceNames.push(cab_rides[0].name)
+//     var exists = false;
+
+//     for(let i = 1; i < cab_rides.length; i++) {
+//         for(let j = 0; j < sourceNames.length; j++) {
+//             if(cab_rides[i].name == sourceNames[j]) {
+//                 exists = true;
+//             }
+//         }
+
+//         if(exists) {
+//             exists = false
+//         }
+//         else {
+//             sourceNames.push(cab_rides[i].name)
+//             exists = false
+//         }
+//     }
+//     console.log(sourceNames);
+// }
+
+module.exports = { ParseCab_Rides, parseJSONToCSV };
