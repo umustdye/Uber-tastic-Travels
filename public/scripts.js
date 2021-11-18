@@ -1009,3 +1009,33 @@ function EndTimeCheck(time_to_check) {
 function ClearDiv() {
     document.getElementById("container").innerHTML = "";
 }
+
+function ShowSearch() {
+    document.getElementById('Search').style.display = "block";
+    document.getElementById('compare_based_on_month').style.display = "none";
+    document.getElementById("container").innerHTML = "";
+    var tbodyEl = $('tbody');
+    
+    tbodyEl.html('');
+
+    tbodyEl.append('\
+    <tr>\
+        Search Reesults Will be Displayed Here\
+    </tr>\
+    ');
+}
+
+function ShowCompare() {
+    document.getElementById('Search').style.display = "none";
+    document.getElementById('compare_based_on_month').style.display = "block";
+    document.getElementById("container").innerHTML = "";
+    var tbodyEl = $('tbody');
+    
+    tbodyEl.html('');
+
+    tbodyEl.append('\
+    <tr>\
+        Nothing is Displayed Here\
+    </tr>\
+    ');
+}

@@ -27,10 +27,10 @@ function parseJSONToCSV(data)
     {
         //console.log(data[i])
         //Prestige, Highclass, Firstclass, Diplo, American
-        if((i>0) && ((data[i-1].name == "Prestige" && data[i].name == "Highclass") || (data[i-1].name == "Highclass" && data[i].name == "Firstclass") || (data[i-1].name == "Firstclass" && data[i].name == "Diplo") || (data[i-1].name == "Diplo" && data[i].name == "American")))
-        {
-            index = 0;
-        }
+        // if((i>0) && ((data[i-1].name == "Prestige" && data[i].name == "Highclass") || (data[i-1].name == "Highclass" && data[i].name == "Firstclass") || (data[i-1].name == "Firstclass" && data[i].name == "Diplo") || (data[i-1].name == "Diplo" && data[i].name == "American")))
+        // {
+        //     index = 0;
+        // }
         file += "\n" + data[i].date + ',' + data[i].time + ',' + data[i].address + ',' + data[i].name + ',' + index;
         index++;
 

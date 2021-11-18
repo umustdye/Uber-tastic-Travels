@@ -175,11 +175,11 @@ function popular_destination_boston(data) {
         result.push(obj);
     }
 
-    for (var i of src.keys()) {
-        var obj = {};
-        obj = { "Source": i, "Count": src.get(i) }
-        result.push(obj);
-    }
+    // for (var i of src.keys()) {
+    //     var obj = {};
+    //     obj = { "Source": i, "Count": src.get(i) }
+    //     result.push(obj);
+    // }
 
     return result;
 }
