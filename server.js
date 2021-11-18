@@ -39,6 +39,10 @@ cab_rides = cab_rides_parser.ParseCab_Rides();
 Noah.updateUberCompareCount(uber, 0, 0);
 Noah.updateFHVCompareCount(fhv, 0, 0, 'all');
 
+//Incremental implementation for cab_price
+cab_rides_modified = false;
+Bao.cab_price_calc(cab_rides);
+
 //public is name of html directory, basically website shtuff
 server.use(express.static('public'));
 
@@ -56,7 +60,11 @@ server.get('/cab_type', function(req, res)
 
 server.get('/cab_price', function(req, res)
 {
-    cab_price = Bao.cab_price(cab_rides);
+    if (cab_rides_modified) {
+        Bao.cab_price_calc(cab_rides)
+        cab_rides_modified = false;
+    }
+    cab_price = Bao.cab_price(/*cab_rides*/);
     res.send({cab_price, cab_price});
 });
 
@@ -149,7 +157,7 @@ server.put('/add_uber', function(req, res) {
 server.put('/add_lyft', function(req, res) {
     console.log(req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
     Noah.AddLyft(cab_rides, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
-
+    Bao.cab_price_add(req.body.LyftType, req.body.Price, req.body.Distance, 'Lyft')
     res.send('Ride Added Successfully');
 });
 
@@ -193,6 +201,7 @@ server.delete('/delete_uber/:Identifier', function(req, res) {
 
 server.delete('/delete_lyft/:Identifier', function(req, res) {
     Noah.RemoveLyft(cab_rides, req.params.Identifier);
+    cab_rides_modified = true
 
     res.send('Ride Removed Successfully');
 });

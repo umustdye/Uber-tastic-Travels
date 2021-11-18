@@ -58,15 +58,15 @@ function cab_type(data) {
 }
 
 //Analytic on price per mile of what cab type (uber vs. lyft) and how expensive or cheap the cab services are.
-function cab_price(data) {
+const low_lyftPPM = new Map();
+const low_uberPPM = new Map();
+const high_lyftPPM = new Map();
+const high_uberPPM = new Map();
+
+function cab_price_calc(data) {
     var final_data = data;
 
-    const low_lyftPPM = new Map();
-    const low_uberPPM = new Map();
-    const high_lyftPPM = new Map();
-    const high_uberPPM = new Map();
     var PPM;
-
 
     for (let i = 0; i < final_data.length; ++i) {
         PPM = final_data[i].price / final_data[i].distance;
@@ -99,8 +99,43 @@ function cab_price(data) {
             }
         }
     }
+}
 
-    
+function cab_price_add(name, price, distance, cab_type) {
+    var PPM;
+
+    PPM = price / distance;
+    if (cab_type == "Uber") {
+        if (!low_uberPPM.has(name)) {
+            low_uberPPM.set(name, PPM);
+            high_uberPPM.set(name, PPM);
+        }
+        else if (low_uberPPM.has(name)) {
+            if (low_uberPPM.get(name) > PPM) {
+                low_uberPPM.set(name, PPM);
+            }
+            if (high_uberPPM.get(name) < PPM) {
+                high_uberPPM.set(name, PPM);
+            }
+        }
+    }
+    else {
+        if (!low_lyftPPM.has(name)) {
+            low_lyftPPM.set(name, PPM);
+            high_lyftPPM.set(name, PPM);
+        }
+        else if (low_lyftPPM.has(name)) {
+            if (low_lyftPPM.get(name) > PPM) {
+                low_lyftPPM.set(name, PPM);
+            }
+            if (high_lyftPPM.get(name) < PPM) {
+                high_lyftPPM.set(name, PPM);
+            }
+        }
+    }
+}
+
+function cab_price() {
     const result = [];
 
     var low = [];
@@ -221,4 +256,4 @@ function popular_routes(data) {
     return result;
 }
 
-module.exports = { CSVtoJSON, cab_type, cab_price, popular_destination_boston, popular_routes };
+module.exports = { CSVtoJSON, cab_type, cab_price, cab_price_calc, cab_price_add, popular_destination_boston, popular_routes };
