@@ -856,7 +856,7 @@ $(function () {
 // and time are input properly on the
 // website.
 //--------------------------------------
-
+DateChange(document.getElementById('ride_service'))
 function DateChange(ride_service) {
     if (ride_service.value == 'Uber') {
         var date_range = document.getElementById('date_begin');
