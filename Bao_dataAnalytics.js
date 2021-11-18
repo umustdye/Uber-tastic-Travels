@@ -69,6 +69,10 @@ function cab_price_calc(data) {
     var PPM;
 
     for (let i = 0; i < final_data.length; ++i) {
+        if(typeof final_data[i] === 'undefined' || typeof final_data[i].identifier === 'undefined')
+        {
+            continue;
+        }
         PPM = final_data[i].price / final_data[i].distance;
         if (final_data[i].cab_type == "Uber") {
             if (!low_uberPPM.has(final_data[i].name)) {

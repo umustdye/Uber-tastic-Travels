@@ -11,6 +11,10 @@ PrestigeCompMonNums = [0, 0, 0] //July, August, September
 function findByIdentifier(data, data_type, identifier) {
     if(data_type == 'Uber') {
         for (let i = 0; i < data.length; i++) {
+            if(typeof data[i] === 'undefined' || typeof data[i].identifier === 'undefined')
+            {
+                continue;
+            }
             if (data[i].identifier == identifier) {
                 return {"Month": data[i].date[6]};
             }
@@ -18,6 +22,10 @@ function findByIdentifier(data, data_type, identifier) {
     }
     else {
         for (let i = 0; i < data.length; i++) {
+            if(typeof data[i] === 'undefined' || typeof data[i].identifier === 'undefined')
+            {
+                continue;
+            }
             if (data[i].identifier == identifier) {
                 return {"Month": data[i].date[6], "Name": data[i].name};
             }

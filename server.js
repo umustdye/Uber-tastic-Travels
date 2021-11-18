@@ -36,11 +36,17 @@ cab_rides = cab_rides_parser.ParseCab_Rides();
 //Heidi.FindBusiestTime(uber, fhv, "Diplo");
 
 //Incremental implemenation for compare based on month
+var uber_rides_modified = false
+var uber_rides_updates = []
+var fhv_rides_modified = false
+var fhv_rides_updates = []
 Noah.updateUberCompareCount(uber, 0, 0);
 Noah.updateFHVCompareCount(fhv, 0, 0, 'all');
 
 //Incremental implementation for cab_price
-cab_rides_modified = false;
+cab_rides_removed = false;
+cab_rides_added = false;
+cab_rides_updates = []
 Bao.cab_price_calc(cab_rides);
 
 //public is name of html directory, basically website shtuff
@@ -60,9 +66,19 @@ server.get('/cab_type', function(req, res)
 
 server.get('/cab_price', function(req, res)
 {
-    if (cab_rides_modified) {
+    if (cab_rides_added && !cab_rides_removed) {
+        for (let i = 0; i < cab_rides_updates.length; i++) {
+            Bao.cab_price_add(cab_rides_updates[i].name, cab_rides_updates[i].price, cab_rides_updates[i].distance, cab_rides_updates[i].cab_type)
+        }
+        cab_rides_added = false;
+    }
+    if (cab_rides_removed) {
         Bao.cab_price_calc(cab_rides)
-        cab_rides_modified = false;
+        cab_rides_removed = false;
+
+        if (cab_rides_added) {
+            cab_rides_added = false;
+        }
     }
     cab_price = Bao.cab_price(/*cab_rides*/);
     res.send({cab_price, cab_price});
@@ -142,22 +158,28 @@ server.post('/search_results', function(req, res) {
 //Add new ride
 server.put('/add_fhv', function(req, res) {
     Noah.AddFHV(fhv, req.body.Service, req.body.Date, req.body.Time, req.body.Address);
-    Noah.updateFHVCompareCount(fhv, 1, req.body.Date[6], req.body.Service);
+    // Noah.updateFHVCompareCount(fhv, 1, req.body.Date[6], req.body.Service);
+    fhv_rides_modified = true
+    fhv_rides_updates.push({'service': req.body.Service, 'action': 'add', 'month': req.body.Date[6]})
 
     res.send('Ride Added Successfully');
 });
 
 server.put('/add_uber', function(req, res) {
     Noah.AddUber(uber, req.body.Date, req.body.Time, req.body.Longitude, req.body.Latitude, req.body.Base);
-    Noah.updateUberCompareCount(uber, 1, req.body.Date[6]);
-
+    // Noah.updateUberCompareCount(uber, 1, req.body.Date[6]);
+    uber_rides_modified = true
+    uber_rides_updates.push({'service': 'Uber', 'action': 'add', 'month': req.body.Date[6]})
     res.send('Ride Added Successfully');
 });
 
 server.put('/add_lyft', function(req, res) {
     console.log(req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
     Noah.AddLyft(cab_rides, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
-    Bao.cab_price_add(req.body.LyftType, req.body.Price, req.body.Distance, 'Lyft')
+    
+    cab_rides_added = true;
+    cab_rides_updates.push({'type': 'Lyft', 'price': req.body.Price, 'distance': req.body.Distance, 'name': req.body.LyftType})
+    
     res.send('Ride Added Successfully');
 });
 
@@ -185,7 +207,9 @@ server.put('/modify_lyft/:Identifier', function(req, res) {
 //Remove existing ride
 server.delete('/delete_fhv/:Identifier', function(req, res) {
     ride = Noah.findByIdentifier(fhv, 'Other', req.params.Identifier)
-    Noah.updateFHVCompareCount(fhv, -1, ride.Month, ride.Name);
+    // Noah.updateFHVCompareCount(fhv, -1, ride.Month, ride.Name);
+    fhv_rides_modified = true
+    fhv_rides_updates.push({'service': ride.Name, 'action': 'delete', 'month': ride.Month})
     Noah.RemoveFHV(fhv, req.params.Identifier);
 
     res.send('Ride Removed Successfully');
@@ -193,7 +217,9 @@ server.delete('/delete_fhv/:Identifier', function(req, res) {
 
 server.delete('/delete_uber/:Identifier', function(req, res) {
     ride = Noah.findByIdentifier(uber, 'Uber', req.params.Identifier)
-    Noah.updateUberCompareCount(uber, -1, ride.Month);
+    // Noah.updateUberCompareCount(uber, -1, ride.Month);
+    uber_rides_modified = true
+    uber_rides_updates.push({'service': 'Uber', 'action': 'delete', 'month': ride.Month})
     Noah.RemoveUber(uber, req.params.Identifier);
 
     res.send('Ride Removed Successfully');
@@ -201,7 +227,7 @@ server.delete('/delete_uber/:Identifier', function(req, res) {
 
 server.delete('/delete_lyft/:Identifier', function(req, res) {
     Noah.RemoveLyft(cab_rides, req.params.Identifier);
-    cab_rides_modified = true
+    cab_rides_removed = true
 
     res.send('Ride Removed Successfully');
 });
@@ -222,6 +248,39 @@ server.post('/add_lyft_ride', function(req, res) {
 server.post('/compare_results', function(req, res) {
     var results;
     console.log('Server', req.body.rideService1, req.body.rideService2, req.body.date, req.body.date2);
+    
+    if (uber_rides_modified) {
+        for (let i = 0; i < uber_rides_updates.length; i++) {
+            if (uber_rides_updates[i].action == 'delete') {
+                Noah.updateUberCompareCount(uber, -1, uber_rides_updates[i].month)
+            }
+            else if (uber_rides_updates[i].action == 'add') {
+                Noah.updateUberCompareCount(uber, 1, uber_rides_updates[i].month)
+            }
+            else {
+                //do nothing
+            }
+        }
+        uber_rides_updates = []
+        uber_rides_modified = false
+    }
+
+    if (fhv_rides_modified) {
+        for (let i = 0; i < fhv_rides_updates.length; i++) {
+            if (fhv_rides_updates[i].action == 'delete') {
+                Noah.updateFHVCompareCount(fhv, -1, fhv_rides_updates[i].month, fhv_rides_updates[i].service)
+            }
+            else if (fhv_rides_updates[i].action == 'add') {
+                Noah.updateFHVCompareCount(fhv, 1, fhv_rides_updates[i].month, fhv_rides_updates[i].service)
+            }
+            else {
+                //do nothing
+            }
+        }
+        fhv_rides_updates = []
+        fhv_rides_modified = false
+    }
+    
     results = Noah.CompareBasedOnMonth(req.body.rideService1, req.body.rideService2, req.body.date,req.body.date2);
     console.log(results);
     res.send(results);
