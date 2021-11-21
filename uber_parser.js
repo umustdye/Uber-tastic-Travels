@@ -2,15 +2,6 @@ const fs = require('fs');
 const fileName_1 = "csv_files\\Uber_Rides_1.csv";
 const fileName_2 = "csv_files\\Uber_Rides_2.csv";
 const fileName_3 = "csv_files\\Uber_Rides_3.csv";
-// const fileName_1 = "csv_files\\uber-raw-data-apr14.csv";
-// const fileName_2 = "csv_files\\uber-raw-data-aug14.csv";
-// const fileName_3 = "csv_files\\uber-raw-data-jul14.csv";
-// const fileName_4 = "csv_files\\uber-raw-data-jun14.csv";
-// const fileName_5 = "csv_files\\uber-raw-data-may14.csv";
-// const fileName_6 = "csv_files\\uber-raw-data-sep14.csv";
-
-//JSON.stringify(object)
-//JSON.parse(string)
 
 function ParseUber()
 {
@@ -19,11 +10,6 @@ function ParseUber()
     fileData = fs.readFileSync(fileName_1, 'utf8');
     fileData += fs.readFileSync(fileName_2, 'utf8');
     fileData += fs.readFileSync(fileName_3, 'utf8');
-    // fileData += fs.readFileSync(fileName_4, 'utf8');
-    // fileData += fs.readFileSync(fileName_5, 'utf8');
-    // fileData += fs.readFileSync(fileName_6, 'utf8');
-
-    //console.log(fileData);
 
     //array of each row as JSON object
     Uber_Obj = parseCSVToJSON(fileData);
@@ -71,10 +57,7 @@ function parseJSONToCSV(data)
     writeToFile(file_1, fileName_1);
     writeToFile(file_2, fileName_2);
     writeToFile(file_3, fileName_3);
-    //writeToFile(file_1, "csv_files\\test_1.csv");
-    //writeToFile(file_2, "csv_files\\test_2.csv");
-    //writeToFile(file_3, "csv_files\\test_3.csv");
-
+    console.log('Save Complete')
 }
 
 
@@ -113,7 +96,6 @@ function parseCSVToJSON(data)
 {
     const Uber = [];
 
-    //const rows = data.split('\n');
     //if first row are headers
     //rows = data.split('\n').slice(1);
     rows = data.split('\n');
@@ -133,20 +115,6 @@ function parseCSVToJSON(data)
         {
             // row = row.replace(/\"/g, '');
             const column = row.split(',');
-
-            //const date_time = column[0];
-            const date_time = column[0].split(' ');
-            /*
-            tempdate = date_time[0];
-            //date = date.replace(':00\"','');
-            tempdate = tempdate.split('\/');
-            const date = tempdate[2] + '-' + tempdate[0] + '-' + tempdate[1];
-            */
-            // let curr_date = new Date(date_time[0]); 
-            // corrected_date = curr_date.toJSON(); //Changing the date to have the year first
-            // const date = corrected_date[0] + corrected_date[1] + corrected_date[2] + corrected_date[3] + corrected_date[4] + corrected_date[5] + corrected_date[6] + corrected_date[7] + corrected_date[8] + corrected_date[9]; //Gathering only the necessary values of the date to be stored
-            // time = date_time[1];
-            // time = time[0]+time[1]+time[2]+time[3];
             const date = column[0];
             const time = column[1];
             const latitude = column[2];
