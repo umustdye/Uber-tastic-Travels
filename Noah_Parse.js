@@ -20,6 +20,17 @@ function findByIdentifier(data, data_type, identifier) {
             }
         }
     }
+    else if(data_type == 'Lyft') {
+        for (let i = 0; i < data.length; i++) {
+            if(typeof data[i] === 'undefined' || typeof data[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if (data[i].identifier == identifier) {
+                return {"source": data[i].source, "destination": data[i].destination};
+            }
+        }
+    }
     else {
         for (let i = 0; i < data.length; i++) {
             if(typeof data[i] === 'undefined' || typeof data[i].identifier === 'undefined')
@@ -57,6 +68,10 @@ function updateUberCompareCount(uber_rides, modify_type, month) {
     }
     else if (modify_type == 0) { //Setup Count
         for (let i = 0; i < uber_rides.length; i++) {
+            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
             if (uber_rides[i].date[6] == 4) {
                 UberCompMonNums[0] += 1
             }
@@ -163,6 +178,10 @@ function updateFHVCompareCount(fhv_rides, modify_type, month, service) {
     }
     else if (modify_type == 0) { //Setup Count
         for (let i = 0; i < fhv_rides.length; i++) {
+            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
             if (fhv_rides[i].name == 'American') {
                 if (fhv_rides[i].date[6] == 7) {
                     AmericanCompMonNums[0] += 1
@@ -443,35 +462,67 @@ function CompareBasedOnMonth(name_1, name_2, date, date2)
         }
     }
 
-    // if (name_1 == 'Uber') {
-    //     for (let i = 0; i < uber_rides.length; i++) {
-    //         if (uber_rides[i].date[6] == date[6]) {
-    //             first_count += 1;
-    //         }
-    //     }
-    // }
-    // else {
-    //     for (let i = 0; i < fhv_rides.length; i++) {
-    //         if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_1)) {
-    //             first_count += 1;
-    //         }
-    //     }
-    // }
+    compare.push({"month": date, "name1": name_1,"month2": date2, "name2": name_2, "count1": first_count, "count2": second_count});
+    /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
+    output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
+    output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}*/
+    console.log('Finished Calculation');
+    //console.log(compare);
+    return compare
+}
 
-    // if (name_2 == 'Uber') {
-    //     for (let i = 0; i < uber_rides.length; i++) {
-    //         if (uber_rides[i].date[6] == date2[6]) {
-    //             second_count += 1;
-    //         }
-    //     }
-    // }
-    // else {
-    //     for (let i = 0; i < fhv_rides.length; i++) {
-    //         if ((fhv_rides[i].date[6] == date2[6]) && (fhv_rides[i].name == name_2)) {
-    //             second_count += 1;
-    //         }
-    //     }
-    // }
+function CompareBasedOnMonthOld(uber_rides, fhv_rides, name_1, name_2, date, date2) 
+{
+    var compare = [];
+    first_count = 0;
+    second_count = 0;
+    console.log('Comparing ', name_1, ' to ', name_2);
+
+    if (name_1 == 'Uber') {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if (uber_rides[i].date[6] == date[6]) {
+                first_count += 1;
+            }
+        }
+    }
+    else {
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if ((fhv_rides[i].date[6] == date[6]) && (fhv_rides[i].name == name_1)) {
+                first_count += 1;
+            }
+        }
+    }
+
+    if (name_2 == 'Uber') {
+        for (let i = 0; i < uber_rides.length; i++) {
+            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if (uber_rides[i].date[6] == date2[6]) {
+                second_count += 1;
+            }
+        }
+    }
+    else {
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if ((fhv_rides[i].date[6] == date2[6]) && (fhv_rides[i].name == name_2)) {
+                second_count += 1;
+            }
+        }
+    }
 
     compare.push({"month": date, "name1": name_1,"month2": date2, "name2": name_2, "count1": first_count, "count2": second_count});
     /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
@@ -738,4 +789,4 @@ function RemoveLyft(cab_rides, identifier) {
     }
 }
 
-module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, UpdateLyft, RemoveFHV, RemoveUber, RemoveLyft, AddUber, AddLyft, AddFHV, updateUberCompareCount, updateFHVCompareCount, findByIdentifier };
+module.exports = { CompareBasedOnMonth, CompareBasedOnMonthOld, SearchByParameter, UpdateFHV, UpdateUber, UpdateLyft, RemoveFHV, RemoveUber, RemoveLyft, AddUber, AddLyft, AddFHV, updateUberCompareCount, updateFHVCompareCount, findByIdentifier };
