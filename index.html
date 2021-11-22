@@ -8,7 +8,13 @@
     <title>Uber Specs</title>
 </head>
 <body>
-    <div class="multi-button" id="analytics">
+    <div id="main_header">
+        <div id="top_header">
+            <h1 id="main_title">Ride Service Vehicle Analytics</h1>
+            <button id="indicate_search" onclick="ShowSearch()">Search</button>  
+        </div>
+
+        <div class="multi-button" id="analytics">
         <button id="cab_type">Cab Type</button>
         <button id="cab_price">Cab Price</button>
         <button id="popular_destination_boston">Most Popular Destination in Boston</button>
@@ -18,9 +24,13 @@
         <button id="busiest-times">Pick-ups By The Hour</button>
         <button id="compare_uber_fhv" onclick="ShowCompare()">Compare Number of Rides by Month</button>
     </div>
+    </div>
 
 
-    <!--<button id="indicate_search" onclick="ShowSearch()">Search</button>-->
+
+
+
+    
     
     <hr>
     <table>

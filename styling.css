@@ -3,17 +3,45 @@ body{
     color:black;
     font-family:monospace;
     text-align: left;
-    font-size: large;
+    font-size: 2vw;
 }
+
+#top_header
+{
+    display: table;
+    width: 100%
+}
+
+#main_title
+{
+    text-align: center;
+    display: table-cell;
+    font-size: 5vw;
+}
+
+#indicate_search
+{
+    text-align: end;
+    display: table-cell;
+}
+
 
 button{
     background-color: white;
     color: black;
     align-items: center;
+    font-size: 2vm;
 }
 h1 {
     font-weight: bold;
+    font-size: 3vw;
   } 
+
+  #dataset_augmentation
+  {
+    position: fixed;
+    bottom: 0;
+  }
 
 
   :root {
