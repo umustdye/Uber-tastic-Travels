@@ -60,17 +60,57 @@ $(function () {
         
                         var tbodyEl = $('tbody');
         
-                        tbodyEl.html('<h2>Most Popular Pick-up Destination in Boston</h2>');
-        
-                        response.popular_destination_boston.forEach(function (cab) {
-                            tbodyEl.append('\
-                            <tr>\
-                                <td class="Destination">' + cab.Destination + '</td>\
-                                <td class="Count">' + cab.Count + '</td>\
-                            </tr>\
+                        tbodyEl.html('<h2>Most Popular Pick-up Locations and Destinations in Boston</h2>');
+
+
+
+                        tbodyEl.append('\
+                        <tr>\
+                            <td class="Location">Source</td>\
+                            <td class="Count">Count</td>\
+                        </tr>\
                         ');
+                        response.popular_destination_boston.forEach(function (cab) {
+
+                            if(cab.Type == "Source")
+                            {
+                                tbodyEl.append('\
+                                <tr>\
+                                    <td class="Location">' + cab.Location + '</td>\
+                                    <td class="Count">' + cab.Count + '</td>\
+                                </tr>\
+                            ');
+                            }
+
         
                         });
+
+                        tbodyEl.append('\
+                        <tr>\
+                            <td class="Location">Destination</td>\
+                            <td class="Count">Count</td>\
+                        </tr>\
+                        ');
+                        response.popular_destination_boston.forEach(function (cab) {
+                            if(cab.Type == "Destination")
+                            {
+                                tbodyEl.append('\
+                                <tr>\
+                                    <td class="Location">' + cab.Location + '</td>\
+                                    <td class="Count">' + cab.Count + '</td>\
+                                </tr>\
+                                ');
+                            }
+
+        
+                        });
+
+
+
+
+
+
+
                     }
                 });
             });
