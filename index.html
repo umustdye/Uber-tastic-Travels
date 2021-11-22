@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styling.css">
+    <title>Uber Specs</title>
+</head>
+<body>
+    <div class="multi-button" id="analytics">
+        <button id="cab_type">Cab Type</button>
+        <button id="cab_price">Cab Price</button>
+        <button id="popular_destination_boston">Most Popular Destination in Boston</button>
+        <button id="popular_routes">Most Popular Routes</button>
+        <!-- <button id="get-pickup">Uber Oldests Pick-up Dates</button> -->
+        <!-- <button id="compareDiplo">Compare Uber to Other Services</button> -->
+        <button id="busiest-times">Pick-ups By The Hour</button>
+        <button id="compare_uber_fhv" onclick="ShowCompare()">Compare Number of Rides by Month</button>
+    </div>
+
+
+    <!--<button id="indicate_search" onclick="ShowSearch()">Search</button>-->
+    
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="container" style="width: 100%; height: 100%"></div>
+    <div id='Search'>
+        <h1>Search</h1>
+        <form id='search_parameters'>
+            Ride Service: <br>
+            Choose a Ride Service: <select id='ride_service' onchange="DateChange(this)">
+                <option value='Uber'>Uber</option>
+                <option value='American'>American</option>
+                <option value='Diplo'>Diplo</option>
+                <option value='Firstclass'>Firstclass</option>
+                <option value='Highclass'>Highclass</option>
+                <option value='Lyft'>Lyft</option>
+                <option value='Prestige'>Prestige</option>
+            </select>
+            <div id='not_lyft_rides_search'>
+                <br> Date Range: <br>
+                From: <input type='date' id='date_begin' min="2014-04-01" max="2014-09-30" onblur="BeginDateCheck(this)" required>
+                To: <input type='date' id='date_end' min="2014-04-01" max="2014-09-30" onblur="EndDateCheck(this)" required>
+                <br><br> Time Range: <br>
+                From: <input type='time' id='time_begin' onblur="BeginTimeCheck(this)" required>
+                To: <input type='time' id='time_end' onblur="EndTimeCheck(this)"required>
+                <div id='address_search_text' style="display:none">
+                    <br> Location: <br>
+                    Street Name: <input type='text' id='location'>
+                </div>
+            </div>
+            <div id='lyft_rides_search' style="display:none">
+                <!-- <br> Distance Traveled (Mi): 
+                <input type="number" id="distance_traveled" min="0.00" max="10.00" step="0.01" placeholder="0 -> 10.00">
+                <br> -->
+
+                <br> Source: 
+                <select id='source'>
+                    <option disabled selected value> Select a Location </option>
+                    <option value='Haymarket Square'>Haymarket Square</option>
+                    <option value='Back Bay'>Back Bay</option>
+                    <option value='North End'>North End</option>
+                    <option value='North Station'>North Station</option>
+                    <option value='Beacon Hill'>Beacon Hill</option>
+                    <option value='Boston University'>Boston University</option>
+                    <option value='Fenway'>Fenway</option>
+                    <option value='South Station'>South Station</option>
+                    <option value='Theatre District'>Theatre District</option>
+                    <option value='West End'>West End</option>
+                    <option value='Financial District'>Financial District</option>
+                    <option value='Northeastern University'>Northeastern University</option>
+                </select>
+                <br>
+
+                <br> Destination: 
+                <select id='destination' value='Haymarket Square'>
+                    <option disabled selected value> Select a Location </option>
+                    <option value='Haymarket Square'>Haymarket Square</option>
+                    <option value='Back Bay'>Back Bay</option>
+                    <option value='North End'>North End</option>
+                    <option value='North Station'>North Station</option>
+                    <option value='Beacon Hill'>Beacon Hill</option>
+                    <option value='Boston University'>Boston University</option>
+                    <option value='Fenway'>Fenway</option>
+                    <option value='South Station'>South Station</option>
+                    <option value='Theatre District'>Theatre District</option>
+                    <option value='West End'>West End</option>
+                    <option value='Financial District'>Financial District</option>
+                    <option value='Northeastern University'>Northeastern University</option>
+                </select>
+                <br>
+
+                <!-- <br> Price Range: <br> 
+                From: <input type='number' id='price_from' min="0.0" max="100.0" step='0.1' placeholder="0 -> 100.0">
+                To: <input type='number' id='price_to' min="0.0" max="100.0" step='0.1' placeholder="0 -> 100.0">
+                <br> -->
+
+                <br> Lyft Ride Type: 
+                <select id='lyft_type'>
+                    <option disabled selected value> Select a Type </option>
+                    <option value='Shared'>Shared</option>
+                    <option value='Lux'>Lux</option>
+                    <option value='Lyft'>Lyft</option>
+                    <option value='Lux Black XL'>Lux Black XL</option>
+                    <option value='Lyft XL'>Lyft XL</option>
+                    <option value='Lux Black'>Lux Black</option>
+                </select>
+                <br>
+            </div>
+            <br><br>
+                <input type="checkbox" id="search_type" name="search_type">
+                <label for="search_type"> Edit Search Results </label>
+            <br><br>
+            <button id='initiate_search'>Search</button>
+        </form>
+    </div>
+    <div id='compare_based_on_month' style="display:none">
+        <h1>Compare Service Performance</h1>
+        <form id='compare_parameters'>
+            Select a Ride Service: <select id='ride_service_compare_1' onchange="MonthChange(this)">
+                <option value='American'>American</option>
+                <option value='Diplo'>Diplo</option>
+                <option value='Firstclass'>Firstclass</option>
+                <option value='Highclass'>Highclass</option>
+                <option value='Prestige'>Prestige</option>
+                <option value='Uber'>Uber</option>
+            </select> 
+            Select a Month to Compare: <input type='month' id='compare_date' min="2014-07" max="2014-09" required><br><br>
+            Select Another Ride Service: <select id='ride_service_compare_2' onchange="MonthChange2(this)">
+                <option value='American'>American</option>
+                <option value='Diplo'>Diplo</option>
+                <option value='Firstclass'>Firstclass</option>
+                <option value='Highclass'>Highclass</option>
+                <option value='Prestige'>Prestige</option>
+                <option value='Uber'>Uber</option>
+            </select>
+            Select a Month to Compare: <input type='month' id='compare_date2' min="2014-07" max="2014-09" required>
+            <br><br><button onclick="ClearDiv()">Compare</button>
+        </form>
+    </div>
+
+    <div class="multi-button" id="dataset_augmentation">
+        <button id="add_uber_ride">Add an Uber Trip</button>
+        <button id="add_lyft_ride">Add a Lyft Trip</button>
+        <button id="add_fhv_ride">Add a For-Hire Ride Service Trip</button>
+        <button id="save_uber_ride">Save the Collection of Uber Trips</button>
+        <button id="save_lyft_ride">Save the Collection of Lyft Trips</button>
+        <button id="save_fhv_ride">Save the Collection of For-Hire Ride Service Trips</button>
+    </div>
+
+
+
+    <script src="./jQuery.js"></script>
+    <script src="./scripts.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+    
+</body>
+</html>
