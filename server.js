@@ -67,6 +67,15 @@ endOld = new Date().getTime();
 console.log('Popular Routes Incremental Analytics Initial Run: ', endOld - beginOld)
 
 
+//Incremental implementation for most_popular
+popular_destination_boston = Bao.popular_destination_boston(cab_rides);
+
+beginOld = new Date().getTime();
+Bao.popular_destination_boston(cab_rides);
+endOld = new Date().getTime();
+console.log('Most Popular  Incremental Analytics Initial Run: ', endOld - beginOld)
+
+
 
 //Incremental implementation for busiest_time
 
@@ -124,7 +133,7 @@ server.get('/cab_price', function(req, res)
 
 server.get('/popular_destination_boston', function(req, res)
 {
-    popular_destination_boston = Bao.popular_destination_boston(cab_rides);
+    //popular_destination_boston = Bao.popular_destination_boston(cab_rides);
     res.send({popular_destination_boston, popular_destination_boston});
 });
 
@@ -264,6 +273,9 @@ server.put('/add_lyft', function(req, res) {
     popular_routes_modified = true;
     popular_routes_updates.push({'type': 'Lyft', 'source': req.body.Source, 'destination': req.body.Destination, 'action': 'add'});
 
+    popular_destination_boston = Bao.add_popular_destination_boston(popular_destination_boston, req.body.Source, req.body.Destination);
+
+    console.log('Ride Added Successfully');
     res.send('Ride Added Successfully');
 });
 
@@ -324,7 +336,10 @@ server.put('/modify_uber/:Identifier', function(req, res) {
 
 server.put('/modify_lyft/:Identifier', function(req, res) {
     console.log(req.params.Identifier, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
+    oldData = cab_rides_parser.findLyft(cab_rides, req.params.Identifier);
+    popular_destination_boston = Bao.delete_popular_destination_boston(cab_rides, oldData.source, oldData.destination);
     Noah.UpdateLyft(cab_rides, req.params.Identifier, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
+    popular_destination_boston = Bao.add_popular_destination_boston(cab_rides, req.body.Source, req.body.Destination);
     
     res.send('Ride Updated Successfully');
     
@@ -372,6 +387,7 @@ server.delete('/delete_lyft/:Identifier', function(req, res) {
     ride = Noah.findByIdentifier(cab_rides, 'Lyft', req.params.Identifier)
     popular_routes_modified = true;
     popular_routes_updates.push({'type': 'Lyft', 'source': ride.source, 'destination': ride.destination, 'action': 'delete'});
+    popular_destination_boston = Bao.delete_popular_destination_boston(popular_destination_boston, ride.source, ride.destination);
     Noah.RemoveLyft(cab_rides, req.params.Identifier);
     cab_price_removed = true
 
