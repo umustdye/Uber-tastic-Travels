@@ -113,4 +113,25 @@ function parseJSONToCSV(data)
 }
 
 
-module.exports = { ParseCab_Rides, parseJSONToCSV };
+
+function findLyft(lyft, identifier)
+{
+    for(let i=0; i<lyft.length; i++)
+    {
+        if(typeof lyft[i] === 'undefined' || typeof lyft[i].identifier === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+
+        else
+        {
+            if(lyft[i].identifier == identifier )
+            {
+                return lyft[i];
+            }
+        }
+    }
+}
+
+
+module.exports = { ParseCab_Rides, parseJSONToCSV, findLyft };

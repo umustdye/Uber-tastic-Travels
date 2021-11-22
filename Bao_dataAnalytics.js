@@ -42,6 +42,10 @@ function cab_type(data) {
     var num_uber = 0, num_lyft = 0;
 
     for (var i = 0; i < final_data.length; ++i) {
+        if (typeof final_data[i] === 'undefined' || typeof final_data[i].identifier === 'undefined')
+        {
+            continue;
+        }
         if (final_data[i].cab_type == "Uber") {
             ++num_uber;
         }
@@ -280,9 +284,11 @@ function cab_price() {
 
 //Just show an overview of the most picked source and destination, the data doesn't correlate with each other in any way.
 //will add another analytic where both data correlate with each other.
+var dest = new Map();
+var src = new Map();
 function popular_destination_boston(data) {
-    var dest = new Map();
-    var src = new Map();
+    dest = new Map();
+    src = new Map();
     var result = [];
     for (let i = 0; i < data.length; ++i) {
         if (!dest.has(data[i].destination)) {
@@ -302,18 +308,98 @@ function popular_destination_boston(data) {
 
     for (var i of dest.keys()) {
         var obj = {};
-        obj = { "Destination": i, "Count": dest.get(i) }
+        obj = { "Location": i, "Count": dest.get(i), "Type": "Destination" };
         result.push(obj);
     }
 
-    /*for (var i of src.keys()) {
+    for (var i of src.keys()) {
          var obj = {};
-         obj = { "Source": i, "Count": src.get(i) }
+         obj = { "Location": i, "Count": src.get(i), "Type": "Source" };
          result.push(obj);
-    }*/
+    }
 
     return result;
 }
+
+
+function add_popular_destination_boston(result, source, destination) {
+        dest.set(destination, dest.get(destination) + 1);
+        for(let i = 0; i<result.length; i++)
+        {
+            if(result[i].Type == "Destination" && (result[i].Location == destination))
+            {
+                result[i].Count = dest.get(destination);
+                //console.log(result[i]);
+            }
+        }
+
+
+        src.set(source, src.get(source) + 1);
+        for(let i = 0; i<result.length; i++)
+        {
+            if(result[i].Type == "Source" && (result[i].Location == source))
+            {
+                result[i].Count = src.get(source);
+                //console.log(result[i])
+            }
+        }
+
+
+    return result;
+}
+
+
+
+function delete_popular_destination_boston(result, source, destination) {
+    if(dest.get(destination) == 0)
+    {
+        dest.set(destination, 0);  
+    }
+
+    else
+    {
+        dest.set(destination, dest.get(destination) - 1);  
+    }
+    
+    
+    for(let i = 0; i<result.length; i++)
+    {
+        if(result[i].Type == "Destination" && (result[i].Location == destination))
+        {
+            result[i].Count = dest.get(destination);
+            //console.log(result[i]);
+        }
+    }
+
+
+    
+    if(src.get(source) == 0)
+    {
+        src.set(source, 0);
+    }
+
+    else
+    {
+        src.set(source, src.get(source) - 1);
+    }
+
+    for(let i = 0; i<result.length; i++)
+    {
+        if(result[i].Type == "Source" && (result[i].Location == source))
+        {
+            result[i].Count = src.get(source);
+            //console.log(result[i])
+        }
+    }
+
+
+return result;
+}
+
+
+
+
+
 
 
 //maps out which source goes to which destination and output a list of popular "route" (source to destination).
@@ -398,4 +484,4 @@ function popular_routes(data) {
     return popular_routes_data;
 }
 
-module.exports = { CSVtoJSON, cab_type, cab_price, cab_price_old, cab_price_calc, cab_price_add, popular_destination_boston, popular_routes, popular_routes_calc, popular_routes_add, popular_routes_subtract };
+module.exports = { CSVtoJSON, cab_type, cab_price, cab_price_old, cab_price_calc, cab_price_add, popular_destination_boston, add_popular_destination_boston, delete_popular_destination_boston, popular_routes, popular_routes_calc, popular_routes_add, popular_routes_subtract };
