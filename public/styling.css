@@ -3,17 +3,45 @@ body{
     color:black;
     font-family:monospace;
     text-align: left;
-    font-size: large;
+    font-size: 1vw;
 }
+
+#top_header
+{
+    display: table;
+    width: 100%
+}
+
+#main_title
+{
+    text-align: center;
+    display: table-cell;
+    font-size: 4vw;
+}
+
+#indicate_search
+{
+    text-align: end;
+    display: table-cell;
+}
+
 
 button{
     background-color: white;
     color: black;
     align-items: center;
+    font-size: 2vm;
 }
 h1 {
     font-weight: bold;
+    font-size: 2vw;
   } 
+
+  #dataset_augmentation
+  {
+    position: fixed;
+    bottom: 0;
+  }
 
 
   :root {
@@ -23,7 +51,7 @@ h1 {
     --font-family: monospace;
     --color-primary: white;
     --color-secondary: black;
-    --color-tertiary: dodgerblue;
+    --color-tertiary: midnightblue;
     --shadow: rgba(0, 0, 0, 0.1);
     --space: 1rem;
   }
