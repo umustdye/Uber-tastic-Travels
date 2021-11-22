@@ -3,7 +3,7 @@ body{
     color:black;
     font-family:monospace;
     text-align: left;
-    font-size: 2vw;
+    font-size: 1vw;
 }
 
 #top_header
@@ -16,7 +16,7 @@ body{
 {
     text-align: center;
     display: table-cell;
-    font-size: 5vw;
+    font-size: 4vw;
 }
 
 #indicate_search
@@ -34,7 +34,7 @@ button{
 }
 h1 {
     font-weight: bold;
-    font-size: 3vw;
+    font-size: 2vw;
   } 
 
   #dataset_augmentation
@@ -51,7 +51,7 @@ h1 {
     --font-family: monospace;
     --color-primary: white;
     --color-secondary: black;
-    --color-tertiary: dodgerblue;
+    --color-tertiary: midnightblue;
     --shadow: rgba(0, 0, 0, 0.1);
     --space: 1rem;
   }
