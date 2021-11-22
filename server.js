@@ -28,12 +28,6 @@ fhv = fhvParser.Parsefhv();
 cab_rides = cab_rides_parser.ParseCab_Rides();
 // cab_rides_parser.parseJSONToCSV(cab_rides);
 
-//console.log(cab_rides);
-//console.log(Bao.cab_type(cab_rides));
-//console.log(Bao.cab_price(cab_rides));
-//console.log(Bao.popular_destination_boston(cab_rides));
-//console.log(Bao.popular_routes(cab_rides));
-//Heidi.FindBusiestTime(uber, fhv, "Diplo");
 
 //Incremental implemenation for compare based on month
 var uber_rides_modified = false
@@ -46,6 +40,16 @@ Noah.updateUberCompareCount(uber, 0, 0);
 Noah.updateFHVCompareCount(fhv, 0, 0, 'all');
 endOld = new Date().getTime();
 console.log('Compare by Month Incremental Analytics Initial Run: ', endOld - beginOld)
+
+
+//For cab_type
+var add_ride_lyft = false;
+//var add_ride_uber = false;
+//var delete_ride_uber = false;
+var delete_ride_lyft = false;
+//var uber_to_lyft = false;
+var cabTypeInit = false;
+//End of cab_type variables
 
 //Incremental implementation for cab_price
 cab_price_removed = false;
@@ -97,7 +101,24 @@ server.get('/pickup_date', function(req, res){
 //Bao's Analytics
 server.get('/cab_type', function(req, res)
 {
-    cab_type = Bao.cab_type(cab_rides);
+    if (!cabTypeInit) {
+        cabTypeInit = true;
+        cab_type = Bao.cab_type(cab_rides);
+    }
+
+    if (add_ride_lyft) {
+        add_ride_lyft = false;
+        cab_type.Lyft += 1;
+        cab_type.Total += 1;
+    }
+
+
+    if (delete_ride_lyft) {
+        delete_ride_lyft = false;
+        cab_type.Lyft -= 1;
+        cab_type.Total -= 1;
+    }
+    //cab_type = Bao.cab_type(cab_rides);
     res.send({cab_type, cab_type});
 });
 
@@ -267,6 +288,7 @@ server.put('/add_lyft', function(req, res) {
     console.log(req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance)
     Noah.AddLyft(cab_rides, req.body.Source, req.body.Destination, req.body.LyftType, req.body.Price, req.body.Distance);
     
+    add_ride_lyft = true;
     cab_price_added = true;
     cab_price_updates.push({'type': 'Lyft', 'price': req.body.Price, 'distance': req.body.Distance, 'name': req.body.LyftType})
     
@@ -390,7 +412,7 @@ server.delete('/delete_lyft/:Identifier', function(req, res) {
     popular_destination_boston = Bao.delete_popular_destination_boston(popular_destination_boston, ride.source, ride.destination);
     Noah.RemoveLyft(cab_rides, req.params.Identifier);
     cab_price_removed = true
-
+    delete_ride_lyft = true;
     res.send('Ride Removed Successfully');
 });
 
