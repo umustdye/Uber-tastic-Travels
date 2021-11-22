@@ -1,7 +1,13 @@
+search_return_vals = [];
+search_pointer = 0;
+search_pointer_init = 0;
+search_pointer_final = 0;
+
 $(function () {
 
     // GET/cab_type
     $('#cab_type').on('click', function () {
+        ClearBelowTable()
         $.ajax({
             url: '/cab_type',
             contentType: 'application/json',
@@ -18,7 +24,6 @@ $(function () {
                         <td class="Total">' + 'Total: ' + response.cab_type.Total + '</td>\
                     </tr>\
                 ');
-    
             }
         });
     });
@@ -27,6 +32,7 @@ $(function () {
     
         // GET/cab_price
         $('#cab_price').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/cab_price',
                 contentType: 'application/json',
@@ -35,7 +41,14 @@ $(function () {
                     var tbodyEl = $('tbody');
     
                     tbodyEl.html('<h2>Prices for Uber and Lyft</h2>');
-    
+                    tbodyEl.append('\
+                        <tr>\
+                            <td> <b>Ride Service</b> </td>\
+                            <td> <b>Ride Type</b> </td>\
+                            <td> <b>Minimum</b> </td>\
+                            <td> <b>Maximum</b> </td>\
+                        </tr>\
+                    ');
                     response.cab_price.forEach(function (cab) {
                         tbodyEl.append('\
                         <tr>\
@@ -53,6 +66,7 @@ $(function () {
     
             // GET/popular_destination_boston
             $('#popular_destination_boston').on('click', function () {
+                ClearBelowTable()
                 $.ajax({
                     url: '/popular_destination_boston',
                     contentType: 'application/json',
@@ -117,6 +131,7 @@ $(function () {
     
     // GET/popular_routes
     $('#popular_routes').on('click', function () {
+        ClearBelowTable()
         $.ajax({
             url: '/popular_routes',
             contentType: 'application/json',
@@ -142,6 +157,7 @@ $(function () {
     
         // GET/pickup
         $('#get-pickup').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/pickup_date',
                 contentType: 'application/json',
@@ -168,6 +184,7 @@ $(function () {
     
     
         $('#save_uber_ride').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/save_uber',
                 contentType: 'application/json',
@@ -183,6 +200,7 @@ $(function () {
     
     
         $('#save_fhv_ride').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/save_fhv',
                 contentType: 'application/json',
@@ -197,6 +215,7 @@ $(function () {
         });
 
         $('#save_lyft_ride').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/save_lyft',
                 contentType: 'application/json',
@@ -212,6 +231,7 @@ $(function () {
     
         // GET/compare
         $('#compareDiplo').on('click', function () {
+            ClearBelowTable()
             $.ajax({
                 url: '/compareDiplo',
                 contentType: 'application/json',
@@ -248,7 +268,7 @@ $(function () {
         // CREATE/POST
         $('#search_parameters').on('submit', function (event) {
             event.preventDefault();
-    
+            search_pointer = 0;
             var ride_service = $('#ride_service');
             var date_begin = $('#date_begin');
             var date_end = $('#date_end');
@@ -283,8 +303,18 @@ $(function () {
                     var tbodyEl = $('tbody');
     
                     tbodyEl.html('');
-    
+                    search_return_vals = response;
+
+                    final_is_larger = false;
+                    if (search_return_vals.length < 20) {
+                        final_is_larger = true;
+                    }
+                    else {
+                        final_is_larger = false;
+                    }
+
                     response.forEach(ride => {
+                        if (search_pointer < 20) {
                         if (ride.Type == 'view_only') {
                             tbodyEl.append('\
                                 <tr>\
@@ -399,7 +429,361 @@ $(function () {
                                 </tr>\
                             ');
                         }
+                        }
+                        if (search_pointer < 20) { 
+                            search_pointer += 1;
+                        }
                     });
+                    if (!final_is_larger) {
+                        tbodyEl.append('\
+                                <tr>\
+                                    <td>\
+                                        <button class="next_twenty"> >> </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                    }
+                }
+            });
+        });
+
+        $('table').on('click', '.next_twenty', function () {
+            $.ajax({
+                url: '/next_twenty',
+                method: 'POST',
+                contentType: 'application/json',
+
+                success: function (response) {
+                    var tbodyEl = $('tbody');
+                    
+                    tbodyEl.html('');
+                    search_pointer_init = search_pointer;
+                    search_pointer_final = search_pointer + 20;
+                    search_pointer = 0;
+                    final_is_larger = false;
+                    if (search_pointer_final > search_return_vals.length) {
+                        final_is_larger = true
+                    }
+                    else {
+                        final_is_larger = false;
+                    }
+
+                    search_return_vals.forEach(ride => {
+                        console.log(search_pointer, search_pointer_init, search_pointer_final, search_pointer >= search_pointer_init, search_pointer < search_pointer_final)
+                        if (search_pointer >= search_pointer_init && search_pointer < search_pointer_final) {
+                        if (ride.Type == 'view_only') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td class="date">' + 'Date: ' + ride.Date + ' | ' + '</td>\
+                                    <td class="time">' + 'Time: ' + ride.Time + ' | ' + '</td>\
+                                    <td class="address">' + 'Address: ' + ride.Address + '</td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'view_only_l') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td class="source">' + 'Source: ' + ride.Source + ' | ' + '</td>\
+                                    <td class="destination">' + 'Destination: ' + ride.Destination + ' | ' + '</td>\
+                                    <td class="lyft_type">' + 'Ride Type: ' + ride.lyftType + ' | ' + '</td>\
+                                    <td class="price">' + 'Price: $' + ride.Price + '</td>\
+                                    <td class="distance">' + '| Distance (mi): ' + ride.Distance + '</td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_uber') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td>' + 'Identifier: ' + '</td>\
+                                    <td class="identifier">' + ride.Identifier + '</td>\
+                                    <td>' + ' | ' + '</td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
+                                    <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
+                                    <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
+                                    <td>' + 'Base: ' + '<input type="text" class="base" value="' + ride.Base + '"></td>\
+                                    <td>\
+                                        <button class="modify_uber_ride"> Update Ride </button>\
+                                        <button class="delete_uber_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_fhv') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td>' + 'Identifier: ' + '</td>\
+                                    <td class="identifier">' + ride.Identifier + '</td>\
+                                    <td>' + ' | ' + '</td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
+                                    <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
+                                    <td>\
+                                        <button class="modify_fhv_ride"> Update Ride </button>\
+                                        <button class="delete_fhv_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_lyft') {
+                            tbodyEl.append('\
+                                <tr>\
+                                <td>' + 'Identifier: ' + '</td>\
+                                <td class="identifier">' + ride.Identifier + '</td>\
+                                <td>' + ' | ' + '</td>\
+                                <td>\
+                                    Source: <select class="source1" id="source1" value=' + ride.Source + '>\
+                                        <option disabled selected value> Select Location </option>\
+                                        <option value="Haymarket Square">Haymarket Square</option>\
+                                        <option value="Back Bay">Back Bay</option>\
+                                        <option value="North End">North End</option>\
+                                        <option value="North Station">North Station</option>\
+                                        <option value="Beacon Hill">Beacon Hill</option>\
+                                        <option value="Boston University">Boston University</option>\
+                                        <option value="Fenway">Fenway</option>\
+                                        <option value="South Station">South Station</option>\
+                                        <option value="Theatre District">Theatre District</option>\
+                                        <option value="West End">West End</option>\
+                                        <option value="Financial District">Financial District</option>\
+                                        <option value="Northeastern University">Northeastern University</option>\
+                                    </select> | \
+                                <td>\
+                                <td>\
+                                    Destination: <select class="destination1" id="destination1" value=' + ride.Destination + '>\
+                                        <option disabled selected value> Select Location </option>\
+                                        <option value="Haymarket Square">Haymarket Square</option>\
+                                        <option value="Back Bay">Back Bay</option>\
+                                        <option value="North End">North End</option>\
+                                        <option value="North Station">North Station</option>\
+                                        <option value="Beacon Hill">Beacon Hill</option>\
+                                        <option value="Boston University">Boston University</option>\
+                                        <option value="Fenway">Fenway</option>\
+                                        <option value="South Station">South Station</option>\
+                                        <option value="Theatre District">Theatre District</option>\
+                                        <option value="West End">West End</option>\
+                                        <option value="Financial District">Financial District</option>\
+                                        <option value="Northeastern University">Northeastern University</option>\
+                                    </select> | \
+                                <td>\
+                                <td>\
+                                    Type: <select class="lyft_type1" id="lyft_type1" value=' + ride.lyftType + '>\
+                                        <option disabled selected value> Select Type </option>\
+                                        <option value="Shared">Shared</option>\
+                                        <option value="Lux">Lux</option>\
+                                        <option value="Lyft">Lyft</option>\
+                                        <option value="Lux Black XL">Lux Black XL</option>\
+                                        <option value="Lyft XL">Lyft XL</option>\
+                                        <option value="Lux Black">Lux Black</option>\
+                                    </select> | \
+                                <td>\
+                                <td>' + 'Price: ' + '<input type="number" class="price" min="0.0" max="100.0" step="0.1" value=' + ride.Price + '>' + '</td>\
+                                <td>' + '| Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01" value=' + ride.Distance + '>' + '</td>\
+                                    <td>\
+                                        <button class="modify_lyft_ride"> Update Ride </button>\
+                                        <button class="delete_lyft_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        }
+                        if (search_pointer < search_pointer_final) {
+                            search_pointer += 1;
+                        }
+                    });
+                    if (final_is_larger) {
+                        tbodyEl.append('\
+                                <tr>\
+                                    <td>\
+                                        <button class="past_twenty"> << </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        search_pointer = search_pointer_final
+                    }
+                    if (!final_is_larger) {
+                        tbodyEl.append('\
+                                <tr>\
+                                    <td>\
+                                        <button class="past_twenty"> << </button>\
+                                        <button class="next_twenty"> >> </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                    }
+                    
+                }
+            });
+        });
+
+        $('table').on('click', '.past_twenty', function () {
+            $.ajax({
+                url: '/past_twenty',
+                method: 'POST',
+                contentType: 'application/json',
+
+                success: function (response) {
+                    var tbodyEl = $('tbody');
+    
+                    tbodyEl.html('');
+                    console.log(search_pointer, search_pointer_init, search_pointer_final, search_pointer >= search_pointer_init, search_pointer < search_pointer_final)
+
+                    search_pointer_init = (search_pointer - 40);
+                    search_pointer_final = search_pointer_init + 20;
+                    search_pointer = 0;
+
+                    if (search_pointer_init < 0) {
+                        search_pointer_init = 0;
+                        search_pointer_final = 20;
+                    }
+                    init_is_smaller = false;
+                    if (search_pointer_init <= 0) {
+                        init_is_smaller = true
+                    }
+                    else {
+                        init_is_smaller = false;
+                    }
+                    console.log(search_pointer, search_pointer_init, search_pointer_final, search_pointer >= search_pointer_init, search_pointer < search_pointer_final)
+
+                    search_return_vals.forEach(ride => {
+                        if (search_pointer >= search_pointer_init && search_pointer < search_pointer_final) {
+                        if (ride.Type == 'view_only') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td class="date">' + 'Date: ' + ride.Date + ' | ' + '</td>\
+                                    <td class="time">' + 'Time: ' + ride.Time + ' | ' + '</td>\
+                                    <td class="address">' + 'Address: ' + ride.Address + '</td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'view_only_l') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td class="source">' + 'Source: ' + ride.Source + ' | ' + '</td>\
+                                    <td class="destination">' + 'Destination: ' + ride.Destination + ' | ' + '</td>\
+                                    <td class="lyft_type">' + 'Ride Type: ' + ride.lyftType + ' | ' + '</td>\
+                                    <td class="price">' + 'Price: $' + ride.Price + '</td>\
+                                    <td class="distance">' + '| Distance (mi): ' + ride.Distance + '</td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_uber') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td>' + 'Identifier: ' + '</td>\
+                                    <td class="identifier">' + ride.Identifier + '</td>\
+                                    <td>' + ' | ' + '</td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
+                                    <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
+                                    <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
+                                    <td>' + 'Base: ' + '<input type="text" class="base" value="' + ride.Base + '"></td>\
+                                    <td>\
+                                        <button class="modify_uber_ride"> Update Ride </button>\
+                                        <button class="delete_uber_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_fhv') {
+                            tbodyEl.append('\
+                                <tr>\
+                                    <td>' + 'Identifier: ' + '</td>\
+                                    <td class="identifier">' + ride.Identifier + '</td>\
+                                    <td>' + ' | ' + '</td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
+                                    <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
+                                    <td>\
+                                        <button class="modify_fhv_ride"> Update Ride </button>\
+                                        <button class="delete_fhv_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        else if (ride.Type == 'edit_lyft') {
+                            tbodyEl.append('\
+                                <tr>\
+                                <td>' + 'Identifier: ' + '</td>\
+                                <td class="identifier">' + ride.Identifier + '</td>\
+                                <td>' + ' | ' + '</td>\
+                                <td>\
+                                    Source: <select class="source1" id="source1" value=' + ride.Source + '>\
+                                        <option disabled selected value> Select Location </option>\
+                                        <option value="Haymarket Square">Haymarket Square</option>\
+                                        <option value="Back Bay">Back Bay</option>\
+                                        <option value="North End">North End</option>\
+                                        <option value="North Station">North Station</option>\
+                                        <option value="Beacon Hill">Beacon Hill</option>\
+                                        <option value="Boston University">Boston University</option>\
+                                        <option value="Fenway">Fenway</option>\
+                                        <option value="South Station">South Station</option>\
+                                        <option value="Theatre District">Theatre District</option>\
+                                        <option value="West End">West End</option>\
+                                        <option value="Financial District">Financial District</option>\
+                                        <option value="Northeastern University">Northeastern University</option>\
+                                    </select> | \
+                                <td>\
+                                <td>\
+                                    Destination: <select class="destination1" id="destination1" value=' + ride.Destination + '>\
+                                        <option disabled selected value> Select Location </option>\
+                                        <option value="Haymarket Square">Haymarket Square</option>\
+                                        <option value="Back Bay">Back Bay</option>\
+                                        <option value="North End">North End</option>\
+                                        <option value="North Station">North Station</option>\
+                                        <option value="Beacon Hill">Beacon Hill</option>\
+                                        <option value="Boston University">Boston University</option>\
+                                        <option value="Fenway">Fenway</option>\
+                                        <option value="South Station">South Station</option>\
+                                        <option value="Theatre District">Theatre District</option>\
+                                        <option value="West End">West End</option>\
+                                        <option value="Financial District">Financial District</option>\
+                                        <option value="Northeastern University">Northeastern University</option>\
+                                    </select> | \
+                                <td>\
+                                <td>\
+                                    Type: <select class="lyft_type1" id="lyft_type1" value=' + ride.lyftType + '>\
+                                        <option disabled selected value> Select Type </option>\
+                                        <option value="Shared">Shared</option>\
+                                        <option value="Lux">Lux</option>\
+                                        <option value="Lyft">Lyft</option>\
+                                        <option value="Lux Black XL">Lux Black XL</option>\
+                                        <option value="Lyft XL">Lyft XL</option>\
+                                        <option value="Lux Black">Lux Black</option>\
+                                    </select> | \
+                                <td>\
+                                <td>' + 'Price: ' + '<input type="number" class="price" min="0.0" max="100.0" step="0.1" value=' + ride.Price + '>' + '</td>\
+                                <td>' + '| Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01" value=' + ride.Distance + '>' + '</td>\
+                                    <td>\
+                                        <button class="modify_lyft_ride"> Update Ride </button>\
+                                        <button class="delete_lyft_ride"> Remove Ride </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                        }
+                        }
+                        if (search_pointer < search_pointer_final) {
+                            search_pointer += 1;
+                        }
+                    });
+                    if (init_is_smaller) {
+                        tbodyEl.append('\
+                                <tr>\
+                                    <td>\
+                                        <button class="next_twenty"> >> </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                    }
+                    if (!init_is_smaller) {
+                        tbodyEl.append('\
+                                <tr>\
+                                    <td>\
+                                        <button class="past_twenty"> << </button>\
+                                        <button class="next_twenty"> >> </button>\
+                                    </td>\
+                                </tr>\
+                            ');
+                    }
                 }
             });
         });
@@ -407,8 +791,10 @@ $(function () {
     
     
     
+    
     // CREATE/POST
     $('#busiest-times').on('click', function (event) {
+        ClearBelowTable()
         event.preventDefault();
     
         $.ajax({
@@ -446,6 +832,7 @@ $(function () {
     
         //Process busiest-time query and search
         $('table').on('click', '.service4Time', function () {
+            ClearBelowTable()
             console.log("Before...")
             var rowEl = $(this).closest('tr');
             var service = rowEl.find('.service_selector_time').val();
@@ -489,6 +876,7 @@ $(function () {
     
         // CREATE/POST
         $('#add_fhv_ride').on('click', function (event) {
+            ClearBelowTable()
             event.preventDefault();
     
             $.ajax({
@@ -528,6 +916,7 @@ $(function () {
     
         // CREATE/POST
         $('#add_uber_ride').on('click', function (event) {
+            ClearBelowTable()
             event.preventDefault();
     
             $.ajax({
@@ -559,6 +948,7 @@ $(function () {
 
         // CREATE/POST
         $('#add_lyft_ride').on('click', function (event) {
+            ClearBelowTable()
             event.preventDefault();
     
             $.ajax({
@@ -573,6 +963,7 @@ $(function () {
     
                     tbodyEl.append('\
                     <tr>\
+                    <td>' + '<b>Add a Lyft Trip</b> | ' + '</td>\
                     <td>\
                         Source: <select class="source1" id="source1">\
                             <option disabled selected value> Select Location </option>\
@@ -588,7 +979,7 @@ $(function () {
                             <option value="West End">West End</option>\
                             <option value="Financial District">Financial District</option>\
                             <option value="Northeastern University">Northeastern University</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>\
                         Destination: <select class="destination1" id="destination1">\
@@ -605,7 +996,7 @@ $(function () {
                             <option value="West End">West End</option>\
                             <option value="Financial District">Financial District</option>\
                             <option value="Northeastern University">Northeastern University</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>\
                         Type: <select class="lyft_type1" id="lyft_type1">\
@@ -616,10 +1007,10 @@ $(function () {
                             <option value="Lux Black XL">Lux Black XL</option>\
                             <option value="Lyft XL">Lyft XL</option>\
                             <option value="Lux Black">Lux Black</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>' + 'Price: ' + '<input type="number" class="price" min="0.0" max="100.0" step="0.1">' + '</td>\
-                    <td>' + '| Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01">' + '</td>\
+                    <td>' + ' Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01">' + '</td>\
                     <td>\
                         <button class="new_lyft_ride"> Add Ride </button>\
                     </td>\
@@ -1078,4 +1469,10 @@ function ShowCompare() {
         Nothing is Displayed Here\
     </tr>\
     ');
+}
+
+function ClearBelowTable() {
+    document.getElementById('Search').style.display = "none";
+    document.getElementById('compare_based_on_month').style.display = "none";
+    document.getElementById("container").innerHTML = "";
 }

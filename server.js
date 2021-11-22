@@ -481,3 +481,11 @@ server.post('/compare_results', function(req, res) {
     res.send(results);
 });
 
+
+server.post('/next_twenty', function(req, res) {
+    res.send('Showing next twenty');
+});
+
+server.post('/past_twenty', function(req, res) {
+    res.send('Showing last twenty');
+});
