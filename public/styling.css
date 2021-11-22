@@ -37,11 +37,7 @@ h1 {
     font-size: 2vw;
   } 
 
-  #dataset_augmentation
-  {
-    position: fixed;
-    bottom: 0;
-  }
+
 
 
   :root {
