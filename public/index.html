@@ -8,10 +8,15 @@
     <title>Uber Specs</title>
 </head>
 <body>
-    <div class="multi-button" id="analytics">
-        <button id="indicate_search" onclick="ShowSearch()">Search</button>
-        <button id="cab_type">Cab Type</button>
-        <button id="cab_price">Cab Price</button>
+    <div id="main_header">
+        <div id="top_header">
+            <h1 id="main_title">Ride Service Vehicle Analytics</h1>
+            <button id="indicate_search" onclick="ShowSearch()">Search</button>  
+        </div>
+
+        <div class="multi-button" id="analytics">
+        <button id="cab_type">Compare Uber to Lyft</button>
+        <button id="cab_price">Cab Price Uber to Lyft</button>
         <button id="popular_destination_boston">Most Popular Destination in Boston</button>
         <button id="popular_routes">Most Popular Routes</button>
         <!-- <button id="get-pickup">Uber Oldests Pick-up Dates</button> -->
@@ -19,12 +24,16 @@
         <button id="busiest-times">Pick-ups By The Hour</button>
         <button id="compare_uber_fhv" onclick="ShowCompare()">Compare Number of Rides by Month</button>
     </div>
+    </div>
 
 
-    <!--<button id="indicate_search" onclick="ShowSearch()">Search</button>-->
+
+
+
     
-    <hr>
-    <div id='Search' style="display:none">
+    
+
+    <div id='Search'>
         <h1>Search</h1>
         <form id='search_parameters'>
             Ride Service: <br>
@@ -138,7 +147,8 @@
             <br><br><button onclick="ClearDiv()">Compare</button>
         </form>
     </div>
-    <br>
+
+    <hr>
     <table>
         <thead>
             <tr>
@@ -147,8 +157,9 @@
         </thead>
         <tbody></tbody>
     </table>
-    <br>
-    <div id="container" style="width: 100%; height: 100%"></div>
+    <div id="container" style="width: 100%; height: 100%;"></div>
+    <div id="container_1" style="width: 100%; height: 100%;"></div>
+
     <div class="multi-button" id="dataset_augmentation">
         <button id="add_uber_ride">Add an Uber Trip</button>
         <button id="add_lyft_ride">Add a Lyft Trip</button>
