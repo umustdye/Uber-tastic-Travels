@@ -15,8 +15,15 @@ Team Pear
 
 - open a terminal
 - change the directory to the project directory
-- enter *npm init* into the terminal
+- into the terminal, enter 
+> npm init 
 - follow the prompts given
+
+### Installing Anime JS
+
+for our loading animations we used [Anime JS](https://animejs.com/)
+- in the same terminal, enter
+> npm install animejs --save
 
 ### Installing the datasets
 
@@ -27,5 +34,6 @@ Team Pear
 
 ### Running the program
 
-- in the same terminal, enter *node server*
+- in the same terminal, enter 
+> node server
 - in a web browser go to [local host 3000](http://localhost:3000/)
