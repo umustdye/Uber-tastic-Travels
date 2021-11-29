@@ -7,8 +7,9 @@ Team Pear
 ## How to set up
 ### Prerequisites
 
-- Install an IDE that supports Javascript and HTML. We used [Visual Studios](https://visualstudio.microsoft.com/downloads/)
-- Pull this repository.
+- Install an IDE that supports Javascript, NodeJS and HTML. We used [Visual Studios](https://visualstudio.microsoft.com/downloads/)
+  - Make sure install Javascript, NodeJS, and HTML dependencies for the IDE
+- Pull or clone [this](https://github.com/ucr-cs180-fall21/cs180project-021-team-pear-1.git) repository.
 
 ### Installing Express
 
