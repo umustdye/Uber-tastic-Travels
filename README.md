@@ -17,6 +17,7 @@ Team Pear
 - change the directory to the project directory
 - into the terminal, enter 
 > npm init -y
+> 
 > npm i -S express body-parser
 - follow the prompts given
 
