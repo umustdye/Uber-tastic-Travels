@@ -1,16 +1,12 @@
 const fs = require('fs');
-const fileName_1 = "csv_files\\Uber_Rides_1.csv";
-const fileName_2 = "csv_files\\Uber_Rides_2.csv";
-const fileName_3 = "csv_files\\Uber_Rides_3.csv";
 
-function ParseUber()
+function ParseUber(fileNames)
 {
+    var fileData = '';
     console.log('About to read Uber dataset file...');
-
-    fileData = fs.readFileSync(fileName_1, 'utf8');
-    fileData += fs.readFileSync(fileName_2, 'utf8');
-    fileData += fs.readFileSync(fileName_3, 'utf8');
-
+    for (let i = 0; i < fileNames.length; i++) {
+        fileData += fs.readFileSync(fileNames[i], 'utf8');
+    }
     //array of each row as JSON object
     Uber_Obj = parseCSVToJSON(fileData);
     //console.log(Uber_Obj[0])
@@ -24,7 +20,7 @@ function ParseUber()
 
 
 //parse function annd write to file
-function parseJSONToCSV(data)
+function parseJSONToCSV(data, fileNames)
 {
     console.log("Writing Uber Dataset to file...");
     //Date,Time,Latitude,Longitude,Base,Identifier
@@ -54,9 +50,9 @@ function parseJSONToCSV(data)
         }
     }
 
-    writeToFile(file_1, fileName_1);
-    writeToFile(file_2, fileName_2);
-    writeToFile(file_3, fileName_3);
+    writeToFile(file_1, fileNames[0]);
+    writeToFile(file_2, fileNames[1]);
+    writeToFile(file_3, fileNames[2]);
     console.log('Save Complete')
 }
 
@@ -116,11 +112,43 @@ function parseCSVToJSON(data)
             // row = row.replace(/\"/g, '');
             const column = row.split(',');
             const date = column[0];
-            const time = column[1];
-            const latitude = column[2];
-            const longitude = column[3];
+
+            var time = '0';
+            if (column[1].length <= 4) {
+                time += column[1];
+            }
+            else {
+                time = column[1];
+            }
+
+            var latitude = column[2];
+
+            if (latitude[0] == '-') {
+                while (latitude.length < 8) {
+                    latitude += '0';
+                }
+            }
+            else {
+                while (latitude.length < 7) {
+                    latitude += '0';
+                }
+            }
+            
+            var longitude = column[3];
+            if (longitude[0] == '-') {
+                while (longitude.length < 8) {
+                    longitude += '0';
+                }
+            }
+            else {
+                while (longitude.length < 7) {
+                    longitude += '0';
+                }
+            }
+
             const base = column[4];
-            const identifier = column[5];
+            const identifier = column[5].replace(/(\r)/gm, "");
+            
             const data = {"date":date, "time":time, "latitude":latitude, "longitude":longitude, "base":base, "identifier":identifier};
             Uber.push(data);
             }

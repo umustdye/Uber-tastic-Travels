@@ -8,7 +8,6 @@ $(function () {
     // GET/cab_type
     $('#cab_type').on('click', function () {
         ClearBelowTable()
-        document.getElementById('container').style.display = "block";
         $.ajax({
             url: '/cab_type',
             contentType: 'application/json',
@@ -18,60 +17,13 @@ $(function () {
     
                 tbodyEl.html('<h2>Did Uber outpreform Lyft</h2>');
     
-                    /*tbodyEl.append('\
+                    tbodyEl.append('\
                     <tr>\
                         <td class="Uber">' + 'Uber: ' + response.cab_type.Uber + '</td>\
                         <td class="Lyft">' + 'Lyft: ' + response.cab_type.Lyft + '</td>\
                         <td class="Total">' + 'Total: ' + response.cab_type.Total + '</td>\
                     </tr>\
-                ');*/
-
-
-                //pie chart
-                anychart.onDocumentReady(function() {
- 
-                    // set the data
-                    var data;
-                    var name1 = "Uber";
-                    var name2 = "Lyft";
-
-                        
-                    data = {
-                        header: ["Name", "Number of Rides"],
-                        rows: [
-                              [name1, response.cab_type.Uber],
-                              [name2, response.cab_type.Lyft]
-                              ]
-                    };
-
-
-
-                   
-                    // create the chart
-                    var chart = anychart.pie();
-             
-                    // add the data
-                    chart.data(data);
-
-                    //change the radius
-                    //chart.radius("100%");
-             
-                    // set the chart title
-                    chart.title("Comparing " + name1 + " & " + name2);
-                    
-                    // set the position of labels
-                    //chart.labels().position("outside");
-
-                    // configure connectors
-                    //chart.connectorStroke({color: "#595959", thickness: 2, dash:"2 2"});
-             
-                    // draw
-                    chart.container("container");
-                    chart.draw();
-                 });
-
-
-
+                ');
             }
         });
     });
@@ -81,7 +33,6 @@ $(function () {
         // GET/cab_price
         $('#cab_price').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "block";
             $.ajax({
                 url: '/cab_price',
                 contentType: 'application/json',
@@ -90,7 +41,7 @@ $(function () {
                     var tbodyEl = $('tbody');
     
                     tbodyEl.html('<h2>Prices for Uber and Lyft</h2>');
-                    /*tbodyEl.append('\
+                    tbodyEl.append('\
                         <tr>\
                             <td> <b>Ride Service</b> </td>\
                             <td> <b>Ride Type</b> </td>\
@@ -108,58 +59,7 @@ $(function () {
                         </tr>\
                     ');
     
-                    });*/
-
-
-                    anychart.onDocumentReady(function() {
- 
-
-                        var row = []
-
-                        response.cab_price.forEach(function (cab) {
-                        row.push([cab.Cab_Type + ": " + cab.Name, cab.Lowest_price, cab.Highest_price])
-        
-                        });
-                         
-                        var data = anychart.data.set(row);
-
-                        // map the data
-                        var seriesData_1 = data.mapAs({x: 0, value: 1});
-                        var seriesData_2 = data.mapAs({x: 0, value: 2});
-    
-                       
-                        // create the chart
-                        var chart = anychart.bar();
-
-
-                        // create the first series, set the data and name
-                        var series1 = chart.bar(seriesData_1);
-                        series1.name("Minimum Cost");
-
-                        // create the second series, set the data and name
-                        var series2 = chart.bar(seriesData_2);
-                        series2.name("Maximum Cost");
-
-                        // set the padding between bars
-                        chart.barsPadding(-0.5);
-
-                        // set the padding between bar groups
-                        chart.barGroupsPadding(2);
- 
-                        // set the chart title
-                        chart.title("Minimum and Maximum Prices for various riding services");
-                 
-                        // draw
-                        chart.container("container");
-                        chart.draw();
-                     });
-
-
-
-
-
-
-
+                    });
                 }
             });
         });
@@ -167,18 +67,18 @@ $(function () {
             // GET/popular_destination_boston
             $('#popular_destination_boston').on('click', function () {
                 ClearBelowTable()
-                document.getElementById('container').style.display = "block";
                 $.ajax({
                     url: '/popular_destination_boston',
                     contentType: 'application/json',
                     success: function (response) {
+        
                         var tbodyEl = $('tbody');
         
                         tbodyEl.html('<h2>Most Popular Pick-up Locations and Destinations in Boston</h2>');
 
 
 
-                        /*tbodyEl.append('\
+                        tbodyEl.append('\
                         <tr>\
                             <td class="Location">Source</td>\
                             <td class="Count">Count</td>\
@@ -217,89 +117,21 @@ $(function () {
                             }
 
         
-                        });*/
+                        });
 
 
 
 
-                        anychart.onDocumentReady(function() {
- 
-
-                            var row = []
-                            response.popular_destination_boston.forEach(function (cab) {
-                            
-
-                                if(cab.Type == "Source")
-                                {
-                                    row.push([cab.Location, cab.Count, 0])
-                                }
-    
-            
-                            });
-
-                            response.popular_destination_boston.forEach(function (cab) {
-
-                                if(cab.Type == "Destination")
-                                {
-                                    let index = row.findIndex((item) => item[0] === cab.Location);
-                                    row[index][2] = cab.Count;
-                                }
-    
-            
-                            });
-                            
-                             
-                            var data = anychart.data.set(row);
-
-                            // map the data
-                            var seriesData_1 = data.mapAs({x: 0, value: 1});
-                            var seriesData_2 = data.mapAs({x: 0, value: 2});
-        
-                           
-                            // create the chart
-                            var chart = anychart.bar();
-                     
-                            // add the data
-                            //chart.data(data);
-
-
-                            // create the first series, set the data and name
-                            var series1 = chart.bar(seriesData_1);
-                            series1.name("Source");
-
-                            // create the second series, set the data and name
-                            var series2 = chart.bar(seriesData_2);
-                            series2.name("Destination");
-
-                            // set the padding between bars
-                            chart.barsPadding(-0.5);
-
-                            // set the padding between bar groups
-                            chart.barGroupsPadding(2);
-
-
-
-
-                     
-                            // set the chart title
-                            chart.title("Most popular pick-up and drop-off locations");
-                     
-                            // draw
-                            chart.container("container");
-                            chart.draw();
-                         });
 
 
 
                     }
                 });
-
             });
     
     // GET/popular_routes
     $('#popular_routes').on('click', function () {
         ClearBelowTable()
-        document.getElementById('container').style.display = "block";
         $.ajax({
             url: '/popular_routes',
             contentType: 'application/json',
@@ -309,7 +141,7 @@ $(function () {
     
                 tbodyEl.html('<h2>Most popular Drop-off Destinations for Uber and Lyft</h2>');
     
-                /*response.popular_routes.forEach(function (cab) {
+                response.popular_routes.forEach(function (cab) {
                     tbodyEl.append('\
                     <tr>\
                         <td class="source">' + cab.source + '</td>\
@@ -318,46 +150,7 @@ $(function () {
                     </tr>\
                 ');
     
-                });*/
-
-
-
-
-                anychart.onDocumentReady(function() {
- 
-                    // set the data
-                    var data;
-                    var row = [];
-                        
-                    response.popular_routes.forEach(function (cab) {
-                        row.push([cab.source + " to " + cab.destination, cab.count]);
-        
-                    });
-                        
-                    data = {
-                        header: ["Route", "Number of Rides"],
-                        rows: row
-                    };
-   
-
-
-                   
-                    // create the chart
-                    var chart = anychart.bar();
-             
-                    // add the data
-                    chart.data(data);
-             
-                    // set the chart title
-                    chart.title("Most popular routes");
-             
-                    // draw
-                    chart.container("container");
-                    chart.draw();
-                 });
-
-
-
+                });
             }
         });
     });
@@ -365,7 +158,6 @@ $(function () {
         // GET/pickup
         $('#get-pickup').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/pickup_date',
                 contentType: 'application/json',
@@ -393,7 +185,6 @@ $(function () {
     
         $('#save_uber_ride').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_uber',
                 contentType: 'application/json',
@@ -410,7 +201,6 @@ $(function () {
     
         $('#save_fhv_ride').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_fhv',
                 contentType: 'application/json',
@@ -426,7 +216,6 @@ $(function () {
 
         $('#save_lyft_ride').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_lyft',
                 contentType: 'application/json',
@@ -443,7 +232,6 @@ $(function () {
         // GET/compare
         $('#compareDiplo').on('click', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "block";
             $.ajax({
                 url: '/compareDiplo',
                 contentType: 'application/json',
@@ -562,7 +350,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-04-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
                                     <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
@@ -580,7 +368,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-07-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
                                     <td>\
@@ -718,7 +506,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-04-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
                                     <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
@@ -736,7 +524,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-07-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
                                     <td>\
@@ -893,7 +681,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-07-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
                                     <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
@@ -911,7 +699,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-07-01" max="2014-09-30" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
                                     <td>\
@@ -1016,7 +804,6 @@ $(function () {
     // CREATE/POST
     $('#busiest-times').on('click', function (event) {
         ClearBelowTable()
-        document.getElementById('container').style.display = "none";
         event.preventDefault();
     
         $.ajax({
@@ -1046,7 +833,6 @@ $(function () {
                             </td>\
                         </tr>\
                     ');
-                    ClearBelowTable();
             }
         });
     });
@@ -1056,7 +842,6 @@ $(function () {
         //Process busiest-time query and search
         $('table').on('click', '.service4Time', function () {
             ClearBelowTable()
-            document.getElementById('container').style.display = "block";
             console.log("Before...")
             var rowEl = $(this).closest('tr');
             var service = rowEl.find('.service_selector_time').val();
@@ -1070,9 +855,9 @@ $(function () {
                     //console.log(response);
                     var tbodyEl = $('tbody');
     
-                    tbodyEl.html('<h2>Busiest Times for '+service+'</h2>');
+                    tbodyEl.html('<h2>Busiest Times</h2>');
     
-                    /*tbodyEl.append('\
+                    tbodyEl.append('\
                     <tr>' + '<b>' + 'service' + ' Pick-ups per Hour</b> ' + '</tr>\
                     <tr>\
                         <td class="hour">' + "Hour" + '</td>\
@@ -1087,37 +872,8 @@ $(function () {
                             <td class="value">' + time.value + '</td>\
                         </tr>\
                     ');
-                    });*/
-
-
-                    anychart.onDocumentReady(function() {
- 
-                        // set the data
-                        const data=[];
-                        
-                        response.Busiest_Time.forEach(function (time) {
-                            data.push({"x": time.hour, "value": time.value});
-                        });
     
-    
-                       
-                        // create the chart
-                        var chart = anychart.line();
-                 
-                        // add the data
-                        chart.data(data);
-                 
-                        // set the chart title
-                        chart.title("Number of Pickups per Hour for "+service);
-                 
-                        // draw
-                        chart.container("container");
-                        chart.draw();
-                     });
-
-
-
-
+                    });
                 }
             });
         });
@@ -1130,7 +886,6 @@ $(function () {
         // CREATE/POST
         $('#add_fhv_ride').on('click', function (event) {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -1156,7 +911,7 @@ $(function () {
                                     <option value="Prestige">Prestige</option>\
                                     </select>\
                                 </td>\
-                                <td>' + ' Date: ' + '<input type="date" min="2014-07-01" max="2014-09-30" class="date"></td>\
+                                <td>' + ' Date: ' + '<input type="date" class="date"></td>\
                                 <td>' + ' Time: ' + '<input type="time" class="time"></td>\
                                 <td>' + ' Address: ' + '<input type="text" class="address" placeholder="2557 Marion Ave Fordham"></td>\
                                 <td>\
@@ -1164,7 +919,6 @@ $(function () {
                                 </td>\
                             </tr>\
                         ');
-                        ClearBelowTable();
                 }
             });
         });
@@ -1172,7 +926,6 @@ $(function () {
         // CREATE/POST
         $('#add_uber_ride').on('click', function (event) {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -1188,7 +941,7 @@ $(function () {
                         tbodyEl.append('\
                             <tr>\
                                 <td>' + '<b>Add an Uber Trip</b> | ' + '</td>\
-                                <td>' + ' Date: ' + '<input type="date" min="2014-04-01" max="2014-09-30" class="date"></td>\
+                                <td>' + ' Date: ' + '<input type="date" class="date"></td>\
                                 <td>' + ' Time: ' + '<input type="time" class="time"></td>\
                                 <td>' + ' Longitude: ' + '<input type="text" class="longitude" placeholder="-7X.XXXX"></td>\
                                 <td>' + ' Latitude: ' + '<input type="text" class="latitude" placeholder="40.XXXX"></td>\
@@ -1205,7 +958,6 @@ $(function () {
         // CREATE/POST
         $('#add_lyft_ride').on('click', function (event) {
             ClearBelowTable()
-            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -1277,43 +1029,6 @@ $(function () {
             });
         });
     
-        // Add New Ride
-        $('table').on('click', '.new_fhv_ride', function () {
-            var rowEl = $(this).closest('tr');
-            var newService = rowEl.find('.service_selector').val();
-            var newDate = rowEl.find('.date').val();
-            var newTime = rowEl.find('.time').val();
-            var newAddress = rowEl.find('.address').val();
-    
-            $.ajax({
-                url: '/add_fhv',
-                method: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify({ Service: newService, Date: newDate, Time: newTime, Address: newAddress }),
-                success: function (response) {
-                    console.log(response);
-                }
-            });
-        });
-    
-        $('table').on('click', '.new_uber_ride', function () {
-            var rowEl = $(this).closest('tr');
-            var newDate = rowEl.find('.date').val();
-            var newTime = rowEl.find('.time').val();
-            var newLongitude = rowEl.find('.longitude').val();
-            var newLatitude = rowEl.find('.latitude').val();
-            var newBase = rowEl.find('.base').val();
-    
-            $.ajax({
-                url: '/add_uber',
-                method: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify({ Date: newDate, Time: newTime, Longitude: newLongitude, Latitude: newLatitude, Base: newBase }),
-                success: function (response) {
-                    console.log(response);
-                }
-            });
-        });
         // Add New Ride
         $('table').on('click', '.new_fhv_ride', function () {
             var rowEl = $(this).closest('tr');
@@ -1480,7 +1195,7 @@ $(function () {
     // CREATE/POST
     $('#compare_parameters').on('submit', function (event) {
         event.preventDefault();
-        document.getElementById('container').style.display = "block";
+
         var ride_service_1 = $('#ride_service_compare_1');
         var ride_service_2 = $('#ride_service_compare_2');
         var date = $('#compare_date');
@@ -1736,7 +1451,6 @@ function ClearDiv() {
 }
 
 function ShowSearch() {
-    document.getElementById('container').style.display = "none";
     document.getElementById('Search').style.display = "block";
     document.getElementById('compare_based_on_month').style.display = "none";
     document.getElementById("container").innerHTML = "";

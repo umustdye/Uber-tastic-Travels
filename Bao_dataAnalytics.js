@@ -62,97 +62,6 @@ function cab_type(data) {
 }
 
 //Analytic on price per mile of what cab type (uber vs. lyft) and how expensive or cheap the cab services are.
-function cab_price_old(data) {
-    const low_lyftPPM = new Map();
-    const low_uberPPM = new Map();
-    const high_lyftPPM = new Map();
-    const high_uberPPM = new Map();
-
-    var final_data = data;
-
-    var PPM;
-
-    for (let i = 0; i < final_data.length; ++i) {
-        if(typeof final_data[i] === 'undefined' || typeof final_data[i].identifier === 'undefined')
-        {
-            continue;
-        }
-        PPM = final_data[i].price / final_data[i].distance;
-        if (final_data[i].cab_type == "Uber") {
-            if (!low_uberPPM.has(final_data[i].name)) {
-                low_uberPPM.set(final_data[i].name, PPM);
-                high_uberPPM.set(final_data[i].name, PPM);
-            }
-            else if (low_uberPPM.has(final_data[i].name)) {
-                if (low_uberPPM.get(final_data[i].name) > PPM) {
-                    low_uberPPM.set(final_data[i].name, PPM);
-                }
-                if (high_uberPPM.get(final_data[i].name) < PPM) {
-                    high_uberPPM.set(final_data[i].name, PPM);
-                }
-            }
-        }
-        else {
-            if (!low_lyftPPM.has(final_data[i].name)) {
-                low_lyftPPM.set(final_data[i].name, PPM);
-                high_lyftPPM.set(final_data[i].name, PPM);
-            }
-            else if (low_lyftPPM.has(final_data[i].name)) {
-                if (low_lyftPPM.get(final_data[i].name) > PPM) {
-                    low_lyftPPM.set(final_data[i].name, PPM);
-                }
-                if (high_lyftPPM.get(final_data[i].name) < PPM) {
-                    high_lyftPPM.set(final_data[i].name, PPM);
-                }
-            }
-        }
-    }
-
-    const result = [];
-
-    var low = [];
-    var high = [];
-    for (var i of low_lyftPPM.keys()) {
-        var obj = {};
-        obj = { "Cab_Type": "Lyft", "Name": i, "PPM": low_lyftPPM.get(i) };
-        low.push(obj);
-    }
-
-    for (var i of high_lyftPPM.keys()) {
-        var obj = {};
-        obj = { "Cab_Type": "Lyft", "Name": i, "PPM": high_lyftPPM.get(i) };
-        high.push(obj);
-    }
-
-    for (var i = 0; i < low.length; ++i) {
-        var obj = {};
-        obj = { "Cab_Type": "Lyft", "Name": low[i].Name, "Lowest_price": low[i].PPM, "Highest_price": high[i].PPM };
-        result.push(obj);
-    }
-
-    var low = new Array();
-    var high = new Array();
-
-    for (var i of low_uberPPM.keys()) {
-        var obj = {};
-        obj = { "Cab_Type": "Uber", "Name": i, "PPM": low_uberPPM.get(i) };
-        low.push(obj);
-    }
-
-    for (var i of high_uberPPM.keys()) {
-        var obj = {};
-        obj = { "Cab_Type": "Uber", "Name": i, "PPM": high_uberPPM.get(i) };
-        high.push(obj);
-    }
-
-    for (var i = 0; i < low.length; ++i) {
-        var obj = {};
-        obj = { "Cab_Type": "Uber", "Name": low[i].Name, "Lowest_price": low[i].PPM, "Highest_price": high[i].PPM };
-        result.push(obj);
-    }
-
-    return result;
-}
 
 const low_lyftPPM = new Map();
 const low_uberPPM = new Map();
@@ -317,6 +226,11 @@ function popular_destination_boston(data) {
          obj = { "Location": i, "Count": src.get(i), "Type": "Source" };
          result.push(obj);
     }
+    // for (var i of src.keys()) {
+    //     var obj = {};
+    //     obj = { "Source": i, "Count": src.get(i) }
+    //     result.push(obj);
+    // }
 
     return result;
 }
@@ -484,4 +398,4 @@ function popular_routes(data) {
     return popular_routes_data;
 }
 
-module.exports = { CSVtoJSON, cab_type, cab_price, cab_price_old, cab_price_calc, cab_price_add, popular_destination_boston, add_popular_destination_boston, delete_popular_destination_boston, popular_routes, popular_routes_calc, popular_routes_add, popular_routes_subtract };
+module.exports = { CSVtoJSON, cab_type, cab_price, cab_price_calc, cab_price_add, popular_destination_boston, add_popular_destination_boston, delete_popular_destination_boston, popular_routes, popular_routes_calc, popular_routes_add, popular_routes_subtract };

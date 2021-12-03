@@ -1,14 +1,16 @@
 const fs = require('fs');
-const fileName = "csv_files\\cab_rides.csv";
 
 //JSON.stringify(object)
 //JSON.parse(string)
 
-function ParseCab_Rides()
+function ParseCab_Rides(fileNames)
 {
+    var fileData = '';
     console.log('About to read cab_rides dataset file...');
 
-    fileData = fs.readFileSync(fileName, 'utf8');
+    for (let i = 0; i < fileNames.length; i++) {
+        fileData += fs.readFileSync(fileNames[i], 'utf8');
+    }
 
     //console.log(fileData);
 
@@ -79,7 +81,7 @@ function parseCSVToJSON(data)
 }
 
 //parse function annd write to file
-function parseJSONToCSV(data)
+function parseJSONToCSV(data, fileNames)
 {
     console.log("Writing Cab Dataset to file...");
     //Date,Time,Address,Name,Identifier
@@ -97,10 +99,10 @@ function parseJSONToCSV(data)
         index++;
 
     }
-    filename = "csv_files\\cab_rides.csv"
+    // filename = "csv_files\\cab_rides.csv"
     //filename = "csv_files\\test.csv"
 
-    fs.writeFile(filename, file, err => {
+    fs.writeFile(fileNames[0], file, err => {
         if (err) {
           console.error(err)
           return

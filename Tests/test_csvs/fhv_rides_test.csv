@@ -1,0 +1,51 @@
+Date,Time,Address,Name,Identifier
+2014-07-01,00:00,Location Aurek,Prestige,0
+2014-08-01,00:00,Location Besh,Prestige,1
+2014-09-01,00:00,Location Cresh,Prestige,2
+2014-07-11,00:02,123 Location Ave,Prestige,3
+2014-08-11,00:02,523 Location Blvd,Prestige,4
+2014-09-11,00:02,W 123 Location St,Prestige,5
+2014-07-21,00:03,E 153 St Location,Prestige,6
+2014-08-21,00:03,153 E 125th St Location,Prestige,7
+2014-09-21,00:03,123 E 235th St Place,Prestige,8
+2014-09-30,00:04,5234 Location Ave Place,Prestige,9
+2014-07-01,00:00,Location Aurek,American,10
+2014-08-01,00:00,Location Besh,American,11
+2014-09-01,00:00,Location Cresh,American,12
+2014-07-11,00:02,123 Location Ave,American,13
+2014-08-11,00:02,523 Location Blvd,American,14
+2014-09-11,00:02,W 123 Location St,American,15
+2014-07-21,00:03,E 153 St Location,American,16
+2014-08-21,00:03,153 E 125th St Location,American,17
+2014-09-21,00:03,123 E 235th St Place,American,18
+2014-09-30,00:04,5234 Location Ave Place,American,19
+2014-07-01,00:00,Location Aurek,Highclass,20
+2014-08-01,00:00,Location Besh,Highclass,21
+2014-09-01,00:00,Location Cresh,Highclass,22
+2014-07-11,00:02,123 Location Ave,Highclass,23
+2014-08-11,00:02,523 Location Blvd,Highclass,24
+2014-09-11,00:02,W 123 Location St,Highclass,25
+2014-07-21,00:03,E 153 St Location,Highclass,26
+2014-08-21,00:03,153 E 125th St Location,Highclass,27
+2014-09-21,00:03,123 E 235th St Place,Highclass,28
+2014-09-30,00:04,5234 Location Ave Place,Highclass,29
+2014-07-01,00:00,Location Aurek,Firstclass,30
+2014-08-01,00:00,Location Besh,Firstclass,31
+2014-09-01,00:00,Location Cresh,Firstclass,32
+2014-07-11,00:02,123 Location Ave,Firstclass,33
+2014-08-11,00:02,523 Location Blvd,Firstclass,34
+2014-09-11,00:02,W 123 Location St,Firstclass,35
+2014-07-21,00:03,E 153 St Location,Firstclass,36
+2014-08-21,00:03,153 E 125th St Location,Firstclass,37
+2014-09-21,00:03,123 E 235th St Place,Firstclass,38
+2014-09-30,00:04,5234 Location Ave Place,Firstclass,39
+2014-07-01,00:00,Location Aurek,Diplo,40
+2014-08-01,00:00,Location Besh,Diplo,41
+2014-09-01,00:00,Location Cresh,Diplo,42
+2014-07-11,00:02,123 Location Ave,Diplo,43
+2014-08-11,00:02,523 Location Blvd,Diplo,44
+2014-09-11,00:02,W 123 Location St,Diplo,45
+2014-07-21,00:03,E 153 St Location,Diplo,46
+2014-08-21,00:03,153 E 125th St Location,Diplo,47
+2014-09-21,00:03,123 E 235th St Place,Diplo,48
+2014-09-30,00:04,5234 Location Ave Place,Diplo,49
