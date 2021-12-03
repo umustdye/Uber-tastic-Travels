@@ -16,7 +16,8 @@ Team Pear
 - open a terminal
 - change the directory to the project directory
 - into the terminal, enter 
-> npm init 
+> npm init -y
+> npm i -S express body-parser
 - follow the prompts given
 
 ### Installing Anime JS
@@ -24,6 +25,11 @@ Team Pear
 for our loading animations we used [Anime JS](https://animejs.com/)
 - in the same terminal, enter
 > npm install animejs --save
+
+### Saving to File
+
+- Your device may require this command to save data to file without crashing. This will expand the amount of memory the program has access to.
+> $env:NODE_OPTIONS="--max-old-space-size=4096"
 
 ### Installing the datasets
 
