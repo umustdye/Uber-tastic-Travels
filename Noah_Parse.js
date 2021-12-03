@@ -31,6 +31,8 @@ function findByIdentifier(data, data_type, identifier) {
             }
         }
     }
+
+
     else {
         for (let i = 0; i < data.length; i++) {
             if(typeof data[i] === 'undefined' || typeof data[i].identifier === 'undefined')
@@ -43,6 +45,433 @@ function findByIdentifier(data, data_type, identifier) {
         }
     }
 
+}
+
+function updateUberCompareCount(uber_rides, modify_type, month) {
+    if (modify_type == 1) { //Increment Count
+        if (month == 4) {
+            UberCompMonNums[0] += 1
+        }
+        else if (month == 5) {
+            UberCompMonNums[1] += 1
+        }
+        else if (month == 6) {
+            UberCompMonNums[2] += 1
+        }
+        else if (month == 7) {
+            UberCompMonNums[3] += 1
+        }
+        else if (month == 8) {
+            UberCompMonNums[4] += 1
+        }
+        else if (month == 9) {
+            UberCompMonNums[5] += 1
+        }
+    }
+    else if (modify_type == 0) { //Setup Count
+        for (let i = 0; i < uber_rides.length; i++) {
+            if(typeof uber_rides[i] === 'undefined' || typeof uber_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }
+            if (uber_rides[i].date[6] == 4) {
+                UberCompMonNums[0] += 1
+            }
+            else if (uber_rides[i].date[6] == 5) {
+                UberCompMonNums[1] += 1
+            }
+            else if (uber_rides[i].date[6] == 6) {
+                UberCompMonNums[2] += 1
+            }
+            else if (uber_rides[i].date[6] == 7) {
+                UberCompMonNums[3] += 1
+            }
+            else if (uber_rides[i].date[6] == 8) {
+                UberCompMonNums[4] += 1
+            }
+            else if (uber_rides[i].date[6] == 9) {
+                UberCompMonNums[5] += 1
+            }
+        }
+    }
+    else if (modify_type == -1) { //Decrement Count
+        if (month == 4) {
+            UberCompMonNums[0] -= 1
+        }
+        else if (month == 5) {
+            UberCompMonNums[1] -= 1
+        }
+        else if (month == 6) {
+            UberCompMonNums[2] -= 1
+        }
+        else if (month == 7) {
+            UberCompMonNums[3] -= 1
+        }
+        else if (month == 8) {
+            UberCompMonNums[4] -= 1
+        }
+        else if (month == 9) {
+            UberCompMonNums[5] -= 1
+        }
+    }
+    else {
+        // Do Nothing
+    }
+}
+
+function updateFHVCompareCount(fhv_rides, modify_type, month, service) {
+    console.log(modify_type, month, service)
+    if (modify_type == 1) { //Increment Count
+        if (service == 'American') {
+            if (month == 7) {
+                AmericanCompMonNums[0] += 1
+            }
+            else if (month == 8) {
+                AmericanCompMonNums[1] += 1
+            }
+            else if (month == 9) {
+                AmericanCompMonNums[2] += 1
+            }
+        }
+        else if (service == 'Diplo') {
+            if (month == 7) {
+                DiploCompMonNums[0] += 1
+            }
+            else if (month == 8) {
+                DiploCompMonNums[1] += 1
+            }
+            else if (month == 9) {
+                DiploCompMonNums[2] += 1
+            }
+        }
+        else if (service == 'Firstclass') {
+            if (month == 7) {
+                FirstclassCompMonNums[0] += 1
+            }
+            else if (month == 8) {
+                FirstclassCompMonNums[1] += 1
+            }
+            else if (month == 9) {
+                FirstclassCompMonNums[2] += 1
+            }
+        }
+        else if (service == 'Highclass') {
+            if (month == 7) {
+                HighclassCompMonNums[0] += 1
+            }
+            else if (month == 8) {
+                HighclassCompMonNums[1] += 1
+            }
+            else if (month == 9) {
+                HighclassCompMonNums[2] += 1
+            }
+        }
+        else if (service == 'Prestige') {
+            if (month == 7) {
+                PrestigeCompMonNums[0] += 1
+            }
+            else if (month == 8) {
+                PrestigeCompMonNums[1] += 1
+            }
+            else if (month == 9) {
+                PrestigeCompMonNums[2] += 1
+            }
+        }
+    }
+    else if (modify_type == 0) { //Setup Count
+        for (let i = 0; i < fhv_rides.length; i++) {
+            if(typeof fhv_rides[i] === 'undefined' || typeof fhv_rides[i].identifier === 'undefined')
+            {
+                continue;
+            }   
+            if (fhv_rides[i].name == 'American') {
+                if (fhv_rides[i].date[6] == 7) {
+                    AmericanCompMonNums[0] += 1
+                }
+                else if (fhv_rides[i].date[6] == 8) {
+                    AmericanCompMonNums[1] += 1
+                }
+                else if (fhv_rides[i].date[6] == 9) {
+                    AmericanCompMonNums[2] += 1
+                }
+            }
+            else if (fhv_rides[i].name == 'Diplo') {
+                if (fhv_rides[i].date[6] == 7) {
+                    DiploCompMonNums[0] += 1
+                }
+                else if (fhv_rides[i].date[6] == 8) {
+                    DiploCompMonNums[1] += 1
+                }
+                else if (fhv_rides[i].date[6] == 9) {
+                    DiploCompMonNums[2] += 1
+                }
+            }
+            else if (fhv_rides[i].name == 'Firstclass') {
+                if (fhv_rides[i].date[6] == 7) {
+                    FirstclassCompMonNums[0] += 1
+                }
+                else if (fhv_rides[i].date[6] == 8) {
+                    FirstclassCompMonNums[1] += 1
+                }
+                else if (fhv_rides[i].date[6] == 9) {
+                    FirstclassCompMonNums[2] += 1
+                }
+            }
+            else if (fhv_rides[i].name == 'Highclass') {
+                if (fhv_rides[i].date[6] == 7) {
+                    HighclassCompMonNums[0] += 1
+                }
+                else if (fhv_rides[i].date[6] == 8) {
+                    HighclassCompMonNums[1] += 1
+                }
+                else if (fhv_rides[i].date[6] == 9) {
+                    HighclassCompMonNums[2] += 1
+                }
+            }
+            else if (fhv_rides[i].name == 'Prestige') {
+                if (fhv_rides[i].date[6] == 7) {
+                    PrestigeCompMonNums[0] += 1
+                }
+                else if (fhv_rides[i].date[6] == 8) {
+                    PrestigeCompMonNums[1] += 1
+                }
+                else if (fhv_rides[i].date[6] == 9) {
+                    PrestigeCompMonNums[2] += 1
+                }
+            }
+        }
+    }
+    else if (modify_type == -1) { //Decrement Count
+        if (service == 'American') {
+            if (month == 7) {
+                AmericanCompMonNums[0] -= 1
+            }
+            else if (month == 8) {
+                AmericanCompMonNums[1] -= 1
+            }
+            else if (month == 9) {
+                AmericanCompMonNums[2] -= 1
+            }
+        }
+        else if (service == 'Diplo') {
+            if (month == 7) {
+                DiploCompMonNums[0] -= 1
+            }
+            else if (month == 8) {
+                DiploCompMonNums[1] -= 1
+            }
+            else if (month == 9) {
+                DiploCompMonNums[2] -= 1
+            }
+        }
+        else if (service == 'Firstclass') {
+            if (month == 7) {
+                FirstclassCompMonNums[0] -= 1
+            }
+            else if (month == 8) {
+                FirstclassCompMonNums[1] -= 1
+            }
+            else if (month == 9) {
+                FirstclassCompMonNums[2] -= 1
+            }
+        }
+        else if (service == 'Highclass') {
+            if (month == 7) {
+                HighclassCompMonNums[0] -= 1
+            }
+            else if (month == 8) {
+                HighclassCompMonNums[1] -= 1
+            }
+            else if (month == 9) {
+                HighclassCompMonNums[2] -= 1
+            }
+        }
+        else if (service == 'Prestige') {
+            if (month == 7) {
+                PrestigeCompMonNums[0] -= 1
+            }
+            else if (month == 8) {
+                PrestigeCompMonNums[1] -= 1
+            }
+            else if (month == 9) {
+                PrestigeCompMonNums[2] -= 1
+            }
+        }
+    }
+    else {
+        // Do Nothing
+    }
+}
+
+function CompareBasedOnMonth(name_1, name_2, date, date2) 
+{
+    var compare = [];
+    first_count = 0;
+    second_count = 0;
+    console.log('Comparing ', name_1, ' to ', name_2);
+
+    month = date[6];
+    if (name_1 == 'Uber') {
+        if (month == 4) {
+            first_count = UberCompMonNums[0]
+        }
+        else if (month == 5) {
+            first_count = UberCompMonNums[1]
+        }
+        else if (month == 6) {
+            first_count = UberCompMonNums[2]
+        }
+        else if (month == 7) {
+            first_count = UberCompMonNums[3]
+        }
+        else if (month == 8) {
+            first_count = UberCompMonNums[4]
+        }
+        else if (month == 9) {
+            first_count = UberCompMonNums[5]
+        }
+    }
+    else if (name_1 == 'American') {
+        if (month == 7) {
+            first_count = AmericanCompMonNums[0]
+        }
+        else if (month == 8) {
+            first_count = AmericanCompMonNums[1]
+        }
+        else if (month == 9) {
+            first_count = AmericanCompMonNums[2]
+        }
+    }
+    else if (name_1 == 'Diplo') {
+        if (month == 7) {
+            first_count = DiploCompMonNums[0]
+        }
+        else if (month == 8) {
+            first_count = DiploCompMonNums[1]
+        }
+        else if (month == 9) {
+            first_count = DiploCompMonNums[2]
+        }
+    }
+    else if (name_1 == 'Firstclass') {
+        if (month == 7) {
+            first_count = FirstclassCompMonNums[0]
+        }
+        else if (month == 8) {
+            first_count = FirstclassCompMonNums[1]
+        }
+        else if (month == 9) {
+            first_count = FirstclassCompMonNums[2]
+        }
+    }
+    else if (name_1 == 'Highclass') {
+        if (month == 7) {
+            first_count = HighclassCompMonNums[0]
+        }
+        else if (month == 8) {
+            first_count = HighclassCompMonNums[1]
+        }
+        else if (month == 9) {
+            first_count = HighclassCompMonNums[2]
+        }
+    }
+    else if (name_1 == 'Prestige') {
+        if (month == 7) {
+            first_count = PrestigeCompMonNums[0]
+        }
+        else if (month == 8) {
+            first_count = PrestigeCompMonNums[1]
+        }
+        else if (month == 9) {
+            first_count = PrestigeCompMonNums[2]
+        }
+    }
+
+    month = date2[6];
+    if (name_2 == 'Uber') {
+        if (month == 4) {
+            second_count = UberCompMonNums[0]
+        }
+        else if (month == 5) {
+            second_count = UberCompMonNums[1]
+        }
+        else if (month == 6) {
+            second_count = UberCompMonNums[2]
+        }
+        else if (month == 7) {
+            second_count = UberCompMonNums[3]
+        }
+        else if (month == 8) {
+            second_count = UberCompMonNums[4]
+        }
+        else if (month == 9) {
+            second_count = UberCompMonNums[5]
+        }
+    }
+    else if (name_2 == 'American') {
+        if (month == 7) {
+            second_count = AmericanCompMonNums[0]
+        }
+        else if (month == 8) {
+            second_count = AmericanCompMonNums[1]
+        }
+        else if (month == 9) {
+            second_count = AmericanCompMonNums[2]
+        }
+    }
+    else if (name_2 == 'Diplo') {
+        if (month == 7) {
+            second_count = DiploCompMonNums[0]
+        }
+        else if (month == 8) {
+            second_count = DiploCompMonNums[1]
+        }
+        else if (month == 9) {
+            second_count = DiploCompMonNums[2]
+        }
+    }
+    else if (name_2 == 'Firstclass') {
+        if (month == 7) {
+            second_count = FirstclassCompMonNums[0]
+        }
+        else if (month == 8) {
+            second_count = FirstclassCompMonNums[1]
+        }
+        else if (month == 9) {
+            second_count = FirstclassCompMonNums[2]
+        }
+    }
+    else if (name_2 == 'Highclass') {
+        if (month == 7) {
+            second_count = HighclassCompMonNums[0]
+        }
+        else if (month == 8) {
+            second_count = HighclassCompMonNums[1]
+        }
+        else if (month == 9) {
+            second_count = HighclassCompMonNums[2]
+        }
+    }
+    else if (name_2 == 'Prestige') {
+        if (month == 7) {
+            second_count = PrestigeCompMonNums[0]
+        }
+        else if (month == 8) {
+            second_count = PrestigeCompMonNums[1]
+        }
+        else if (month == 9) {
+            second_count = PrestigeCompMonNums[2]
+        }
+    }
+
+
+    compare.push({"month": date, "name1": name_1,"month2": date2, "name2": name_2, "count1": first_count, "count2": second_count});
+    /*console.log('Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides);
+    output = 'Uber Rides: ' + u_rides + ' | ', f_name + ' Rides: ' + f_rides
+    output = {"uber": u_rides, "f_name": f_name, "f_rides":f_rides}*/
+    console.log('Finished Calculation');
+    //console.log(compare);
+    return compare
 }
 
 function updateUberCompareCount(uber_rides, modify_type, month) {
@@ -727,4 +1156,4 @@ function RemoveLyft(cab_rides, identifier) {
     }
 }
 
-module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, UpdateLyft, RemoveFHV, RemoveUber, RemoveLyft, AddUber, AddLyft, AddFHV, updateUberCompareCount, updateFHVCompareCount, findByIdentifier };
+module.exports = { CompareBasedOnMonth, SearchByParameter, UpdateFHV, UpdateUber, UpdateLyft, RemoveFHV, RemoveUber, RemoveLyft, AddUber, AddLyft, AddFHV, updateUberCompareCount, updateFHVCompareCount, findByIdentifier }; 

@@ -1,3 +1,64 @@
+
+
+function deleteBusiestTime(busiest_time, oldTime)
+{
+    //preparsed time
+    PPTime = oldTime;
+    //console.log("Preparsed Time: "+ PPTime)
+    var time = "";
+    for(let j = 0; j < PPTime.length; j++)
+    {
+        if((j == 0) && (PPTime[j] == "0"))
+        {
+            continue;
+        }
+        //get only the hour
+        if(PPTime[j] == ":")
+        {
+            break;
+        }
+        else
+        {
+            time += PPTime[j];
+        }
+        
+    }
+
+    busiest_time[parseInt(time)].value--;
+
+    return busiest_time;
+}
+
+function addBusiestTime(busiest_time, newTime)
+{
+    //preparsed time
+    PPTime = newTime;
+    //console.log("Preparsed Time: "+ PPTime)
+    var time = "";
+    for(let j = 0; j < PPTime.length; j++)
+    {
+        if((j == 0) && (PPTime[j] == "0"))
+        {
+            continue;
+        }
+        //get only the hour
+        if(PPTime[j] == ":")
+        {
+            break;
+        }
+        else
+        {
+            time += PPTime[j];
+        }
+        
+    }
+
+    busiest_time[parseInt(time)].value++;
+
+    return busiest_time;
+}
+
+
 function FindBusiestTime(uber_rides, fhv_rides, ride_service)
 {
     var toReturn = [];
@@ -116,4 +177,4 @@ function FindBusiestTime(uber_rides, fhv_rides, ride_service)
     return busiest_time;
 }
 
-module.exports = { FindBusiestTime };
+module.exports = { FindBusiestTime, deleteBusiestTime, addBusiestTime };

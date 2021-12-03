@@ -160,9 +160,23 @@ function parseCSVToJSON(data)
 }
 
 
-function query()
+function findUber(uber, identifier)
 {
+    for(let i=0; i<uber.length; i++)
+    {
+        if(typeof uber[i] === 'undefined' || typeof uber[i].identifier === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
 
+        else
+        {
+            if(uber[i].identifier == identifier )
+            {
+                return uber[i];
+            }
+        }
+    }
 }
 
-module.exports = { ParseUber, parseJSONToCSV };
+module.exports = { ParseUber, parseJSONToCSV, parseCSVToJSON, findUber };

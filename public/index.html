@@ -4,34 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styling.css">
     <title>Uber Specs</title>
 </head>
 <body>
-    <button id="cab_type">Cab Type</button>
-    <button id="cab_price">Cab Price</button>
-    <button id="popular_destination_boston">Most Popular Destination in Boston</button>
-    <button id="popular_routes">Most Popular Routes</button>
-    <!-- <button id="get-pickup">Uber Oldests Pick-up Dates</button> -->
-    <button id="busiest-times">Pick-ups By The Hour</button>
-    <!-- <button id="compareDiplo">Compare Uber to Other Services</button> -->
-    <button id="add_uber_ride">Add an Uber Trip</button>
-    <button id="add_lyft_ride">Add a Lyft Trip</button>
-    <button id="add_fhv_ride">Add a For-Hire Ride Service Trip</button>
-    <button id="save_uber_ride">Save the Collection of Uber Trips</button>
-    <button id="save_lyft_ride">Save the Collection of Lyft Trips</button>
-    <button id="save_fhv_ride">Save the Collection of For-Hire Ride Service Trips</button>
-    <button id="indicate_search" onclick="ShowSearch()">Search</button>
-    <button id="compare_uber_fhv" onclick="ShowCompare()">Compare Number of Rides by Month</button>
-    <hr>
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <div id="container" style="width: 100%; height: 100%"></div>
+    <div id="main_header">
+        <div id="top_header">
+            <h1 id="main_title">Ride Service Vehicle Analytics</h1>
+            <button id="indicate_search" onclick="ShowSearch()">Search</button>  
+        </div>
+
+        <div class="multi-button" id="analytics">
+        <button id="cab_type">Compare Uber to Lyft</button>
+        <button id="cab_price">Cab Price Uber to Lyft</button>
+        <button id="popular_destination_boston">Most Popular Destination in Boston</button>
+        <button id="popular_routes">Most Popular Routes</button>
+        <!-- <button id="get-pickup">Uber Oldests Pick-up Dates</button> -->
+        <!-- <button id="compareDiplo">Compare Uber to Other Services</button> -->
+        <button id="busiest-times">Pick-ups By The Hour</button>
+        <button id="compare_uber_fhv" onclick="ShowCompare()">Compare Number of Rides by Month</button>
+    </div>
+    </div>
+    
+
     <div id='Search'>
         <h1>Search</h1>
         <form id='search_parameters'>
@@ -147,9 +142,50 @@
         </form>
     </div>
 
+
+    <div id="loader" style="display:none;">
+        <svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg" id="car">
+            <circle cx="72" cy="72" r="70" stroke="black" stroke-width="3"/>
+            <path d="M124.699 57.9463C121.675 56.3633 113.425 59.028 111.275 60.4109C110.572 59.1588 109.773 57.7874 108.907 56.3833C104.481 49.2042 100.728 45.044 97.4316 43.6653C97.2994 43.6099 97.1627 43.5656 97.0231 43.5326C96.7404 43.4659 89.8902 41.9 71.9996 41.9C54.109 41.9 47.2588 43.4661 46.9759 43.5326C46.8361 43.5656 46.6996 43.6099 46.5674 43.6653C43.2716 45.0442 39.5177 49.2042 35.0915 56.3833C34.2258 57.7874 33.4271 59.1588 32.7236 60.4109C30.5743 59.028 22.3235 56.3633 19.2998 57.9463C16.1796 59.5798 17.4298 64.7213 19.2998 66.1158C20.4672 66.9862 23.6704 67.2512 27.0435 67.027C26.2804 68.0433 25.679 69.1871 25.2718 70.4192C30.5913 71.4164 43.0957 71.3733 41.2269 75.4274C38.4927 81.3577 30.0769 80.5369 24.8892 77.9002L25.8579 94.6206C25.8579 98.5279 29.0254 101.695 32.9328 101.695H37.1873C41.0947 101.695 44.262 98.5279 44.262 94.6206L44.1231 93.1217H99.8761L99.7373 94.6206C99.7373 98.5279 102.905 101.695 106.812 101.695H111.066C114.974 101.695 118.141 98.5279 118.141 94.6206L119.11 77.9002C113.922 80.5369 105.507 81.358 102.772 75.4274C100.903 71.3733 113.408 71.4164 118.727 70.4192C118.32 69.1869 117.719 68.043 116.956 67.027C120.329 67.2514 123.532 66.9864 124.699 66.1158C126.569 64.7213 127.819 59.5798 124.699 57.9463Z" stroke="black" stroke-width="1.68393" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+            
+            
+                         
+    </div>
+
+
+
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+<div id="container" style="width: 100vw; height: 100vh; display: none;"></div>
+
+    <div class="multi-button" id="dataset_augmentation">
+        <button id="add_uber_ride">Add an Uber Trip</button>
+        <button id="add_lyft_ride">Add a Lyft Trip</button>
+        <button id="add_fhv_ride">Add a For-Hire Ride Service Trip</button>
+        <button id="save_uber_ride">Save the Collection of Uber Trips</button>
+        <button id="save_lyft_ride">Save the Collection of Lyft Trips</button>
+        <button id="save_fhv_ride">Save the Collection of For-Hire Ride Service Trips</button>
+    </div>
+
+    
+
+
     <script src="./jQuery.js"></script>
     <script src="./scripts.js"></script>
     <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+    <script src="anime.min.js"></script>
+        
+
+
     
 </body>
 </html>

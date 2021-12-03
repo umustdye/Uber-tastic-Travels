@@ -114,27 +114,26 @@ function parseJSONToCSV(data, fileNames)
 
 }
 
-// function thing(cab_rides) {
-//     sourceNames = []
-//     sourceNames.push(cab_rides[0].name)
-//     var exists = false;
 
-//     for(let i = 1; i < cab_rides.length; i++) {
-//         for(let j = 0; j < sourceNames.length; j++) {
-//             if(cab_rides[i].name == sourceNames[j]) {
-//                 exists = true;
-//             }
-//         }
 
-//         if(exists) {
-//             exists = false
-//         }
-//         else {
-//             sourceNames.push(cab_rides[i].name)
-//             exists = false
-//         }
-//     }
-//     console.log(sourceNames);
-// }
+function findLyft(lyft, identifier)
+{
+    for(let i=0; i<lyft.length; i++)
+    {
+        if(typeof lyft[i] === 'undefined' || typeof lyft[i].identifier === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
 
-module.exports = { ParseCab_Rides, parseJSONToCSV };
+        else
+        {
+            if(lyft[i].identifier == identifier )
+            {
+                return lyft[i];
+            }
+        }
+    }
+}
+
+
+module.exports = { ParseCab_Rides, parseJSONToCSV, findLyft };

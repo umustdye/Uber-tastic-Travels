@@ -100,6 +100,25 @@ function parseCSVToJSON(data, /*name,*/ fhv)
 
 }
 
+function findFHV(fhv, identifier)
+{
+    for(let i=0; i<fhv.length; i++)
+    {
+        if(typeof fhv[i] === 'undefined' || typeof fhv[i].identifier === 'undefined')
+        {
+            console.log("Item is not defined...")
+        }
+
+        else
+        {
+            if(fhv[i].identifier == identifier )
+            {
+                return fhv[i];
+            }
+        }
+    }
+}
 
 
-module.exports = { Parsefhv, parseJSONToCSV };
+
+module.exports = { Parsefhv, parseJSONToCSV, findFHV };
