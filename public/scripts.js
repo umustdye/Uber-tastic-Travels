@@ -121,14 +121,13 @@ $(function () {
                     url: '/popular_destination_boston',
                     contentType: 'application/json',
                     success: function (response) {
-        
                         var tbodyEl = $('tbody');
         
                         tbodyEl.html('<h2>Most Popular Pick-up Locations and Destinations in Boston</h2>');
 
 
 
-                        tbodyEl.append('\
+                        /*tbodyEl.append('\
                         <tr>\
                             <td class="Location">Source</td>\
                             <td class="Count">Count</td>\
@@ -167,16 +166,83 @@ $(function () {
                             }
 
         
-                        });
+                        });*/
 
 
 
 
+                        anychart.onDocumentReady(function() {
+ 
+
+                            var row = []
+                            response.popular_destination_boston.forEach(function (cab) {
+                            
+
+                                if(cab.Type == "Source")
+                                {
+                                    row.push([cab.Location, cab.Count, 0])
+                                }
+    
+            
+                            });
+
+                            response.popular_destination_boston.forEach(function (cab) {
+
+                                if(cab.Type == "Destination")
+                                {
+                                    let index = row.findIndex((item) => item[0] === cab.Location);
+                                    row[index][2] = cab.Count;
+                                }
+    
+            
+                            });
+                            
+                             
+                            var data = anychart.data.set(row);
+
+                            // map the data
+                            var seriesData_1 = data.mapAs({x: 0, value: 1});
+                            var seriesData_2 = data.mapAs({x: 0, value: 2});
+        
+                           
+                            // create the chart
+                            var chart = anychart.bar();
+                     
+                            // add the data
+                            //chart.data(data);
+
+
+                            // create the first series, set the data and name
+                            var series1 = chart.bar(seriesData_1);
+                            series1.name("Source");
+
+                            // create the second series, set the data and name
+                            var series2 = chart.bar(seriesData_2);
+                            series2.name("Destination");
+
+                            // set the padding between bars
+                            chart.barsPadding(-0.5);
+
+                            // set the padding between bar groups
+                            chart.barGroupsPadding(2);
+
+
+
+
+                     
+                            // set the chart title
+                            chart.title("Most popular pick-up and drop-off locations");
+                     
+                            // draw
+                            chart.container("container");
+                            chart.draw();
+                         });
 
 
 
                     }
                 });
+
             });
     
     // GET/popular_routes
