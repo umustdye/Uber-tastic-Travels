@@ -34,7 +34,7 @@ for our loading animations we used [Anime JS](https://animejs.com/)
 
 ### Running Test Files
 
-- Run the following command in the terminal
+- Run the following command in the terminal:
 > npm install --save-dev jest
 
 ### Installing the datasets
