@@ -32,7 +32,7 @@ for our loading animations we used [Anime JS](https://animejs.com/)
 - Your device may require this command to save data to file without crashing. This will expand the amount of memory the program has access to.
 > $env:NODE_OPTIONS="--max-old-space-size=4096"
 
-### Running Test Files
+### Installing Jtest
 
 - Run the following command in the terminal:
 > npm install --save-dev jest
@@ -43,6 +43,11 @@ for our loading animations we used [Anime JS](https://animejs.com/)
   - make sure you are logged into a ucr email account to access the files
 - make a folder in the project directory titled *csv_files*
 - move the datasets into *csv_files*
+
+### Running Tests
+-- in the same terminal, enter
+> npm test
+
 
 ### Running the program
 
