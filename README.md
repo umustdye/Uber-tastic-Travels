@@ -32,6 +32,11 @@ for our loading animations we used [Anime JS](https://animejs.com/)
 - Your device may require this command to save data to file without crashing. This will expand the amount of memory the program has access to.
 > $env:NODE_OPTIONS="--max-old-space-size=4096"
 
+### Running Test Files
+
+- Run the following command in the terminal
+> npm install --save-dev jest
+
 ### Installing the datasets
 
 - download all the datasets [here](https://drive.google.com/drive/u/3/folders/1_u6Z-ZV5rL95LQMRHPuvhntG_-pJlbWG)
