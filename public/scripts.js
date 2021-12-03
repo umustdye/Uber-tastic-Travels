@@ -90,7 +90,7 @@ $(function () {
                     var tbodyEl = $('tbody');
     
                     tbodyEl.html('<h2>Prices for Uber and Lyft</h2>');
-                    tbodyEl.append('\
+                    /*tbodyEl.append('\
                         <tr>\
                             <td> <b>Ride Service</b> </td>\
                             <td> <b>Ride Type</b> </td>\
@@ -108,7 +108,58 @@ $(function () {
                         </tr>\
                     ');
     
-                    });
+                    });*/
+
+
+                    anychart.onDocumentReady(function() {
+ 
+
+                        var row = []
+
+                        response.cab_price.forEach(function (cab) {
+                        row.push([cab.Cab_Type + ": " + cab.Name, cab.Lowest_price, cab.Highest_price])
+        
+                        });
+                         
+                        var data = anychart.data.set(row);
+
+                        // map the data
+                        var seriesData_1 = data.mapAs({x: 0, value: 1});
+                        var seriesData_2 = data.mapAs({x: 0, value: 2});
+    
+                       
+                        // create the chart
+                        var chart = anychart.bar();
+
+
+                        // create the first series, set the data and name
+                        var series1 = chart.bar(seriesData_1);
+                        series1.name("Minimum Cost");
+
+                        // create the second series, set the data and name
+                        var series2 = chart.bar(seriesData_2);
+                        series2.name("Maximum Cost");
+
+                        // set the padding between bars
+                        chart.barsPadding(-0.5);
+
+                        // set the padding between bar groups
+                        chart.barGroupsPadding(2);
+ 
+                        // set the chart title
+                        chart.title("Minimum and Maximum Prices for various riding services");
+                 
+                        // draw
+                        chart.container("container");
+                        chart.draw();
+                     });
+
+
+
+
+
+
+
                 }
             });
         });
@@ -272,40 +323,38 @@ $(function () {
 
 
 
-                google.charts.load('current', {'packages':['bar']});
-                google.charts.setOnLoadCallback(drawChart);
-          
-                function drawChart() {
-                  
-                    var rows = []
-                    rows.push(["Route", "Value"])
+                anychart.onDocumentReady(function() {
+ 
+                    // set the data
+                    var data;
+                    var row = [];
+                        
                     response.popular_routes.forEach(function (cab) {
-                        rows.push([cab.source + " to " + cab.destination, cab.count]);
+                        row.push([cab.source + " to " + cab.destination, cab.count]);
         
                     });
+                        
+                    data = {
+                        header: ["Route", "Number of Rides"],
+                        rows: row
+                    };
+   
 
-                var data = new google.visualization.arrayToDataTable(rows);
-                /*var data = google.visualization.arrayToDataTable([
-                    ['Year', 'Sales', 'Expenses', 'Profit'],
-                    ['2014', 1000, 400, 200],
-                    ['2015', 1170, 460, 250],
-                    ['2016', 660, 1120, 300],
-                    ['2017', 1030, 540, 350]
-                  ]);*/
-          
-                  // Sets chart options.
-                  var options = {
-                    chart: {
-                      title: 'Most Popular Source to Destination',
-                      subtitle: 'Route, Count',
-                    },
-                    bars: 'horizontal' // Required for Material Bar Charts.
-                  };
-          
-                  // Instantiates and draws our chart, passing in some options.
-                  var chart = new google.charts.Bar(document.getElementById('container'));
-                  chart.draw(data, google.charts.Bar.convertOptions(options));
-                }
+
+                   
+                    // create the chart
+                    var chart = anychart.bar();
+             
+                    // add the data
+                    chart.data(data);
+             
+                    // set the chart title
+                    chart.title("Most popular routes");
+             
+                    // draw
+                    chart.container("container");
+                    chart.draw();
+                 });
 
 
 
