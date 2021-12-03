@@ -1,12 +1,13 @@
 const fs = require('fs');
-const fileName = "csv_files\\FHV_Rides.csv";
 
-function Parsefhv()
+function Parsefhv(fileNames)
 {
+    var fileData = '';
     console.log('About to read fhv dataset file...');
 
-    fileData = fs.readFileSync(fileName, 'utf8').slice(1);
-
+    for (let i = 0; i < fileNames.length; i++) {
+        fileData += fs.readFileSync(fileNames[i], 'utf8');
+    }
     //array of each row as JSON object
     fhv_Obj = []
     fhv_Obj = parseCSVToJSON(fileData, /*fhv_names[0],*/ fhv_Obj);
@@ -17,7 +18,7 @@ function Parsefhv()
 }
 
 //parse function annd write to file
-function parseJSONToCSV(data)
+function parseJSONToCSV(data, fileNames)
 {
     console.log("Writing fhv Dataset to file...");
     //Date,Time,Address,Name,Identifier
@@ -35,10 +36,10 @@ function parseJSONToCSV(data)
         index++;
 
     }
-    filename = "csv_files\\FHV_Rides.csv"
+
     //filename = "csv_files\\test.csv"
 
-    fs.writeFile(filename, file, err => {
+    fs.writeFile(fileNames[0], file, err => {
         if (err) {
           console.error(err)
           return
@@ -87,7 +88,7 @@ function parseCSVToJSON(data, /*name,*/ fhv)
             const time = column[1]
             const address = column[2];
             const name = column[3];
-            const identifier = column[4];
+            const identifier = column[4].replace(/(\r)/gm, "");
             const data = {"date":date, "time":time, "address":address, "name":name, "identifier":identifier};
             fhv.push(data);
         }

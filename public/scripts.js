@@ -18,7 +18,8 @@ $(function () {
                         <td class="Total">' + 'Total: ' + response.cab_type.Total + '</td>\
                     </tr>\
                 ');
-    
+
+                ClearBelowTable();
             }
         });
     });
@@ -47,6 +48,7 @@ $(function () {
                     ');
     
                     });
+                    ClearBelowTable();
                 }
             });
         });
@@ -71,6 +73,7 @@ $(function () {
                         ');
         
                         });
+                        ClearBelowTable();
                     }
                 });
             });
@@ -96,6 +99,7 @@ $(function () {
                 ');
     
                 });
+                ClearBelowTable();
             }
         });
     });
@@ -122,6 +126,7 @@ $(function () {
                     ');
     
                     });
+                    ClearBelowTable();
                 }
             });
         });
@@ -137,8 +142,11 @@ $(function () {
     
                     tbodyEl.html('');
                     tbodyEl.append(response);
+                    ClearBelowTable();
                 }
+                
             });
+
         });
     
     
@@ -152,6 +160,7 @@ $(function () {
     
                     tbodyEl.html('');
                     tbodyEl.append(response);
+                    ClearBelowTable();
                 }
             });
         });
@@ -166,6 +175,7 @@ $(function () {
     
                     tbodyEl.html('');
                     tbodyEl.append(response);
+                    ClearBelowTable();
                 }
             });
         });
@@ -198,6 +208,7 @@ $(function () {
                         ');
     
                     });
+                    ClearBelowTable();
     
                 }
             });
@@ -271,7 +282,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-04-01" max="2014-09-30" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Longitude: ' + '<input type="text" class="longitude" value="' + ride.Longitude + '"></td>\
                                     <td>' + 'Latitude: ' + '<input type="text" class="latitude" value="' + ride.Latitude + '"></td>\
@@ -289,7 +300,7 @@ $(function () {
                                     <td>' + 'Identifier: ' + '</td>\
                                     <td class="identifier">' + ride.Identifier + '</td>\
                                     <td>' + ' | ' + '</td>\
-                                    <td>' + 'Date: ' + '<input type="date" class="date" value="' + ride.Date + '"></td>\
+                                    <td>' + 'Date: ' + '<input type="date" class="date" min="2014-07-01" max="2014-09-30" value="' + ride.Date + '"></td>\
                                     <td>' + 'Time: ' + '<input type="time" class="time" value="' + ride.Time + '"></td>\
                                     <td>' + 'Address: ' + '<input type="text" class="address" value="' + ride.Address + '"></td>\
                                     <td>\
@@ -394,10 +405,11 @@ $(function () {
                                 <option value="Highclass">Highclass</option>\
                                 <option value="Prestige">Prestige</option>\
                                 </select>\
-                                <button class="service4Time"> Add Ride </button>\
+                                <button class="service4Time"> Search </button>\
                             </td>\
                         </tr>\
                     ');
+                    ClearBelowTable();
             }
         });
     });
@@ -438,6 +450,7 @@ $(function () {
                     ');
     
                     });
+                    ClearBelowTable();
                 }
             });
         });
@@ -482,6 +495,7 @@ $(function () {
                                 </td>\
                             </tr>\
                         ');
+                        ClearBelowTable();
                 }
             });
         });
@@ -513,6 +527,7 @@ $(function () {
                                 </td>\
                             </tr>\
                         ');
+                        ClearBelowTable();
                 }
             });
         });
@@ -533,6 +548,7 @@ $(function () {
     
                     tbodyEl.append('\
                     <tr>\
+                    <td>' + '<b>Add a Lyft Trip</b> | ' + '</td>\
                     <td>\
                         Source: <select class="source1" id="source1">\
                             <option disabled selected value> Select Location </option>\
@@ -548,7 +564,7 @@ $(function () {
                             <option value="West End">West End</option>\
                             <option value="Financial District">Financial District</option>\
                             <option value="Northeastern University">Northeastern University</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>\
                         Destination: <select class="destination1" id="destination1">\
@@ -565,7 +581,7 @@ $(function () {
                             <option value="West End">West End</option>\
                             <option value="Financial District">Financial District</option>\
                             <option value="Northeastern University">Northeastern University</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>\
                         Type: <select class="lyft_type1" id="lyft_type1">\
@@ -576,15 +592,16 @@ $(function () {
                             <option value="Lux Black XL">Lux Black XL</option>\
                             <option value="Lyft XL">Lyft XL</option>\
                             <option value="Lux Black">Lux Black</option>\
-                        </select> | \
+                        </select>  \
                     <td>\
                     <td>' + 'Price: ' + '<input type="number" class="price" min="0.0" max="100.0" step="0.1">' + '</td>\
-                    <td>' + '| Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01">' + '</td>\
+                    <td>' + ' Distance (mi): ' + '<input type="number" class="distance_traveled" min="0.00" max="10.00" step="0.01">' + '</td>\
                     <td>\
                         <button class="new_lyft_ride"> Add Ride </button>\
                     </td>\
                     </tr>\
                 ');
+                ClearBelowTable();
                 }
             });
         });
@@ -1038,4 +1055,10 @@ function ShowCompare() {
         Nothing is Displayed Here\
     </tr>\
     ');
+}
+
+function ClearBelowTable() {
+    document.getElementById('Search').style.display = "none";
+    document.getElementById('compare_based_on_month').style.display = "none";
+    document.getElementById("container").innerHTML = "";
 }

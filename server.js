@@ -19,13 +19,17 @@ server.listen(port, function(error) {
         console.log("Server is listening on port " + port)
     }
 })
-
 //console.log(UberParser.ParseUber());
 
-//datasets
-uber = UberParser.ParseUber();
-fhv = fhvParser.Parsefhv();
-cab_rides = cab_rides_parser.ParseCab_Rides();
+// Dataset files
+const uber_files = ["csv_files\\Uber_Rides_1.csv", "csv_files\\Uber_Rides_2.csv", "csv_files\\Uber_Rides_3.csv"];
+const fhv_files = ["csv_files\\FHV_Rides.csv"]
+const cab_files = ["csv_files\\cab_rides.csv"]
+
+// Dataset parse
+uber = UberParser.ParseUber(uber_files);
+fhv = fhvParser.Parsefhv(fhv_files);
+cab_rides = cab_rides_parser.ParseCab_Rides(cab_files);
 // cab_rides_parser.parseJSONToCSV(cab_rides);
 
 // console.log(cab_rides);
@@ -102,11 +106,7 @@ server.get('/cab_price', function(req, res)
     Bao.cab_price(/*cab_rides*/);
     endNew = new Date().getTime()
 
-    beginOld = new Date().getTime()
-    Bao.cab_price_old(cab_rides);
-    endOld = new Date().getTime();
-
-    console.log('Cab Price - ', 'Incremental Analytics:', endNew - beginNew, 'Old Method:', endOld - beginOld)
+    console.log('Cab Price - Incremental Analytics:', endNew - beginNew)
 
     cab_price = Bao.cab_price(/*cab_rides*/);
     res.send({cab_price, cab_price});
@@ -140,17 +140,17 @@ server.get('/popular_routes', function(req, res)
 });
 
 server.get('/save_uber', function(req, res){
-    UberParser.parseJSONToCSV(uber);
+    UberParser.parseJSONToCSV(uber, uber_files);
     res.send("Successfully saved Uber dataset to file...");
 });
 
 server.get('/save_fhv', function(req, res){
-    fhvParser.parseJSONToCSV(fhv);
+    fhvParser.parseJSONToCSV(fhv, fhv_files);
     res.send("Successfully saved fhv dataset to file...");
 });
 
 server.get('/save_lyft', function(req, res){
-    cab_rides_parser.parseJSONToCSV(cab_rides);
+    cab_rides_parser.parseJSONToCSV(cab_rides, cab_files);
     res.send("Successfully saved cab dataset to file...");
 });
 
@@ -334,11 +334,7 @@ server.post('/compare_results', function(req, res) {
     Noah.CompareBasedOnMonth(req.body.rideService1, req.body.rideService2, req.body.date,req.body.date2);
     endNew = new Date().getTime();
 
-    beginOld = new Date().getTime();
-    Noah.CompareBasedOnMonthOld(uber,fhv, req.body.rideService1, req.body.rideService2, req.body.date,req.body.date2);
-    endOld = new Date().getTime();
-
-    console.log('Compare Based on Month - ', 'Incremental Analytics:', endNew - beginNew, 'Old Method:', endOld - beginOld)
+    console.log('Compare Based on Month - Incremental Analytics:', endNew - beginNew)
 
     results = Noah.CompareBasedOnMonth(req.body.rideService1, req.body.rideService2, req.body.date,req.body.date2);
     console.log(results);
