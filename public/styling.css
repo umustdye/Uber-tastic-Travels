@@ -4,6 +4,10 @@ body{
     font-family:monospace;
     text-align: left;
     font-size: 1vw;
+    margin: 0;
+}
+html{
+  margin: 0;
 }
 
 #top_header
@@ -26,6 +30,8 @@ body{
 }
 
 
+
+
 button{
     background-color: white;
     color: black;
@@ -36,6 +42,42 @@ h1 {
     font-weight: bold;
     font-size: 2vw;
   } 
+
+#loader{
+  padding: 1vw;
+  text-align: center;
+
+
+}
+
+
+#car path{
+  stroke-dasharray: 750;
+  stroke-dashoffset: 1000;
+  animation: dash 2s linear alternate infinite;
+
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 822;
+    scale: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+    easing: 'linear';
+    scale: 2;
+  }
+}
+
+
+
+
+#dataset_augmentataion {
+  position: sticky;
+  padding: 10px 0;
+  bottom: 0;
+}
 
 
 

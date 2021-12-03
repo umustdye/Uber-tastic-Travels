@@ -8,6 +8,7 @@ $(function () {
     // GET/cab_type
     $('#cab_type').on('click', function () {
         ClearBelowTable()
+        document.getElementById('container').style.display = "block";
         $.ajax({
             url: '/cab_type',
             contentType: 'application/json',
@@ -17,13 +18,60 @@ $(function () {
     
                 tbodyEl.html('<h2>Did Uber outpreform Lyft</h2>');
     
-                    tbodyEl.append('\
+                    /*tbodyEl.append('\
                     <tr>\
                         <td class="Uber">' + 'Uber: ' + response.cab_type.Uber + '</td>\
                         <td class="Lyft">' + 'Lyft: ' + response.cab_type.Lyft + '</td>\
                         <td class="Total">' + 'Total: ' + response.cab_type.Total + '</td>\
                     </tr>\
-                ');
+                ');*/
+
+
+                //pie chart
+                anychart.onDocumentReady(function() {
+ 
+                    // set the data
+                    var data;
+                    var name1 = "Uber";
+                    var name2 = "Lyft";
+
+                        
+                    data = {
+                        header: ["Name", "Number of Rides"],
+                        rows: [
+                              [name1, response.cab_type.Uber],
+                              [name2, response.cab_type.Lyft]
+                              ]
+                    };
+
+
+
+                   
+                    // create the chart
+                    var chart = anychart.pie();
+             
+                    // add the data
+                    chart.data(data);
+
+                    //change the radius
+                    //chart.radius("100%");
+             
+                    // set the chart title
+                    chart.title("Comparing " + name1 + " & " + name2);
+                    
+                    // set the position of labels
+                    //chart.labels().position("outside");
+
+                    // configure connectors
+                    //chart.connectorStroke({color: "#595959", thickness: 2, dash:"2 2"});
+             
+                    // draw
+                    chart.container("container");
+                    chart.draw();
+                 });
+
+
+
             }
         });
     });
@@ -33,6 +81,7 @@ $(function () {
         // GET/cab_price
         $('#cab_price').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "block";
             $.ajax({
                 url: '/cab_price',
                 contentType: 'application/json',
@@ -67,6 +116,7 @@ $(function () {
             // GET/popular_destination_boston
             $('#popular_destination_boston').on('click', function () {
                 ClearBelowTable()
+                document.getElementById('container').style.display = "block";
                 $.ajax({
                     url: '/popular_destination_boston',
                     contentType: 'application/json',
@@ -132,6 +182,7 @@ $(function () {
     // GET/popular_routes
     $('#popular_routes').on('click', function () {
         ClearBelowTable()
+        document.getElementById('container').style.display = "block";
         $.ajax({
             url: '/popular_routes',
             contentType: 'application/json',
@@ -141,7 +192,7 @@ $(function () {
     
                 tbodyEl.html('<h2>Most popular Drop-off Destinations for Uber and Lyft</h2>');
     
-                response.popular_routes.forEach(function (cab) {
+                /*response.popular_routes.forEach(function (cab) {
                     tbodyEl.append('\
                     <tr>\
                         <td class="source">' + cab.source + '</td>\
@@ -150,7 +201,48 @@ $(function () {
                     </tr>\
                 ');
     
-                });
+                });*/
+
+
+
+
+                google.charts.load('current', {'packages':['bar']});
+                google.charts.setOnLoadCallback(drawChart);
+          
+                function drawChart() {
+                  
+                    var rows = []
+                    rows.push(["Route", "Value"])
+                    response.popular_routes.forEach(function (cab) {
+                        rows.push([cab.source + " to " + cab.destination, cab.count]);
+        
+                    });
+
+                var data = new google.visualization.arrayToDataTable(rows);
+                /*var data = google.visualization.arrayToDataTable([
+                    ['Year', 'Sales', 'Expenses', 'Profit'],
+                    ['2014', 1000, 400, 200],
+                    ['2015', 1170, 460, 250],
+                    ['2016', 660, 1120, 300],
+                    ['2017', 1030, 540, 350]
+                  ]);*/
+          
+                  // Sets chart options.
+                  var options = {
+                    chart: {
+                      title: 'Most Popular Source to Destination',
+                      subtitle: 'Route, Count',
+                    },
+                    bars: 'horizontal' // Required for Material Bar Charts.
+                  };
+          
+                  // Instantiates and draws our chart, passing in some options.
+                  var chart = new google.charts.Bar(document.getElementById('container'));
+                  chart.draw(data, google.charts.Bar.convertOptions(options));
+                }
+
+
+
             }
         });
     });
@@ -158,6 +250,7 @@ $(function () {
         // GET/pickup
         $('#get-pickup').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/pickup_date',
                 contentType: 'application/json',
@@ -185,6 +278,7 @@ $(function () {
     
         $('#save_uber_ride').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_uber',
                 contentType: 'application/json',
@@ -201,6 +295,7 @@ $(function () {
     
         $('#save_fhv_ride').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_fhv',
                 contentType: 'application/json',
@@ -216,6 +311,7 @@ $(function () {
 
         $('#save_lyft_ride').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             $.ajax({
                 url: '/save_lyft',
                 contentType: 'application/json',
@@ -232,6 +328,7 @@ $(function () {
         // GET/compare
         $('#compareDiplo').on('click', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "block";
             $.ajax({
                 url: '/compareDiplo',
                 contentType: 'application/json',
@@ -268,6 +365,7 @@ $(function () {
         // CREATE/POST
         $('#search_parameters').on('submit', function (event) {
             event.preventDefault();
+            document.getElementById('container').style.display = "none";
             search_pointer = 0;
             var ride_service = $('#ride_service');
             var date_begin = $('#date_begin');
@@ -294,12 +392,21 @@ $(function () {
     
             console.log(ride_service.val(),/* date_begin.val(), date_end.val(), time_begin.val(), time_end.val(), location.val(),*/source.val(), destination.val(), lyft_type.val(), search_type);
     
+            //loading animation show
+            document.getElementById('loader').style.display = "block";
+
+
             $.ajax({
                 url: '/search_results',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ rideService: ride_service.val(), dateBegin: date_begin.val(), dateEnd: date_end.val(), timeBegin: time_begin.val(), timeEnd: time_end.val(), address: location.val(), source: source.val(), destination: destination.val(), lyftType: lyft_type.val(), searchType: search_type }),
+
+                
+                
                 success: function (response) {
+                    //hide the loader
+                    document.getElementById('loader').style.display = "none";
                     var tbodyEl = $('tbody');
     
                     tbodyEl.html('');
@@ -795,6 +902,7 @@ $(function () {
     // CREATE/POST
     $('#busiest-times').on('click', function (event) {
         ClearBelowTable()
+        document.getElementById('container').style.display = "none";
         event.preventDefault();
     
         $.ajax({
@@ -833,6 +941,7 @@ $(function () {
         //Process busiest-time query and search
         $('table').on('click', '.service4Time', function () {
             ClearBelowTable()
+            document.getElementById('container').style.display = "block";
             console.log("Before...")
             var rowEl = $(this).closest('tr');
             var service = rowEl.find('.service_selector_time').val();
@@ -846,9 +955,9 @@ $(function () {
                     //console.log(response);
                     var tbodyEl = $('tbody');
     
-                    tbodyEl.html('<h2>Busiest Times</h2>');
+                    tbodyEl.html('<h2>Busiest Times for '+service+'</h2>');
     
-                    tbodyEl.append('\
+                    /*tbodyEl.append('\
                     <tr>' + '<b>' + 'service' + ' Pick-ups per Hour</b> ' + '</tr>\
                     <tr>\
                         <td class="hour">' + "Hour" + '</td>\
@@ -864,7 +973,37 @@ $(function () {
                         </tr>\
                     ');
     
-                    });
+                    });*/
+
+
+                    anychart.onDocumentReady(function() {
+ 
+                        // set the data
+                        const data=[];
+                        
+                        response.Busiest_Time.forEach(function (time) {
+                            data.push({"x": time.hour, "value": time.value});
+                        });
+    
+    
+                       
+                        // create the chart
+                        var chart = anychart.line();
+                 
+                        // add the data
+                        chart.data(data);
+                 
+                        // set the chart title
+                        chart.title("Number of Pickups per Hour for "+service);
+                 
+                        // draw
+                        chart.container("container");
+                        chart.draw();
+                     });
+
+
+
+
                 }
             });
         });
@@ -877,6 +1016,7 @@ $(function () {
         // CREATE/POST
         $('#add_fhv_ride').on('click', function (event) {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -917,6 +1057,7 @@ $(function () {
         // CREATE/POST
         $('#add_uber_ride').on('click', function (event) {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -949,6 +1090,7 @@ $(function () {
         // CREATE/POST
         $('#add_lyft_ride').on('click', function (event) {
             ClearBelowTable()
+            document.getElementById('container').style.display = "none";
             event.preventDefault();
     
             $.ajax({
@@ -1186,7 +1328,7 @@ $(function () {
     // CREATE/POST
     $('#compare_parameters').on('submit', function (event) {
         event.preventDefault();
-
+        document.getElementById('container').style.display = "block";
         var ride_service_1 = $('#ride_service_compare_1');
         var ride_service_2 = $('#ride_service_compare_2');
         var date = $('#compare_date');
@@ -1442,6 +1584,7 @@ function ClearDiv() {
 }
 
 function ShowSearch() {
+    document.getElementById('container').style.display = "none";
     document.getElementById('Search').style.display = "block";
     document.getElementById('compare_based_on_month').style.display = "none";
     document.getElementById("container").innerHTML = "";
