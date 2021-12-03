@@ -12,8 +12,8 @@ cab_data = cab_parser.ParseCab_Rides(cab_test);
 
 test('Read in uber csv and check 1st element\'s contents', () => {
   expect(uber_data[0].date).toBe('2014-04-01');
-  expect(uber_data[0].time).toBe('0:01');
-  expect(uber_data[0].latitude).toBe('40.769');
+  expect(uber_data[0].time).toBe('00:01');
+  expect(uber_data[0].latitude).toBe('40.7690');
   expect(uber_data[0].longitude).toBe('-73.9549');
   expect(uber_data[0].base).toBe('B02512');
   expect(uber_data[0].identifier).toBe('0');
@@ -21,9 +21,9 @@ test('Read in uber csv and check 1st element\'s contents', () => {
 
 test('Read in uber csv and check last element\'s contents', () => {
     expect(uber_data[8].date).toBe('2014-09-21');
-    expect(uber_data[8].time).toBe('0:21');
+    expect(uber_data[8].time).toBe('00:21');
     expect(uber_data[8].latitude).toBe('40.7524');
-    expect(uber_data[8].longitude).toBe('-73.996');
+    expect(uber_data[8].longitude).toBe('-73.9960');
     expect(uber_data[8].base).toBe('B02512');
     expect(uber_data[8].identifier).toBe('8');
 });
