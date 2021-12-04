@@ -84,4 +84,10 @@ for our loading animations we used [Anime JS](https://animejs.com/)
 - This analytic will show you a line graph for a given ride service per an hour from Midnight to 11PM
 - Using the top navigation bar, select the "pick-ups by the hour" button to open the ride service menu
   - click on a ride service option: Uber, American, Diplo, Highclass, Firstclass, or Prestige, and click on the "search times" button
-- You will see a line chart, the y-axis represents the number of rides and the x-axis represents the hour of the day.
+- You will see a line graph, the y-axis represents the number of rides and the x-axis represents the hour of the day.
+
+### Compare Uber to Lyft
+
+- This analytic will show you a pie chart comparing the total number of rides from Lyft and Uber
+- Using the top navigation bar, select the "compare uber to lyft" button to open the ride service menu
+- You will see a pie chart, dark blue is Lyft and light blue is Uber
