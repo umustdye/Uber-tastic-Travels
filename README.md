@@ -4,18 +4,6 @@ Team Pear
 
 ## Introduction to the project
 
-Our project consists of various analytcs that look at for-hire ride services and their attributes such as time of pickup, locations where they started and ended, and the days they were used. We analzed the number of rides for-hire services have made, most popular times for pickups, and how they perform when compared to one-another. Our datasets consist of rides from the following services:
-- Uber
-- Lyft
-- Diplo
-- American
-- Firstclass
-- Highclass
-- Prestige
-
-Each of these ride services has unique parameters we had to work with. Uber rides gave us time, date, location by longitude and latitude, and a base number (Files listed of Uber_Rides_1.csv, Uber_Rides_2.csv, Uber_Rides_3.csv). Lyft rides gave us information about where people were picked up, dropped off, and the type of Lyft ride they used (File listed as cab_rides.csv). All other services provided a date, a time, and an address (File listed as FHV_rides.csv).
-
-
 ## How to set up
 ### Prerequisites
 
@@ -103,3 +91,22 @@ for our loading animations we used [Anime JS](https://animejs.com/)
 - This analytic will show you a pie chart comparing the total number of rides from Lyft and Uber
 - Using the top navigation bar, select the "compare uber to lyft" button to open the ride service menu
 - You will see a pie chart, dark blue is Lyft and light blue is Uber
+
+
+### Cab Prices
+
+- This analytic will show you a bar graph with the minimum and maximum costs for various types of Uber and Lyft rides
+- Using the top navigation bar, select the "cab price uber to lyft" button to open the analytic
+- You will see a bar graph, the top bar represents the minimum and the bottom bar represents the maximum cost
+
+### Popular Routes
+
+- This analytic will show you a bar graph with the most popular routes from a given source to destiniation
+- Using the top navigation bar, select the "most popular routes" button to open the analytic
+- You will see a bar graph with each bar representing the number of rides per a given route
+
+### Popular Pick-up and Drop-Off Locations
+
+- This analytic will show you a bar graph with the most popular pick-up locations and drop-off locations
+- Using the top navigation bar, select the "most popular destination in Boston" button to open the analytic
+- You will see a bar graph with each bar represents a location. The top bar represents the location as a source and the bottom represents the location as a destination. 
