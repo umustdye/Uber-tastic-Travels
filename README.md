@@ -77,3 +77,11 @@ for our loading animations we used [Anime JS](https://animejs.com/)
   - In the first row you can select the first ride service you want to compare and the month you want to learn about.
   - In the second row you can select the second ride service you want to compare and the month you want to learn about.
 - Once you click compare, a graph will appear below the search fields.
+
+
+### Busiest Times
+
+- This analytic will show you a line graph for a given ride service per an hour from Midnight to 11PM
+- Using the top navigation bar, select the "pick-ups by the hour" button to open the ride service menu
+  - click on a ride service option: Uber, American, Diplo, Highclass, Firstclass, or Prestige, and click on the "search times" button
+- You will see a line chart, the y-axis represents the number of rides and the x-axis represents the hour of the day.
